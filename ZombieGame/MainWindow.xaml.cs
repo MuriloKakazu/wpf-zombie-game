@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using ZombieGame.Physics;
 
 namespace ZombieGame
 {
@@ -23,6 +24,10 @@ namespace ZombieGame
         public MainWindow()
         {
             InitializeComponent();
+
+            float f = Mathf.Pow(2.006f, 8);
+
+
         }
     }
 }
