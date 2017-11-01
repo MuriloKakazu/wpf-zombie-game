@@ -14,6 +14,7 @@ namespace ZombieGame.Physics
         public Vector TopRight { get { return new Vector(Size.X + Position.X, Position.Y); } }
         public Vector BottomLeft { get { return new Vector(Position.X, Size.Y + Position.Y); } }
         public Vector BottomRight { get { return Size + Position; } }
+        public Vector Center { get { return BottomRight / 2f; } }
 
         public Bounds(Vector position, Vector size)
         {
