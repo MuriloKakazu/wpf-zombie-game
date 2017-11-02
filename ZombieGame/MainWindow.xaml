@@ -5,6 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZombieGame"
         mc:Ignorable="d"
-        Title="Client" Height="720" Width="1280">
-    <Grid/>
+        Title="Client" Height="720" Width="1280" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+    <Grid>
+        <DockPanel>
+            <ListView x:Name="DebugList" DockPanel.Dock="Top" />
+            <Canvas DockPanel.Dock="Top">
+                <Button x:Name="Rectangle" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="323" Canvas.Top="152"/>
+            </Canvas>
+        </DockPanel>
+    </Grid>
+
 </Window>

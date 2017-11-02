@@ -34,7 +34,7 @@ namespace ZombieGame.Physics
             Size = new Vector(width, height, depth);
         }
 
-        public bool IsInside(Bounds b)
+        public bool IntersectsWith(Bounds b)
         {
             return TopLeft <= b.BottomRight && TopLeft >= b.BottomLeft ||
                    TopRight >= b.BottomRight && TopRight <= b.BottomLeft ||
