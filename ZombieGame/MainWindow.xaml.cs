@@ -24,15 +24,6 @@ namespace ZombieGame
         public MainWindow()
         {
             InitializeComponent();
-
-            var u = new Physics.Vector(2, 4);
-            var v = new Physics.Vector(4, 14);
-
-            var size = new Physics.Vector(10, 10);
-            var bu = new Bounds(u, size);
-            var bv = new Bounds(v, size);
-
-            bool isInside = bu.IsInside(bv);
         }
     }
 }

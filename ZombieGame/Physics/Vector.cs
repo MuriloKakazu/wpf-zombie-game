@@ -4,20 +4,13 @@ namespace ZombieGame.Physics
 {
     public struct Vector
     {
-        #region Static Properties and Methods
+        #region Static Properties
         public static Vector Zero { get { return new Vector(); } }
         public static Vector Up { get { return new Vector(0, 1, 0); } }
         public static Vector Down { get { return new Vector(0, -1, 0); } }
         public static Vector Left { get { return new Vector(-1, 0, 0); } }
         public static Vector Right { get { return new Vector(1, 0, 0); } }
         public static Vector EarthGravity { get { return Vector.Down * 9.807f; } }
-
-        public static float Distance(Vector v1, Vector v2)
-        {
-            return (float)Math.Sqrt(Math.Pow(v1.X - v2.X, 2) + 
-                                    Math.Pow(v1.Y - v2.Y, 2) + 
-                                    Math.Pow(v1.Z - v2.Z, 2));
-        }
         #endregion
 
         #region Operators
