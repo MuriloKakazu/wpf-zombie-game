@@ -2,7 +2,7 @@
 
 namespace ZombieGame.Physics
 {
-    public struct Vector
+    public class Vector
     {
         #region Static Properties
         public static Vector Zero { get { return new Vector(); } }
@@ -52,11 +52,16 @@ namespace ZombieGame.Physics
         }
         public static bool operator ==(Vector v1, Vector v2)
         {
-            return Math.Round(v1.Magnitude, 2) == Math.Round(v2.Magnitude, 2); // We will consider 0.995 and 1.005 = 1
+            return Math.Round(v1.X, 2) == Math.Round(v2.X, 2) ^
+                   Math.Round(v1.Y, 2) == Math.Round(v2.Y, 2) ^
+                   Math.Round(v1.Z, 2) == Math.Round(v2.Z, 2); // We will consider 0.995 and 1.005 = 1
+
         }
         public static bool operator !=(Vector v1, Vector v2)
         {
-            return Math.Round(v1.Magnitude, 2) != Math.Round(v2.Magnitude, 2); // We will consider 0.995 and 1.005 = 1
+            return Math.Round(v1.X, 2) != Math.Round(v2.X, 2) ||
+                   Math.Round(v1.Y, 2) != Math.Round(v2.Y, 2) ||
+                   Math.Round(v1.Z, 2) != Math.Round(v2.Z, 2); // We will consider 0.995 and 1.005 = 1
         }
         #endregion
 
@@ -90,7 +95,7 @@ namespace ZombieGame.Physics
         #endregion
 
         #region Methods
-        public Vector(float x = 0, float y = 0, float z = 0) : this()
+        public Vector(float x = 0, float y = 0, float z = 0)
         {
             Set(x, y, z);
         }
@@ -106,6 +111,39 @@ namespace ZombieGame.Physics
         {
             var normalized = Normalized;
             Set(normalized.X, normalized.Y, normalized.Z);
+        }
+
+        public void Approximate(Vector v, float offset)
+        {
+            if (Math.Abs(X - v.X) <= offset)
+                X = v.X;
+            else if (Math.Abs(X - v.X) != 0)
+            {
+                if (X > v.X)
+                    X -= offset;
+                else if (X < v.X)
+                    X += offset;
+            }
+
+            if (Math.Abs(Y - v.Y) <= offset)
+                Y = v.Y;
+            else if (Math.Abs(Y - v.Y) != 0)
+            {
+                if (Y > v.Y)
+                    Y -= offset;
+                else if (Y < v.Y)
+                    Y += offset;
+            }
+
+            if (Math.Abs(Z - v.Z) <= offset)
+                Z = v.Z;
+            else if (Math.Abs(Z - v.Z) != 0)
+            {
+                if (Z > v.Z)
+                    Z -= offset;
+                else if (Z < v.Z)
+                    Z += offset;
+            }
         }
         #endregion
     }

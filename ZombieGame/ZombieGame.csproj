@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1857FF66-B45F-4B9A-8F4C-356FDD4B0578}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>ZombieGame</RootNamespace>
     <AssemblyName>ZombieGame</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -65,8 +65,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Game\Character.cs" />
     <Compile Include="Game\Entity.cs" />
+    <Compile Include="Game\Enums\AxisTypes.cs" />
     <Compile Include="Game\Enums\Tags.cs" />
+    <Compile Include="Game\Enums\WeaponTypes.cs" />
+    <Compile Include="Game\GameMaster.cs" />
+    <Compile Include="Game\Input.cs" />
+    <Compile Include="Game\Player.cs" />
+    <Compile Include="Game\Time.cs" />
+    <Compile Include="Game\Weapon.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -74,7 +82,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Physics\Bounds.cs" />
-    <Compile Include="Physics\Collider.cs" />
     <Compile Include="Physics\Events\CollisionEventArgs.cs" />
     <Compile Include="Physics\RigidBody.cs" />
     <Compile Include="Physics\Vector.cs" />
@@ -103,6 +110,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Game\Events\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

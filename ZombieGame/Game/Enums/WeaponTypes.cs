@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ZombieGame.Game.Enums
 {
-    public enum Tags
+    public enum WeaponTypes
     {
-        Undefined,
-        Camera,
-        Player,
-        Enemy,
-        Ground,
-        Ceiling
+        Pistol,
+        AssaultRifle,
+        SniperRifle,
+        Explosive,
+        Throwable,
+        HeavyMachineGun
     }
 }

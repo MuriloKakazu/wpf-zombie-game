@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ZombieGame.Physics
+namespace ZombieGame.Game.Enums
 {
-    public class Collider
+    public enum AxisTypes
     {
-        public Bounds Bounds { get; set; }
+        Horizontal,
+        Vertical,
+        Sprint,
+        Fire
     }
 }
