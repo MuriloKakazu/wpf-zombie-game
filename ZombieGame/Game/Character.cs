@@ -16,7 +16,6 @@ namespace ZombieGame.Game
         public float TotalExp { get; set; }
         public float RemainingExp { get { return NeededExp - CurrentExp; } }
         #endregion
-
         public Weapon Weapon { get; set; }
         public Vector AimDirection { get; set; }
 
