@@ -5,75 +5,176 @@ namespace ZombieGame.Physics
     public class Vector
     {
         #region Static Properties
+        /// <summary>
+        /// Vetor (0, 0, 0)
+        /// </summary>
         public static Vector Zero { get { return new Vector(); } }
+        /// <summary>
+        /// Vetor (0, 1, 0)
+        /// </summary>
         public static Vector Up { get { return new Vector(0, 1, 0); } }
+        /// <summary>
+        /// Vetor (0, -1, 0)
+        /// </summary>
         public static Vector Down { get { return new Vector(0, -1, 0); } }
+        /// <summary>
+        /// Vetor (-1, 0, 0)
+        /// </summary>
         public static Vector Left { get { return new Vector(-1, 0, 0); } }
+        /// <summary>
+        /// Vetor (1, 0, 0)
+        /// </summary>
         public static Vector Right { get { return new Vector(1, 0, 0); } }
+        /// <summary>
+        /// Vetor (0, -9.807, 0)
+        /// </summary>
         public static Vector EarthGravity { get { return Vector.Down * 9.807f; } }
         #endregion
 
         #region Operators
-        public static Vector operator *(Vector v, float c)
+        /// <summary>
+        /// Retorna o produto de um vetor por um número
+        /// </summary>
+        /// <param name="v">Vetor</param>
+        /// <param name="n">Número</param>
+        /// <returns>Vetor resultante</returns>
+        public static Vector operator *(Vector v, float n)
         {
-            return new Vector(v.X * c, v.Y * c, v.Z * c);
+            return new Vector(v.X * n, v.Y * n, v.Z * n);
         }
+        /// <summary>
+        /// Retorna o produto entre dois vetores
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Vetor resultante</returns>
         public static Vector operator *(Vector v1, Vector v2)
         {
             return new Vector(v1.X * v2.X, v1.Y * v2.Y, v1.Z * v2.Z);
         }
-        public static Vector operator /(Vector v, float c)
+        /// <summary>
+        /// Retorna a divisão de um vetor por um número
+        /// </summary>
+        /// <param name="v">Vetor</param>
+        /// <param name="n">Número</param>
+        /// <returns>Vetor resultante</returns>
+        public static Vector operator /(Vector v, float n)
         {
-            return new Vector(v.X / c, v.Y / c, v.Z / c);
+            return new Vector(v.X / n, v.Y / n, v.Z / n);
         }
+        /// <summary>
+        /// Retorna a soma entre dois vetores
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Vetor resultante</returns>
         public static Vector operator +(Vector v1, Vector v2)
         {
             return new Vector(v1.X + v2.X, v1.Y + v2.Y, v1.Z + v2.Z);
         }
+        /// <summary>
+        /// Retorna a subtração entre dois vetores
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Vetor resultante</returns>
         public static Vector operator -(Vector v1, Vector v2)
         {
             return new Vector(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
+        /// <summary>
+        /// Retorna o vetor oposto
+        /// </summary>
+        /// <param name="v1">Vetor original</param>
+        /// <returns>Vetor resultante</returns>
         public static Vector operator -(Vector v1)
         {
             return new Vector(-v1.X, -v1.Y, -v1.Z);
         }
+        /// <summary>
+        /// Retorna um booleano afirmando se o módulo de A é maior do que o módulo de B
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Bool</returns>
         public static bool operator >(Vector v1, Vector v2)
         {
-            return Math.Round(v1.Magnitude, 2) > Math.Round(v2.Magnitude, 2); // We will consider 0.995 and 1.005 = 1
+            return Math.Round(v1.Magnitude, 2) > Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
         }
+        /// <summary>
+        /// Retorna um booleano afirmando se o módulo de A é menor do que o módulo de B
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Bool</returns>
         public static bool operator <(Vector v1, Vector v2)
         {
-            return Math.Round(v1.Magnitude, 2) < Math.Round(v2.Magnitude, 2); // We will consider 0.995 and 1.005 = 1
+            return Math.Round(v1.Magnitude, 2) < Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
         }
+        /// <summary>
+        /// Retorna um booleano afirmando se o módulo de A é maior do que ou igual ao módulo de B
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Bool</returns>
         public static bool operator >=(Vector v1, Vector v2)
         {
-            return Math.Round(v1.Magnitude, 2) >= Math.Round(v2.Magnitude, 2); // We will consider 0.995 and 1.005 = 1
+            return Math.Round(v1.Magnitude, 2) >= Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
         }
+        /// <summary>
+        /// Retorna um booleano afirmando se o módulo de A é menor do que ou igual ao módulo de B
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Bool</returns>
         public static bool operator <=(Vector v1, Vector v2)
         {
-            return Math.Round(v1.Magnitude, 2) <= Math.Round(v2.Magnitude, 2); // We will consider 0.995 and 1.005 = 1
+            return Math.Round(v1.Magnitude, 2) <= Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
         }
+        /// <summary>
+        /// Retorna um booleano afirmando se os módulos dos vetores são iguais
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Bool</returns>
         public static bool operator ==(Vector v1, Vector v2)
         {
             return Math.Round(v1.X, 2) == Math.Round(v2.X, 2) ^
                    Math.Round(v1.Y, 2) == Math.Round(v2.Y, 2) ^
-                   Math.Round(v1.Z, 2) == Math.Round(v2.Z, 2); // We will consider 0.995 and 1.005 = 1
+                   Math.Round(v1.Z, 2) == Math.Round(v2.Z, 2); // 0.995 e 1.005 são considerados como 1
 
         }
+        /// <summary>
+        /// Retorna um booleano afirmando se os módulos dos vetores são diferentes
+        /// </summary>
+        /// <param name="v1">Vetor A</param>
+        /// <param name="v2">Vetor B</param>
+        /// <returns>Bool</returns>
         public static bool operator !=(Vector v1, Vector v2)
         {
             return Math.Round(v1.X, 2) != Math.Round(v2.X, 2) ||
                    Math.Round(v1.Y, 2) != Math.Round(v2.Y, 2) ||
-                   Math.Round(v1.Z, 2) != Math.Round(v2.Z, 2); // We will consider 0.995 and 1.005 = 1
+                   Math.Round(v1.Z, 2) != Math.Round(v2.Z, 2); // 0.995 e 1.005 são considerados como 1
         }
         #endregion
 
         #region Properties
+        /// <summary>
+        /// Retorna o valor no eixo X
+        /// </summary>
         public float X { get; set; }
+        /// <summary>
+        /// Retorna o valor no eixo Y
+        /// </summary>
         public float Y { get; set; }
+        /// <summary>
+        /// Retorna o valor no eixo Z
+        /// </summary>
         public float Z { get; set; }
 
+        /// <summary>
+        /// Retorna o módulo do vetor
+        /// </summary>
         public float Magnitude
         {
             get
@@ -83,6 +184,9 @@ namespace ZombieGame.Physics
                                         Math.Pow(Z, 2));
             }
         }
+        /// <summary>
+        /// Retorna a parte unitária do vetor
+        /// </summary>
         public Vector Normalized
         {
             get
@@ -95,15 +199,30 @@ namespace ZombieGame.Physics
                     return new Vector(X / mag, Y / mag, Z / mag);
             }
         }
-        public bool IsNormalized { get { return Math.Round(Magnitude, 2) == 1; } } // We will consider 0.995 and 1.005 = 1
+        /// <summary>
+        /// Retorna se o vetor tem módulo igual a 1
+        /// </summary>
+        public bool IsNormalized { get { return Math.Round(Magnitude, 2) == 1; } } // 0.995 e 1.005 são considerados como 1
         #endregion
 
         #region Methods
+        /// <summary>
+        /// ctor.
+        /// </summary>
+        /// <param name="x">Valor no eixo X</param>
+        /// <param name="y">Valor no eixo Y</param>
+        /// <param name="z">Valor no eixo Z</param>
         public Vector(float x = 0, float y = 0, float z = 0)
         {
             Set(x, y, z);
         }
 
+        /// <summary>
+        /// Define os valores dos eixos do vetor
+        /// </summary>
+        /// <param name="x">Valor no eixo X</param>
+        /// <param name="y">Valor no eixo Y</param>
+        /// <param name="z">Valor no eixo Z</param>
         public void Set(float x, float y, float z = 0)
         {
             X = x;
@@ -111,17 +230,30 @@ namespace ZombieGame.Physics
             Z = z;
         }
 
+        /// <summary>
+        /// Retorna o vetor direcionado a um ponto
+        /// </summary>
+        /// <param name="position">Ponto a se direcionar</param>
+        /// <returns></returns>
         public Vector PointedAt(Vector position)
         {
             return this - position;
         }
 
+        /// <summary>
+        /// Torna o vetor unitário
+        /// </summary>
         public void Normalize()
         {
             var normalized = Normalized;
             Set(normalized.X, normalized.Y, normalized.Z);
         }
 
+        /// <summary>
+        /// Aproxima os eixos do vetor aos eixos de um outro
+        /// </summary>
+        /// <param name="v">Vetor alvo</param>
+        /// <param name="offset">Deslocamento máximo de eixo</param>
         public void Approximate(Vector v, float offset)
         {
             if (Math.Abs(X - v.X) <= offset)

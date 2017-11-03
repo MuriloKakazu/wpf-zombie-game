@@ -11,6 +11,12 @@ namespace ZombieGame.Game
 {
     public static class Input
     {
+        /// <summary>
+        /// Retorna o valor de um eixo de entrada de usuário
+        /// </summary>
+        /// <param name="type">Tipo de eixo de entrada de usuário</param>
+        /// <param name="player">Número do jogador ao qual o eixo se aplica</param>
+        /// <returns>Valor do eixo</returns>
         public static float GetAxis(AxisTypes type, int player = 1)
         {
             float output = 0;
@@ -73,8 +79,8 @@ namespace ZombieGame.Game
 
                 if (Keyboard.IsKeyDown(Key.F5))
                 {
-                    GameMaster.Player1.Character.RigidBody.Position = Physics.Vector.Zero;
-                    GameMaster.Player2.Character.RigidBody.Position = Physics.Vector.Zero;
+                    GameMaster.Player1.Character.RigidBody.SetPosition(Physics.Vector.Zero);
+                    GameMaster.Player2.Character.RigidBody.SetPosition(Physics.Vector.Zero);
                 }
             });
             return output;
