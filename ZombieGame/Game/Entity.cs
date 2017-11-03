@@ -19,35 +19,49 @@ namespace ZombieGame.Game
         public RigidBody RigidBody { get; set; }
         public bool IsGrounded { get; protected set; }
 
-        public Entity()
+        public Entity(string name)
         {
+            Name = name;
             Tag = Tags.Undefined;
             RigidBody = new RigidBody();
             Entities.Add(this);
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
-        private void UpdateTimer_Elapsed(object sender, ElapsedEventArgs e)
+        public delegate void CollisionHandler(object sender, CollisionEventArgs e);
+        public event CollisionHandler CollisionEnter;
+        public event CollisionHandler CollisionLeave;
+
+        protected virtual void OnCollisionEnter(CollisionEventArgs e)
         {
-            Update();
+            Console.WriteLine("Collision with {0}", e.Collider.Name);
+            CollisionEnter?.Invoke(this, e);
+        }
+
+        protected virtual void OnCollisionLeave(CollisionEventArgs e)
+        {
+            CollisionLeave?.Invoke(this, e);
+        }
+
+        protected virtual void UpdateTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //Update();
             RigidBody.Update();
         }
 
-        private void Update()
+        protected void Update()
         {
             CheckCollision();
         }
 
-        private void CheckCollision()
+        protected void CheckCollision()
         {
-            int groundCol = 0;
             foreach (var e in Entities)
-                if (this.RigidBody.Bounds.IntersectsWith(e.RigidBody.Bounds) && e.Tag == Tags.Ground)
-                    groundCol++;
-            if (groundCol > 0)
-                IsGrounded = true;
-            else
-                IsGrounded = false;
+            {
+                Vector dir;
+                if (this.RigidBody.Bounds.IntersectsWith(e.RigidBody.Bounds, out dir))
+                    CollisionEnter?.Invoke(this, new CollisionEventArgs(e, dir));
+            }
         }
 
         public void Destroy()

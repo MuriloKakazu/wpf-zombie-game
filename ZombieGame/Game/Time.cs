@@ -20,7 +20,7 @@ namespace ZombieGame.Game
         {
             float d = DateTime.Now.Millisecond - LastUpdate.Millisecond;
             if (d > 0)
-                Delta = d / 1000f;
+                Delta = d / 1000;
             LastUpdate = DateTime.Now;
         }
     }

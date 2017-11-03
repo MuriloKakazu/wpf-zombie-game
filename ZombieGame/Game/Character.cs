@@ -18,23 +18,13 @@ namespace ZombieGame.Game
         #endregion
         public Weapon Weapon { get; set; }
         public Vector AimDirection { get; set; }
+        public bool IsSprinting { get; set; }
 
-        public Character()
+        public Character(string name) : base(name)
         {
             Weapon = new Weapon();
             AimDirection = Vector.Zero;
             RigidBody.SpeedMultiplier = 1.5f;
-            GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
-        }
-
-        private void UpdateTimer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            Update();
-        }
-
-        public void Update()
-        {
-            
         }
 
         #endregion

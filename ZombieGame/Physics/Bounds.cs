@@ -41,5 +41,21 @@ namespace ZombieGame.Physics
                    BottomLeft <= b.TopRight && BottomLeft >= b.TopLeft ||
                    BottomRight >= b.TopLeft && BottomRight <= b.TopRight;
         }
+
+        public bool IntersectsWith(Bounds b, out Vector direction)
+        {
+            if (TopLeft <= b.BottomRight && TopLeft >= b.BottomLeft)
+                direction = TopLeft;
+            else if (TopRight >= b.BottomRight && TopRight <= b.BottomLeft)
+                direction = TopRight;
+            else if (BottomLeft <= b.TopRight && BottomLeft >= b.TopLeft)
+                direction = BottomLeft;
+            else if (BottomRight >= b.TopLeft && BottomRight <= b.TopRight)
+                direction = BottomRight;
+            else
+                direction = null;
+
+            return IntersectsWith(b);
+        }
     }
 }
