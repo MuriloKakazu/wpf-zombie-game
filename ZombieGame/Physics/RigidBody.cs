@@ -73,8 +73,6 @@ namespace ZombieGame.Physics
                     AppliedForces.RemoveAt(i);
             }
 
-            Console.WriteLine(Force.X + " " + Force.Y);
-
             Acceleration = Velocity / Time.Delta;
             Position += Velocity * Time.Delta;
 
