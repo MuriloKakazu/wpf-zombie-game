@@ -10,7 +10,8 @@
         <DockPanel>
             <ListView x:Name="DebugList" DockPanel.Dock="Top" />
             <Canvas DockPanel.Dock="Top">
-                <Button x:Name="Rectangle" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="323" Canvas.Top="152"/>
+                <Button x:Name="Rectangle1" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="323" Canvas.Top="152"/>
+                <Button x:Name="Rectangle2" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="416" Canvas.Top="152"/>
             </Canvas>
         </DockPanel>
     </Grid>

@@ -10,12 +10,13 @@ namespace ZombieGame.Game
 {
     public class Player
     {
-        public int Number { get; set; }
+        public int PlayerNumber { get; set; }
         public Character Character { get; set; }
 
-        public Player()
+        public Player(int playerNumber)
         {
-            Character = new Character();
+            PlayerNumber = playerNumber;
+            Character = new Character(string.Format("Player{0}", playerNumber.ToString()));
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
@@ -26,11 +27,10 @@ namespace ZombieGame.Game
 
         public void Update()
         {
-            if (Character.RigidBody.Velocity.Magnitude < Character.RigidBody.MaxSpeed)
-            Character.RigidBody.AddForce(new Vector(Input.GetAxis(AxisTypes.Horizontal, Number), 0, 0));
-            //if (Character.IsGrounded)
-                Character.RigidBody.AddForce(new Vector(0, Input.GetAxis(AxisTypes.Vertical, Number), 0));
-            var vector = Character.RigidBody.Velocity;
+            Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisTypes.Sprint, PlayerNumber));
+            Character.RigidBody.AddVelocity(new Vector(Input.GetAxis(AxisTypes.Horizontal, PlayerNumber), 0, 0) * 10);
+            if (Character.RigidBody.Position.Y <= 0)
+                Character.RigidBody.AddVelocity(new Vector(0, Input.GetAxis(AxisTypes.Vertical, PlayerNumber), 0) * 10);
         }
     }
 }

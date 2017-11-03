@@ -13,7 +13,8 @@ namespace ZombieGame.Physics
         public Bounds Bounds { get; set; }
         public float Mass { get; set; }
         public float SpeedMultiplier { get; set; }
-        public float MaxSpeed { get; set; }
+        public float MaxSpeedX { get; set; }
+        public float MaxSpeedY { get; set; }
         public Vector Position { get { return Bounds.Position; } set { Bounds.Position = value; } }
         public Vector Size { get { return Bounds.Size; } }
         public Vector[] Forces { get { return AppliedForces.ToArray(); } }
@@ -32,22 +33,35 @@ namespace ZombieGame.Physics
         public float Drag { get; set; }
         public bool UseRotation { get; set; }
         public bool UseGravity { get; set; }
+        public bool CanMoveLeft { get; set; }
+        public bool CanMoveRight { get; set; }
+        public bool CanMoveUp { get; set; }
+        public bool CanMoveDown { get; set; }
 
         public RigidBody()
         {
             AppliedForces = new List<Vector>();
             Mass = 1;
-            MaxSpeed = 10;
             Bounds = new Bounds(Vector.Zero, new Vector(50, 50));
             Acceleration = Vector.Zero;
             Velocity = Vector.Zero;
-            //UseGravity = true;
-            Drag = 0.01f;
+            UseGravity = true;
+            Drag = 1f;
+            MaxSpeedX = 200;
+            MaxSpeedY = 1000;
         }
 
-        public void AddForce(Vector v)
+        public void AddForce(Vector f)
         {
-            AppliedForces.Add(v);
+            AppliedForces.Add(f);
+        }
+
+        public void AddVelocity(Vector v)
+        {
+            if (Math.Abs(Velocity.X + v.X) < MaxSpeedX)
+                Velocity.X += v.X;
+            if (Math.Abs(Velocity.Y + v.Y) < MaxSpeedY)
+                Velocity.Y += v.Y;
         }
 
         public void Update()
@@ -59,9 +73,13 @@ namespace ZombieGame.Physics
                     AppliedForces.RemoveAt(i);
             }
 
-            Acceleration = Force / Mass;
-            Velocity += Acceleration * Time.Delta;
+            Console.WriteLine(Force.X + " " + Force.Y);
+
+            Acceleration = Velocity / Time.Delta;
             Position += Velocity * Time.Delta;
+
+            if (Position.Y < 0)
+                Position.Y = 0;
 
             Velocity.Approximate(Vector.Zero, Drag);
         }
