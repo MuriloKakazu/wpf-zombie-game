@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZombieGame.Game;
 
-namespace ZombieGame.Game
+namespace ZombieGame.Physics
 {
     public static class Time
     {

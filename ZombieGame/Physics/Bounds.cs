@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace ZombieGame.Physics
 {
     public class Bounds
     {
+        public Rect Rectangle { get { return new Rect(Position.X, Position.Y, Size.X, Size.Y); } }
         public Vector Position { get; set; }
         public Vector Size { get; set; }
         public Vector TopLeft { get { return Position; } }
@@ -36,26 +38,7 @@ namespace ZombieGame.Physics
 
         public bool IntersectsWith(Bounds b)
         {
-            return TopLeft <= b.BottomRight && TopLeft >= b.BottomLeft ||
-                   TopRight >= b.BottomRight && TopRight <= b.BottomLeft ||
-                   BottomLeft <= b.TopRight && BottomLeft >= b.TopLeft ||
-                   BottomRight >= b.TopLeft && BottomRight <= b.TopRight;
-        }
-
-        public bool IntersectsWith(Bounds b, out Vector direction)
-        {
-            if (TopLeft <= b.BottomRight && TopLeft >= b.BottomLeft)
-                direction = TopLeft;
-            else if (TopRight >= b.BottomRight && TopRight <= b.BottomLeft)
-                direction = TopRight;
-            else if (BottomLeft <= b.TopRight && BottomLeft >= b.TopLeft)
-                direction = BottomLeft;
-            else if (BottomRight >= b.TopLeft && BottomRight <= b.TopRight)
-                direction = BottomRight;
-            else
-                direction = null;
-
-            return IntersectsWith(b);
+            return Rectangle.IntersectsWith(b.Rectangle);
         }
     }
 }
