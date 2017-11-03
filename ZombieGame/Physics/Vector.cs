@@ -111,6 +111,11 @@ namespace ZombieGame.Physics
             Z = z;
         }
 
+        public Vector PointedAt(Vector position)
+        {
+            return this - position;
+        }
+
         public void Normalize()
         {
             var normalized = Normalized;

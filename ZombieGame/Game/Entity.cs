@@ -26,26 +26,38 @@ namespace ZombieGame.Game
             RigidBody = new RigidBody();
             Entities.Add(this);
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
+            CollisionEnter += OnCollisionEnter;
+            CollisionLeave += OnCollisionLeave;
+        }
+
+        protected virtual void OnCollisionEnter(object sender, CollisionEventArgs e)
+        {
+            Console.WriteLine("Collision with {0}", e.Collider.Name);
+        }
+
+        protected virtual void OnCollisionLeave(object sender, CollisionEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         public delegate void CollisionHandler(object sender, CollisionEventArgs e);
         public event CollisionHandler CollisionEnter;
         public event CollisionHandler CollisionLeave;
 
-        protected virtual void OnCollisionEnter(CollisionEventArgs e)
-        {
-            Console.WriteLine("Collision with {0}", e.Collider.Name);
-            CollisionEnter?.Invoke(this, e);
-        }
+        //protected virtual void OnCollisionEnter(CollisionEventArgs e)
+        //{
+        //    Console.WriteLine("Collision with {0}", e.Collider.Name);
+        //    CollisionEnter?.Invoke(this, e);
+        //}
 
-        protected virtual void OnCollisionLeave(CollisionEventArgs e)
-        {
-            CollisionLeave?.Invoke(this, e);
-        }
+        //protected virtual void OnCollisionLeave(CollisionEventArgs e)
+        //{
+        //    CollisionLeave?.Invoke(this, e);
+        //}
 
         protected virtual void UpdateTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            //Update();
+            Update();
             RigidBody.Update();
         }
 
@@ -58,9 +70,8 @@ namespace ZombieGame.Game
         {
             foreach (var e in Entities)
             {
-                Vector dir;
-                if (this.RigidBody.Bounds.IntersectsWith(e.RigidBody.Bounds, out dir))
-                    CollisionEnter?.Invoke(this, new CollisionEventArgs(e, dir));
+                if (RigidBody.Bounds.IntersectsWith(e.RigidBody.Bounds))
+                    CollisionEnter?.Invoke(this, new CollisionEventArgs(e, RigidBody.Position.PointedAt(e.RigidBody.Position)));
             }
         }
 
