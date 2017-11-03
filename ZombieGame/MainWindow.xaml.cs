@@ -30,6 +30,11 @@ namespace ZombieGame
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
+        /// <summary>
+        /// Atualiza as labels da tela e move os retângulos de acordo com a posição dos jogadores
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             Dispatcher.Invoke(new Action(() =>
@@ -38,14 +43,16 @@ namespace ZombieGame
                 var player = GameMaster.Player1;
                 var pos1 = player.Character.RigidBody.Position;
 
-                //DebugList.Items.Add(new Label() { Content = string.Format("Axis:") });
-                //DebugList.Items.Add(new Label() { Content = string.Format("Horizontal1: {0}", Input.GetAxis(AxisTypes.Horizontal, 1)) });
-                //DebugList.Items.Add(new Label() { Content = string.Format("Horizontal2: {0}", Input.GetAxis(AxisTypes.Horizontal, 2)) });
-                //DebugList.Items.Add(new Label() { Content = string.Format("Vertical1: {0}", Input.GetAxis(AxisTypes.Vertical, 1)) });
-                //DebugList.Items.Add(new Label() { Content = string.Format("Vertical2: {0}", Input.GetAxis(AxisTypes.Vertical, 2)) });
-
-                DebugList.Items.Add(new Label() { Content = string.Format("Player 1:")});
+                DebugList.Items.Add(new Label() { Content = string.Format("Player 1:") });
                 DebugList.Items.Add(new Label() { Content = string.Format("IsSprinting: {0}", player.Character.IsSprinting) });
+                DebugList.Items.Add(new Label()
+                {
+                    Content = string.Format("Force: X: {0} Y: {1} Z: {2}",
+                                            player.Character.RigidBody.Force.X,
+                                            player.Character.RigidBody.Force.Y,
+                                            player.Character.RigidBody.Force.Z)
+                });
+
                 DebugList.Items.Add(new Label()
                 {
                     Content = string.Format("Velocity: X: {0} Y: {1} Z: {2}",
@@ -65,10 +72,10 @@ namespace ZombieGame
                 DebugList.Items.Add(new Label()
                 {
                     Content = string.Format("Bounds: X: {0} Y: {1} Width: {2} Height: {3}",
-                                            player.Character.RigidBody.Bounds.Rectangle.Left,
-                                            player.Character.RigidBody.Bounds.Rectangle.Top,
-                                            player.Character.RigidBody.Bounds.Rectangle.Width,
-                                            player.Character.RigidBody.Bounds.Rectangle.Height)
+                                            player.Character.RigidBody.Bounds.Left,
+                                            player.Character.RigidBody.Bounds.Top,
+                                            player.Character.RigidBody.Bounds.Width,
+                                            player.Character.RigidBody.Bounds.Height)
                 });
 
                 player = GameMaster.Player2;
@@ -78,10 +85,18 @@ namespace ZombieGame
                 DebugList.Items.Add(new Label() { Content = string.Format("IsSprinting: {0}", player.Character.IsSprinting) });
                 DebugList.Items.Add(new Label()
                 {
+                    Content = string.Format("Force: X: {0} Y: {1} Z: {2}",
+                                            player.Character.RigidBody.Force.X,
+                                            player.Character.RigidBody.Force.Y,
+                                            player.Character.RigidBody.Force.Z)
+                });
+
+                DebugList.Items.Add(new Label()
+                {
                     Content = string.Format("Velocity: X: {0} Y: {1} Z: {2}",
-                            player.Character.RigidBody.Velocity.X,
-                            player.Character.RigidBody.Velocity.Y,
-                            player.Character.RigidBody.Velocity.Z)
+                                            player.Character.RigidBody.Velocity.X,
+                                            player.Character.RigidBody.Velocity.Y,
+                                            player.Character.RigidBody.Velocity.Z)
                 });
 
                 DebugList.Items.Add(new Label()
@@ -95,10 +110,10 @@ namespace ZombieGame
                 DebugList.Items.Add(new Label()
                 {
                     Content = string.Format("Bounds: X: {0} Y: {1} Width: {2} Height: {3}",
-                                            player.Character.RigidBody.Bounds.Rectangle.Left,
-                                            player.Character.RigidBody.Bounds.Rectangle.Top,
-                                            player.Character.RigidBody.Bounds.Rectangle.Width,
-                                            player.Character.RigidBody.Bounds.Rectangle.Height)
+                                            player.Character.RigidBody.Bounds.Left,
+                                            player.Character.RigidBody.Bounds.Top,
+                                            player.Character.RigidBody.Bounds.Width,
+                                            player.Character.RigidBody.Bounds.Height)
                 });
 
                 Canvas.SetLeft(Rectangle1, pos1.X);

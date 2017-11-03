@@ -7,24 +7,27 @@ namespace ZombieGame.Game
     public class Character : Entity
     {
         #region Properties
-
-        #region Level and Exeperience
-
-        public int Level { get; set; } //The max is 50
-        public float CurrentExp { get; set; }
-        public float NeededExp { get { return 500 + 10 * (float)Math.Pow(Level, 2); } }
-        public float TotalExp { get; set; }
-        public float RemainingExp { get { return NeededExp - CurrentExp; } }
-        #endregion
+        /// <summary>
+        /// Arma do personagem
+        /// </summary>
         public Weapon Weapon { get; set; }
-        public Vector AimDirection { get; set; }
+        /// <summary>
+        /// Direção a qual o personagem está voltado
+        /// </summary>
+        public Vector FacingDirection { get; set; }
+        /// <summary>
+        /// Retorna se o personagem está correndo
+        /// </summary>
         public bool IsSprinting { get; set; }
 
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="name">Nome do personagem</param>
         public Character(string name) : base(name)
         {
             Weapon = new Weapon();
-            AimDirection = Vector.Zero;
-            RigidBody.SpeedMultiplier = 1.5f;
+            FacingDirection = Vector.Zero;
         }
 
         #endregion
