@@ -54,6 +54,10 @@ namespace ZombieGame.Physics
         /// Define se o corpo estará sujeito à ação da gravidade
         /// </summary>
         public bool UseGravity { get; set; }
+        /// <summary>
+        /// Define se o corpo estará sujeito à mudança automática de posição
+        /// </summary>
+        public bool FixedPosition { get; set; }
 
         /// <summary>
         /// ctor
@@ -62,7 +66,7 @@ namespace ZombieGame.Physics
         {
             Mass = 1f;
             Position = Vector.Zero;
-            Size = new Vector(50, 50);
+            Size = Vector.Zero;
             Acceleration = Vector.Zero;
             Velocity = Vector.Zero;
             Force = Vector.Zero;
@@ -73,10 +77,19 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Redefine a posição do corpo
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="p">Nova posição</param>
         public void SetPosition(Vector p)
         {
             Position = p;
+        }
+
+        /// <summary>
+        /// Redimensiona o corpo
+        /// </summary>
+        /// <param name="s">Novo tamanho</param>
+        public void Resize(Vector s)
+        {
+            Size = s;
         }
 
         /// <summary>
@@ -108,7 +121,7 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Adiciona um vetor velocidade ao corpo
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="v">Vetor velocidade</param>
         public void AddVelocity(Vector v)
         {
             Velocity += v;
@@ -119,20 +132,23 @@ namespace ZombieGame.Physics
         /// </summary>
         public void Update()
         {
-            Acceleration = Force / Mass;
+            if (!FixedPosition)
+            {
+                Acceleration = Force / Mass;
 
-            if (UseGravity)
-                Acceleration += Vector.EarthGravity;
+                if (UseGravity)
+                    Acceleration += Vector.EarthGravity;
 
-            Velocity += Acceleration * Time.Delta;
-            Position += Velocity * Time.Delta;
+                Velocity += Acceleration * Time.Delta;
+                Position += Velocity * Time.Delta;
 
-            Force.Approximate(Vector.Zero, Drag);
+                Force.Approximate(Vector.Zero, Drag);
 
-            //if (UseGravity)
-            //    Velocity.Approximate(Vector.EarthGravity, Drag);
-            //else
-            //    Velocity.Approximate(Vector.Zero, Drag);
+                //if (UseGravity)
+                //    Velocity.Approximate(Vector.EarthGravity, Drag);
+                //else
+                //    Velocity.Approximate(Vector.Zero, Drag);
+            }
         }
     }
 }

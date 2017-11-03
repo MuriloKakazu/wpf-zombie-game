@@ -73,6 +73,8 @@
     <Compile Include="Game\GameMaster.cs" />
     <Compile Include="Game\Input.cs" />
     <Compile Include="Game\Player.cs" />
+    <Compile Include="Physics\Enums\RectPositions.cs" />
+    <Compile Include="Physics\Extensions\RectExtensions.cs" />
     <Compile Include="Physics\Time.cs" />
     <Compile Include="Game\Weapon.cs" />
     <Compile Include="MainWindow.xaml.cs">
