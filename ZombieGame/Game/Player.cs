@@ -28,9 +28,8 @@ namespace ZombieGame.Game
         public void Update()
         {
             Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisTypes.Sprint, PlayerNumber));
-            Character.RigidBody.AddVelocity(new Vector(Input.GetAxis(AxisTypes.Horizontal, PlayerNumber)) * 10);
-            if (Character.RigidBody.Position.Y <= 0)
-                Character.RigidBody.AddVelocity(new Vector(0, Input.GetAxis(AxisTypes.Vertical, PlayerNumber)) * 10);
+            Character.RigidBody.AddForce(new Vector(Input.GetAxis(AxisTypes.Horizontal, PlayerNumber)) * 100);
+            Character.RigidBody.AddForce(new Vector(0, Input.GetAxis(AxisTypes.Vertical, PlayerNumber)) * 100);
         }
     }
 }

@@ -34,6 +34,10 @@ namespace ZombieGame.Physics
         {
             return new Vector(v1.X - v2.X, v1.Y - v2.Y, v1.Z - v2.Z);
         }
+        public static Vector operator -(Vector v1)
+        {
+            return new Vector(-v1.X, -v1.Y, -v1.Z);
+        }
         public static bool operator >(Vector v1, Vector v2)
         {
             return Math.Round(v1.Magnitude, 2) > Math.Round(v2.Magnitude, 2); // We will consider 0.995 and 1.005 = 1
