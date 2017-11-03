@@ -26,7 +26,7 @@ namespace ZombieGame.Game
         public Player(int playerNumber)
         {
             PlayerNumber = playerNumber;
-            Character = new Character(string.Format("Player{0}", playerNumber.ToString()));
+            Character = new Character(string.Format("Player{0}", playerNumber.ToString()), Tags.Player);
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
@@ -47,6 +47,7 @@ namespace ZombieGame.Game
         {
             Character.RigidBody.Stop();
             Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisTypes.Sprint, PlayerNumber));
+            Character.IsFiring = Convert.ToBoolean(Input.GetAxis(AxisTypes.Fire, PlayerNumber));
             if (Character.IsSprinting)
             {
                 Character.RigidBody.AddVelocity(new Vector(Input.GetAxis(AxisTypes.Horizontal, PlayerNumber)) * 500);

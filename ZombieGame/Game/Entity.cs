@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Timers;
 using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
+using ZombieGame.Physics.Enums;
 using ZombieGame.Physics.Events;
+using ZombieGame.Physics.Extensions;
 
 namespace ZombieGame.Game
 {
@@ -25,19 +27,23 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna o nome da entidade
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; protected set; }
         /// <summary>
         /// Retorna a Tag da entidade
         /// </summary>
-        public Tags Tag { get; set; }
+        public Tags Tag { get; protected set; }
         /// <summary>
         /// Retorna o RigidBody da entidade
         /// </summary>
-        public RigidBody RigidBody { get; set; }
+        public RigidBody RigidBody { get; protected set; }
         /// <summary>
         /// Retorna um booleano afirmando se a entidade está aterrada
         /// </summary>
         public bool IsGrounded { get; protected set; }
+        /// <summary>
+        /// Retorna uma lista com todas as entidades as quais se está colidindo
+        /// </summary>
+        protected List<Entity> Collisions { get; set; }
         #endregion
 
         #region Methods
@@ -45,11 +51,13 @@ namespace ZombieGame.Game
         /// ctor
         /// </summary>
         /// <param name="name">Nome da entidade</param>
-        public Entity(string name)
+        /// <param name="tag">Tag da entidade</param>
+        public Entity(string name, Tags tag)
         {
             Name = name;
-            Tag = Tags.Undefined;
+            Tag = tag;
             RigidBody = new RigidBody();
+            Collisions = new List<Entity>();
             Entities.Add(this);
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
             CollisionEnter += OnCollisionEnter;
@@ -63,7 +71,10 @@ namespace ZombieGame.Game
         /// <param name="e">Informações a respeito da colisão</param>
         protected virtual void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
-            Console.WriteLine("Collision with {0}", e.Collider.Name);
+            if (Tag != Tags.Ground && Tag != Tags.Ceiling && e.Collider.Tag != Tags.Ground && e.Collider.Tag != Tags.Ceiling)
+                RigidBody.AddVelocity(e.CollisionDirection * e.Collider.RigidBody.Velocity.Magnitude);
+            else if (Tag == Tags.Ground)
+                e.Collider.RigidBody.AddVelocity(Vector.Up * -e.Collider.RigidBody.Velocity);
         }
 
         /// <summary>
@@ -73,7 +84,7 @@ namespace ZombieGame.Game
         /// <param name="e">Informações a respeito da colisão</param>
         protected virtual void OnCollisionLeave(object sender, CollisionEventArgs e)
         {
-            throw new NotImplementedException();
+            Console.WriteLine(e.Collider.Name);
         }
 
         /// <summary>
@@ -100,11 +111,36 @@ namespace ZombieGame.Game
         /// </summary>
         protected void CheckCollision()
         {
+            List<Entity> currentCollisions = new List<Entity>();
             foreach (var e in Entities)
             {
                 if (RigidBody.Bounds.IntersectsWith(e.RigidBody.Bounds))
-                    CollisionEnter?.Invoke(this, new CollisionEventArgs(e, RigidBody.Position.PointedAt(e.RigidBody.Position)));
+                {
+                    CollisionEnter?.Invoke(this, new CollisionEventArgs(e, RigidBody.Bounds.GetVector(RectPositions.Center).PointedAt(e.RigidBody.Bounds.GetVector(RectPositions.Center)).Normalized));
+                    currentCollisions.Add(e);
+                }
             }
+
+            bool grounded = false;
+
+            foreach (var e in currentCollisions)
+            {
+                if (e.Tag == Tags.Ground)
+                {
+                    grounded = true;
+                    break;
+                }
+            }
+
+            IsGrounded = grounded;
+
+            foreach (var e in Collisions)
+            {
+                if (!currentCollisions.Contains(e))
+                    CollisionLeave.Invoke(this, new CollisionEventArgs(e, RigidBody.Bounds.GetVector(RectPositions.Center).PointedAt(e.RigidBody.Bounds.GetVector(RectPositions.Center)).Normalized));
+            }
+
+            Collisions = currentCollisions;
         }
 
         /// <summary>

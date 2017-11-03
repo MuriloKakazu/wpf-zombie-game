@@ -23,11 +23,18 @@ namespace ZombieGame
     /// </summary>
     public partial class MainWindow : Window
     {
+        Entity GroundEntity { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
             GameMaster.Setup();
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
+
+            GroundEntity = new Entity("Ground", Tags.Ground);
+            GroundEntity.RigidBody.SetPosition(new Physics.Vector(0, -250));
+            GroundEntity.RigidBody.Resize(new Physics.Vector(800, 50));
+            GroundEntity.RigidBody.FixedPosition = true;
         }
 
         /// <summary>
@@ -120,6 +127,8 @@ namespace ZombieGame
                 Canvas.SetTop(Rectangle1, -pos1.Y);
                 Canvas.SetLeft(Rectangle2, pos2.X);
                 Canvas.SetTop(Rectangle2, -pos2.Y);
+                Canvas.SetLeft(Ground, GroundEntity.RigidBody.Position.X);
+                Canvas.SetTop(Ground, -GroundEntity.RigidBody.Position.Y);
             }));
 
         }

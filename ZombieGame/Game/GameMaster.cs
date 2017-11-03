@@ -34,6 +34,8 @@ namespace ZombieGame.Game
             Time.ListenToTimer(UpdateTimer);
             Player1 = new Player(1);
             Player2 = new Player(2);
+            Player1.Character.RigidBody.Resize(new Vector(50, 50));
+            Player2.Character.RigidBody.Resize(new Vector(50, 50));
         }
     }
 }
