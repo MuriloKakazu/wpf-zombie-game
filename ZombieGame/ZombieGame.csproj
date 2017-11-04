@@ -75,12 +75,15 @@
     <Compile Include="Game\Character.cs" />
     <Compile Include="Game\Entity.cs" />
     <Compile Include="Game\Enums\AxisTypes.cs" />
+    <Compile Include="Game\Enums\ItemType.cs" />
     <Compile Include="Game\Enums\Tags.cs" />
     <Compile Include="Game\Enums\WeaponTypes.cs" />
     <Compile Include="Game\Enums\ZombieTag.cs" />
     <Compile Include="Game\GameMaster.cs" />
     <Compile Include="Game\Input.cs" />
+    <Compile Include="Game\Item.cs" />
     <Compile Include="Game\Player.cs" />
+    <Compile Include="Game\Store.cs" />
     <Compile Include="Game\Zombie.cs" />
     <Compile Include="Physics\Enums\RectPositions.cs" />
     <Compile Include="Physics\Extensions\RectExtensions.cs" />

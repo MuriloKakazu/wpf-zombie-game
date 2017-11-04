@@ -14,14 +14,25 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna o dano da arma por projétil
         /// </summary>
-        public float Damage { get; set; }
+        public int Damage { get; set; }
         /// <summary>
         /// Retorna a taxa de disparo de projéteis da arma por minuto
         /// </summary>
         public float FireRate { get; set; }
 
-        public int Ammo { get; set; }
+        /// <summary>
+        /// Retorna a quantidade máxima de munição
+        /// </summary>
+        public int MaxAmmo { get; set; }
 
+        /// <summary>
+        /// Retorna a quantidade atual de munição
+        /// </summary>
+        public int CurAmmo { get; set; }
+
+        /// <summary>
+        /// Retorna a velocidade da arma
+        /// </summary>
         public float BulletVelocity { get; set; }
 
         /// <summary>

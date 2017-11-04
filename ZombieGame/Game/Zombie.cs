@@ -15,14 +15,7 @@ namespace ZombieGame.Game
         /// Retorna o tipo de zumbi
         /// </summary>
         public ZombieTag ZbTag { get; set; }
-
-        /// <summary>
-        /// Retorna a velocidade do zumbi
-        /// </summary>
-        public Vector Velocity { get; set; }]
-
-        //spawn x and y
-
+        public bool IsAZombie { get { return Tag == Tags.Enemy; } }
 
         /// <summary>
         /// ctor
@@ -115,5 +108,34 @@ namespace ZombieGame.Game
             }
         }
 
+        /// <summary>
+        /// Método chamado quando se mata um zumbi
+        /// </summary>
+        /// <param name="killer">O personagem que matou o zumbi</param>
+        public void Kill(Character killer)
+        {
+            if(killer.IsAPlayer)
+            {
+                killer.Money += Money;
+                killer.Experience += Experience;
+
+                Destroy();
+            }
+        }
+
+        /// <summary>
+        /// Método chamado para dar dano ao zumbi
+        /// </summary>
+        /// <param name="attacker">O personagem que atacou o zumbi</param>
+        public void DoDamage(Character attacker)
+        {
+            if(attacker.IsAPlayer)
+            {
+                if (Health - attacker.Weapon.Damage <= 0)
+                    Kill(attacker);
+                else
+                    Health -= attacker.Weapon.Damage;
+            }
+        }
     }
 }
