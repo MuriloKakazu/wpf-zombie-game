@@ -10,6 +10,7 @@ namespace ZombieGame.Game
 {
     public class Weapon
     {
+        #region Properties
         /// <summary>
         /// Retorna o dano da arma por projétil
         /// </summary>
@@ -18,9 +19,15 @@ namespace ZombieGame.Game
         /// Retorna a taxa de disparo de projéteis da arma por minuto
         /// </summary>
         public float FireRate { get; set; }
+
+        public int Ammo { get; set; }
+
+        public float BulletVelocity { get; set; }
+
         /// <summary>
         /// Retorna o tipo da arma
         /// </summary>
         public WeaponTypes Type { get; set; }
+	    #endregion
     }
 }

@@ -25,6 +25,8 @@ namespace ZombieGame.Game
         /// </summary>
         public bool IsFiring { get; set; }
 
+        public int Money { get; set; }
+
         /// <summary>
         /// ctor
         /// </summary>
