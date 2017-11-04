@@ -37,6 +37,8 @@ namespace ZombieGame.Game
                             output = -1;
                         else if (Keyboard.IsKeyDown(Key.W))
                             output = 1;
+                        //if (Keyboard.IsKeyDown(Key.W))
+                        //    output = 1;
                     }
                     else if (type == AxisTypes.Fire)
                     {
@@ -64,6 +66,8 @@ namespace ZombieGame.Game
                             output = -1;
                         else if (Keyboard.IsKeyDown(Key.Up))
                             output = 1;
+                        //if (Keyboard.IsKeyDown(Key.Up))
+                        //    output = 1;
                     }
                     else if (type == AxisTypes.Fire)
                     {

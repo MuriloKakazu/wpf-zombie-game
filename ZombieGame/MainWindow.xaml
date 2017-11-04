@@ -8,11 +8,12 @@
         Title="Client" Height="720" Width="1280">
     <Grid>
         <DockPanel>
-            <ListView x:Name="DebugList" DockPanel.Dock="Top" />
-            <Canvas DockPanel.Dock="Top">
-                <Button x:Name="Rectangle1" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="323" Canvas.Top="152" Content="1" FontWeight="Bold" FontSize="24"/>
-                <Button x:Name="Rectangle2" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="416" Canvas.Top="152" Content="2" FontWeight="Bold" FontSize="24"/>
-                <Button x:Name="Ground" Height="50" Width="800" RenderTransformOrigin="0.5,0.5" Canvas.Left="31" Canvas.Top="446" Content="Ground" FontWeight="Bold" FontSize="24"/>
+            <ToolBar DockPanel.Dock="Top" >
+                <Button Content="Debug" Click="Button_Click"/>
+            </ToolBar>
+            <Canvas x:Name="Camera" DockPanel.Dock="Top">
+                <Button x:Name="Rectangle1" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="323" Canvas.Top="152" Content="1" FontWeight="Bold" FontSize="10"/>
+                <Button x:Name="Rectangle2" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="416" Canvas.Top="152" Content="2" FontWeight="Bold" FontSize="10"/>
             </Canvas>
         </DockPanel>
     </Grid>

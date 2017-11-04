@@ -16,14 +16,19 @@ namespace ZombieGame.Game
     {
         #region Properties
         /// <summary>
-        /// Lista estática de todas as entidades ativas
+        /// Lista estática copntendo todas as entidades ativas
         /// </summary>
         public static List<Entity> Entities = new List<Entity>();
 
         public delegate void CollisionHandler(object sender, CollisionEventArgs e);
         public event CollisionHandler CollisionEnter;
+        public event CollisionHandler CollisionStay;
         public event CollisionHandler CollisionLeave;
 
+        /// <summary>
+        /// Código de identificação única do objeto
+        /// </summary>
+        public Guid Hash { get; protected set; }
         /// <summary>
         /// Retorna o nome da entidade
         /// </summary>
@@ -36,10 +41,6 @@ namespace ZombieGame.Game
         /// Retorna o RigidBody da entidade
         /// </summary>
         public RigidBody RigidBody { get; protected set; }
-        /// <summary>
-        /// Retorna um booleano afirmando se a entidade está aterrada
-        /// </summary>
-        public bool IsGrounded { get; protected set; }
         /// <summary>
         /// Retorna uma lista com todas as entidades as quais se está colidindo
         /// </summary>
@@ -54,6 +55,7 @@ namespace ZombieGame.Game
         /// <param name="tag">Tag da entidade</param>
         public Entity(string name, Tags tag)
         {
+            Hash = Guid.NewGuid();
             Name = name;
             Tag = tag;
             RigidBody = new RigidBody();
@@ -61,6 +63,7 @@ namespace ZombieGame.Game
             Entities.Add(this);
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
             CollisionEnter += OnCollisionEnter;
+            CollisionStay += OnCollisionStay;
             CollisionLeave += OnCollisionLeave;
         }
 
@@ -71,10 +74,69 @@ namespace ZombieGame.Game
         /// <param name="e">Informações a respeito da colisão</param>
         protected virtual void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
-            if (Tag != Tags.Ground && Tag != Tags.Ceiling && e.Collider.Tag != Tags.Ground && e.Collider.Tag != Tags.Ceiling)
-                RigidBody.AddVelocity(e.CollisionDirection * e.Collider.RigidBody.Velocity.Magnitude);
-            else if (Tag == Tags.Ground)
-                e.Collider.RigidBody.AddVelocity(Vector.Up * -e.Collider.RigidBody.Velocity);
+            Console.WriteLine("Collision enter: '{0}' and '{1}'", Name, e.Collider.Name);
+        }
+
+        /// <summary>
+        /// Evento a ser disparado quando a entidade mantém-se em colisão com outra entidade
+        /// </summary>
+        /// <param name="sender">Objeto que invocou o evento</param>
+        /// <param name="e">Informações a respeito da colisão</param>
+        protected virtual void OnCollisionStay(object sender, CollisionEventArgs e)
+        {
+            Console.WriteLine("Collision stay: '{0}' and '{1}'", Name, e.Collider.Name);
+
+            if (Tag == Tags.TopWall &&
+            e.Collider.Tag != Tags.BottomWall &&
+            e.Collider.Tag != Tags.LeftWall &&
+            e.Collider.Tag != Tags.RightWall &&
+            e.Collider.Tag != Tags.TopWall)
+            {
+                if (e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y < RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y &&
+                    e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y > RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y)
+                    e.Collider.RigidBody.SetPosition(new Vector(e.Collider.RigidBody.Position.X, RigidBody.Position.Y + e.Collider.RigidBody.Size.Y));
+            }
+            else if (Tag == Tags.BottomWall &&
+            e.Collider.Tag != Tags.BottomWall &&
+            e.Collider.Tag != Tags.LeftWall &&
+            e.Collider.Tag != Tags.RightWall &&
+            e.Collider.Tag != Tags.TopWall)
+            {
+                if (e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y > RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y &&
+                    e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y < RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y)
+                    e.Collider.RigidBody.SetPosition(new Vector(e.Collider.RigidBody.Position.X, RigidBody.Position.Y - RigidBody.Size.Y));
+            }
+            else if (Tag == Tags.LeftWall &&
+            e.Collider.Tag != Tags.BottomWall &&
+            e.Collider.Tag != Tags.LeftWall &&
+            e.Collider.Tag != Tags.RightWall &&
+            e.Collider.Tag != Tags.TopWall)
+            {
+                if (e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterRight).X > RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X &&
+                    e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterRight).X < RigidBody.Bounds.GetVector(RectPositions.CenterRight).X)
+                    e.Collider.RigidBody.SetPosition(new Vector(RigidBody.Position.X - e.Collider.RigidBody.Size.X, e.Collider.RigidBody.Position.Y));
+            }
+            else if (Tag == Tags.RightWall &&
+            e.Collider.Tag != Tags.BottomWall &&
+            e.Collider.Tag != Tags.LeftWall &&
+            e.Collider.Tag != Tags.RightWall &&
+            e.Collider.Tag != Tags.TopWall)
+            {
+                if (e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X < RigidBody.Bounds.GetVector(RectPositions.CenterRight).X &&
+                    e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X > RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X)
+                    e.Collider.RigidBody.SetPosition(new Vector(RigidBody.Position.X + RigidBody.Size.X, e.Collider.RigidBody.Position.Y));
+            }
+            else if (Tag != Tags.TopWall && 
+            Tag != Tags.BottomWall && 
+            Tag != Tags.LeftWall && 
+            Tag != Tags.RightWall && 
+            e.Collider.Tag != Tags.TopWall && 
+            e.Collider.Tag != Tags.BottomWall &&
+            e.Collider.Tag != Tags.LeftWall &&
+            e.Collider.Tag != Tags.RightWall)
+            {
+                RigidBody.AddVelocity(e.CollisionDirection.Normalized * e.Collider.RigidBody.Velocity.Magnitude);
+            }
         }
 
         /// <summary>
@@ -84,7 +146,7 @@ namespace ZombieGame.Game
         /// <param name="e">Informações a respeito da colisão</param>
         protected virtual void OnCollisionLeave(object sender, CollisionEventArgs e)
         {
-            Console.WriteLine(e.Collider.Name);
+            Console.WriteLine("Collision leave: '{0}' and '{1}'", Name, e.Collider.Name);
         }
 
         /// <summary>
@@ -114,30 +176,37 @@ namespace ZombieGame.Game
             List<Entity> currentCollisions = new List<Entity>();
             foreach (var e in Entities)
             {
-                if (RigidBody.Bounds.IntersectsWith(e.RigidBody.Bounds))
+                if (RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash)
                 {
-                    CollisionEnter?.Invoke(this, new CollisionEventArgs(e, RigidBody.Bounds.GetVector(RectPositions.Center).PointedAt(e.RigidBody.Bounds.GetVector(RectPositions.Center)).Normalized));
                     currentCollisions.Add(e);
+                    if (!Collisions.Contains(e))
+                    {
+                        var d = RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint);
+                        CollisionEnter.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                    }
                 }
             }
 
-            bool grounded = false;
+            //bool grounded = false;
 
-            foreach (var e in currentCollisions)
-            {
-                if (e.Tag == Tags.Ground)
-                {
-                    grounded = true;
-                    break;
-                }
-            }
+            //foreach (var e in currentCollisions)
+            //{
+            //    if (e.Tag == Tags.TopWall && e.RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y - RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y < 0)
+            //    {
+            //        grounded = true;
+            //        RigidBody.SetForce(Vector.Zero);
+            //        break;
+            //    }
+            //}
 
-            IsGrounded = grounded;
+            //RigidBody.IsGrounded = grounded;
 
             foreach (var e in Collisions)
             {
                 if (!currentCollisions.Contains(e))
-                    CollisionLeave.Invoke(this, new CollisionEventArgs(e, RigidBody.Bounds.GetVector(RectPositions.Center).PointedAt(e.RigidBody.Bounds.GetVector(RectPositions.Center)).Normalized));
+                    CollisionLeave.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                else if (currentCollisions.Contains(e))
+                    CollisionStay.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
             }
 
             Collisions = currentCollisions;

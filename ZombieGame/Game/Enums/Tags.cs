@@ -12,7 +12,9 @@ namespace ZombieGame.Game.Enums
         Camera,
         Player,
         Enemy,
-        Ground,
-        Ceiling
+        LeftWall,
+        RightWall,
+        BottomWall,
+        TopWall
     }
 }
