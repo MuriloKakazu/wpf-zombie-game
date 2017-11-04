@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using ZombieGame.Game;
+using ZombieGame.Physics.Enums;
+using ZombieGame.Physics.Extensions;
 
 namespace ZombieGame.Physics
 {
@@ -22,6 +24,10 @@ namespace ZombieGame.Physics
         /// Vetor posição do corpo
         /// </summary>
         public Vector Position { get; protected set; }
+        /// <summary>
+        /// Vetor posição central do corpo
+        /// </summary>
+        public Vector CenterPoint { get { return Bounds.GetVector(RectPositions.Center); } }
         /// <summary>
         /// Vetor tamanho do corpo em pixels
         /// </summary>
@@ -58,6 +64,14 @@ namespace ZombieGame.Physics
         /// Define se o corpo estará sujeito à mudança automática de posição
         /// </summary>
         public bool FixedPosition { get; set; }
+        /// <summary>
+        /// Define se o corpo está aterrado
+        /// </summary>
+        public bool IsGrounded { get; set; }
+        /// <summary>
+        /// Define se o corpo ignorará colisões
+        /// </summary>
+        public bool IgnoreCollisions { get; set; }
 
         /// <summary>
         /// ctor
@@ -71,7 +85,7 @@ namespace ZombieGame.Physics
             Velocity = Vector.Zero;
             Force = Vector.Zero;
             UseGravity = false;
-            Drag = .1f;
+            Drag = 0.1f;
         }
 
         /// <summary>
@@ -102,11 +116,21 @@ namespace ZombieGame.Physics
         }
 
         /// <summary>
-        /// Elimina a ação da força sendo aplicada ao corpo
+        /// Redefine o vetor força aplicado ao corpo
         /// </summary>
-        public void ResetForces()
+        /// <param name="f"></param>
+        public void SetForce(Vector f)
         {
-            Force = Vector.Zero;
+            Force = f;
+        }
+
+        /// <summary>
+        /// Redefine a massa do corpo
+        /// </summary>
+        /// <param name="m"></param>
+        public void SetMass(float m)
+        {
+            Mass = m;
         }
 
         /// <summary>
@@ -114,7 +138,7 @@ namespace ZombieGame.Physics
         /// </summary>
         public void Stop()
         {
-            ResetForces();
+            Force = Vector.Zero;
             Velocity = Vector.Zero;
         }
 
@@ -128,21 +152,48 @@ namespace ZombieGame.Physics
         }
 
         /// <summary>
+        /// Redefine o vetor velocidade aplicado ao corpo
+        /// </summary>
+        /// <param name="v"></param>
+        public void SetVelocity(Vector v)
+        {
+            Velocity = v;
+        }
+
+        /// <summary>
         /// Método que aciona funções que precisam ser disparadas constantemente
         /// </summary>
         public void Update()
         {
             if (!FixedPosition)
             {
+                //Acceleration = Force / Mass;
+
+                //if (UseGravity)
+                //    Acceleration += Vector.EarthGravity;
+
+                //Velocity += Acceleration * Time.Delta;
+                //Position += Velocity * Time.Delta;
+
+                //Force.Approximate(Vector.Zero, Drag);
+
+                //if (UseGravity)
+                //    Velocity.Approximate(Vector.EarthGravity, Drag);
+                //else
+                //    Velocity.Approximate(Vector.Zero, Drag);
+
+                if (UseGravity && !IsGrounded)
+                    Force += Vector.EarthGravity * Mass / Time.Delta;
+
                 Acceleration = Force / Mass;
 
-                if (UseGravity)
-                    Acceleration += Vector.EarthGravity;
+                //if (UseGravity && !IsGrounded)
+                //    Acceleration += Vector.EarthGravity * 1000;
 
                 Velocity += Acceleration * Time.Delta;
                 Position += Velocity * Time.Delta;
 
-                Force.Approximate(Vector.Zero, Drag);
+                Force.Approximate(Vector.Zero, 10);
 
                 //if (UseGravity)
                 //    Velocity.Approximate(Vector.EarthGravity, Drag);

@@ -89,7 +89,7 @@ namespace ZombieGame.Physics
         /// <returns>Vetor resultante</returns>
         public static Vector operator -(Vector v1)
         {
-            return new Vector(-v1.X, -v1.Y, -v1.Z);
+            return v1 * -1;
         }
         /// <summary>
         /// Retorna um booleano afirmando se o módulo de A é maior do que o módulo de B
@@ -200,6 +200,13 @@ namespace ZombieGame.Physics
             }
         }
         /// <summary>
+        /// Retorna o vetor oposto
+        /// </summary>
+        public Vector Opposite
+        {
+            get { return this * -1; }
+        }
+        /// <summary>
         /// Retorna se o vetor tem módulo igual a 1
         /// </summary>
         public bool IsNormalized { get { return Math.Round(Magnitude, 2) == 1; } } // 0.995 e 1.005 são considerados como 1
@@ -237,7 +244,23 @@ namespace ZombieGame.Physics
         /// <returns></returns>
         public Vector PointedAt(Vector position)
         {
+            //return this + (position - this);
             return this - position;
+        }
+
+        /// <summary>
+        /// Retorna o módulo do resultado da soma entre dois vetores
+        /// </summary>
+        /// <param name="v">Segundo vetor</param>
+        /// <returns>Float</returns>
+        public float DistanceBetween(Vector v)
+        {
+            return (this + v).Magnitude;
+        }
+
+        public float AngleBetween(Vector v)
+        {
+            return (float)Math.Atan2(v.Y - Y, v.X - X);
         }
 
         /// <summary>
