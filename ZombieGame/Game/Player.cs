@@ -14,6 +14,7 @@ namespace ZombieGame.Game
         /// Número do jogador
         /// </summary>
         public int PlayerNumber { get; set; }
+        
         /// <summary>
         /// Personagem do jogador
         /// </summary>
@@ -29,6 +30,11 @@ namespace ZombieGame.Game
             Character = new Character(string.Format("Player{0}", playerNumber.ToString()), Tags.Player);
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
         }
+
+        /// <summary>
+        /// Retorna se o jogador está ou não jogando.
+        /// </summary>
+        public bool IsPlaying { get; set; }
 
         /// <summary>
         /// Evento a ser disparado quando o timer de atualização é decorrido
