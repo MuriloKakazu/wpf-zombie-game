@@ -25,7 +25,25 @@ namespace ZombieGame.Game
         /// </summary>
         public bool IsFiring { get; set; }
 
+        /// <summary>
+        /// Retorna a quantidade de dinheiro do personagem
+        /// </summary>
         public int Money { get; set; }
+
+        /// <summary>
+        /// Retorna o nível do personagem
+        /// </summary>
+        public int Level { get; set; }
+
+        /// <summary>
+        /// Retorna a saúde do personagem
+        /// </summary>
+        public int Health { get; set; }
+
+        /// <summary>
+        /// Retorna a experiência adiquirida pelo personagem
+        /// </summary>
+        public int Experience { get; set; }
 
         /// <summary>
         /// ctor
@@ -37,7 +55,6 @@ namespace ZombieGame.Game
             Weapon = new Weapon();
             FacingDirection = Vector.Zero;
         }
-
         #endregion
     }
 }
