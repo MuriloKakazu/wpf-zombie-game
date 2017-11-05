@@ -21,7 +21,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna se o projétil explode com o impacto
         /// </summary>
-        public bool IsExplosive { get { return Type == ProjectileTypes.Missile; } }
+        public bool IsExplosive { get; set; }
         /// <summary>
         /// Dano de impacto do projétil
         /// </summary>
@@ -63,9 +63,18 @@ namespace ZombieGame.Game
         /// Cria uma explosão na posição solicitada
         /// </summary>
         /// <param name="pos">Posição da explosão</param>
-        protected void ExplodeAt(Vector pos)
+        protected void ExplodeAt(Vector pos, float explosionRadius)
         {
+            var targets = Character.GetNearbyCharacters(pos, explosionRadius);
 
+            if (targets != null)
+            {
+                foreach (var t in targets)
+                {
+                    t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * 500);
+                    Console.WriteLine("Projectile exploded on {0}", t.Name);
+                }
+            }
         }
 
         /// <summary>
@@ -107,10 +116,10 @@ namespace ZombieGame.Game
                 List<Entity> currentCollisions = new List<Entity>();
                 foreach (var e in Entities.ToArray())
                 {
-                    if (RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash)
+                    if (e != null && RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash)
                     {
                         currentCollisions.Add(e);
-                        if (!Collisions.Contains(e))
+                        if (!Collisions.ToArray().Contains(e))
                         {
                             var d = RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint);
                             OnCollisionEnter(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
@@ -120,10 +129,13 @@ namespace ZombieGame.Game
 
                 foreach (var e in Collisions.ToArray())
                 {
-                    if (!currentCollisions.Contains(e))
-                        OnCollisionLeave(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
-                    else if (currentCollisions.Contains(e))
-                        OnCollisionStay(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                    if (e != null)
+                    {
+                        if (!currentCollisions.Contains(e))
+                            OnCollisionLeave(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                        else if (currentCollisions.Contains(e))
+                            OnCollisionStay(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                    }
                 }
 
                 Collisions = currentCollisions;
@@ -148,8 +160,8 @@ namespace ZombieGame.Game
                 {
                     colliderChar.Damage(HitDamage);
                     colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 100);
-                    //if (IsExplosive)
-                    //generate explosion at collision location
+                    if (IsExplosive)
+                        ExplodeAt(RigidBody.CenterPoint, 200);
                     Destroy();
                 }
                 else if (e.Collider.Tag == Tags.Projectile)
@@ -201,9 +213,13 @@ namespace ZombieGame.Game
         /// <returns>Projectile</returns>
         public static Projectile FromHashCode(Guid hash)
         {
-            foreach (Projectile p in Projectiles)
-                if (p.Hash == hash)
-                    return p;
+            try
+            {
+                foreach (Projectile p in Projectiles.ToArray())
+                    if (p.Hash == hash)
+                        return p;
+            }
+            catch { }
             return null;
         }
 

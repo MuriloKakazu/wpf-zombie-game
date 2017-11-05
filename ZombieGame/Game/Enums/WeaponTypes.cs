@@ -5,6 +5,7 @@
         Pistol,
         AssaultRifle,
         SniperRifle,
-        HeavyMG
+        HeavyMG,
+        Explosive,
     }
 }

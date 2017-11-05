@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZombieGame.Game.Enums;
+using ZombieGame.IO;
 
 namespace ZombieGame.Game.Prefabs.Weapons
 {
-    public sealed class Pistol : Weapon
+    public sealed class RPG : Weapon
     {
-        public Pistol() : base(WeaponTypes.Pistol, ProjectileTypes.PistolProjectile)
+        public RPG() : base(WeaponTypes.Explosive, ProjectileTypes.Missile)
         {
-            FireRate = 60f;
+            FireRate = 1000f;
         }
     }
 }

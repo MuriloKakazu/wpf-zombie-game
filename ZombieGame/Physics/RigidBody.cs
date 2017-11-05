@@ -57,6 +57,10 @@ namespace ZombieGame.Physics
         /// </summary>
         public float Drag { get; private set; }
         /// <summary>
+        /// Multiplicador do módulo da velocidade
+        /// </summary>
+        public float SpeedMultiplier { get; private set; }
+        /// <summary>
         /// Define se deve-se permitir a rotação do corpo
         /// </summary>
         public bool UseRotation { get; set; }
@@ -87,6 +91,7 @@ namespace ZombieGame.Physics
             Force = Vector.Zero;
             Rotation = 0;
             Drag = 1f;
+            SpeedMultiplier = 1f;
         }
 
         /// <summary>
@@ -184,6 +189,7 @@ namespace ZombieGame.Physics
                 Front = Velocity.Normalized;
             }
             Velocity += Acceleration * Time.Delta;
+            Velocity *= SpeedMultiplier;
             if (!FixedPosition)
                 Position += Velocity * Time.Delta;
 

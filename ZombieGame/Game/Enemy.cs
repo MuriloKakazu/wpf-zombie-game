@@ -24,11 +24,17 @@ namespace ZombieGame.Game
         public Enemy(EnemyTypes type) : base(type.ToString(), Tags.Enemy)
         {
             Type = type;
-            //RigidBody.IgnoreCollisions = true;
             RigidBody.UseRotation = true;
             SetMoney();
             SetHealth();
             SetExperience();
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+
+            Chase(GetNearestPlayer(), 250);
         }
 
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
@@ -39,8 +45,9 @@ namespace ZombieGame.Game
                 if (colliderChar != null)
                 {
                     colliderChar.Damage(10);
-                    colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 500);
-                    RigidBody.AddVelocity(e.CollisionDirection.Normalized * e.Collider.RigidBody.Velocity.Magnitude);
+                    colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 2000);
+                    RigidBody.AddForce(e.CollisionDirection.Normalized * 2000);
+                    //RigidBody.AddVelocity(e.CollisionDirection.Normalized * e.Collider.RigidBody.Velocity.Magnitude);
                 }
             }
         }

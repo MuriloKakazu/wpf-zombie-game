@@ -13,7 +13,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Lista estática copntendo todos os personagens ativos
         /// </summary>
-        protected static List<Character> Characters = new List<Character>();
+        public static List<Character> Characters = new List<Character>();
 
         /// <summary>
         /// Arma do personagem
@@ -62,7 +62,7 @@ namespace ZombieGame.Game
         public Character(string name, Tags tag) : base(name, tag)
         {
             Level = 1;
-            Weapon = new Pistol();
+            Weapon = new RPG();
             Characters.Add(this);
         }
 
@@ -112,16 +112,39 @@ namespace ZombieGame.Game
         /// <returns>Character(Array)</returns>
         public Character[] GetNearbyCharacters(float radius)
         {
-            List<Character> characters = new List<Character>();
-            foreach (var c in Characters)
-                if ((c.RigidBody.CenterPoint + RigidBody.CenterPoint).Magnitude <= radius)
-                    characters.Add(c);
-            return characters.ToArray();
+            try
+            {
+                List<Character> characters = new List<Character>();
+                foreach (var c in Characters.ToArray())
+                    if ((c.RigidBody.CenterPoint + RigidBody.CenterPoint).Magnitude <= radius)
+                        characters.Add(c);
+                return characters.ToArray();
+            }
+            catch { }
+            return null;
+        }
+
+        /// <summary>
+        /// Retorna um conjunto de personagens no raio especificado
+        /// </summary>
+        /// <param name="radius">Raio de procura</param>
+        /// <returns>Character(Array)</returns>
+        public static Character[] GetNearbyCharacters(Vector pos, float radius)
+        {
+            try
+            {
+                List<Character> characters = new List<Character>();
+                foreach (var c in Characters.ToArray())
+                    if ((c.RigidBody.CenterPoint - pos).Magnitude <= radius)
+                        characters.Add(c);
+                return characters.ToArray();
+            }
+            catch { return null; }
         }
 
         public static Character FromHashCode(Guid hash)
         {
-            foreach (Character c in Characters)
+            foreach (Character c in Characters.ToArray())
                 if (c.Hash == hash)
                     return c;
             return null;

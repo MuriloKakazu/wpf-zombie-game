@@ -76,8 +76,22 @@ namespace ZombieGame
                 {
                     Camera.Children.Clear();
 
-                    foreach (var ae in Entity.Entities)
+                    //Ellipse el = new Ellipse
+                    //{
+                    //    StrokeThickness = 10,
+                    //    Fill = Brushes.Red,
+                    //    Width = 200,
+                    //    Height = 200,
+                    //    Stretch = Stretch.Uniform,
+                    //};
+                    //Canvas.SetLeft(el, GameMaster.Player2.Character.RigidBody.CenterPoint.X);
+                    //Canvas.SetTop(el, -GameMaster.Player2.Character.RigidBody.CenterPoint.Y);
+                    //Camera.Children.Add(el);
+
+                    foreach (var ae in Entity.Entities.ToArray())
+                    {
                         Camera.Children.Add(ae.VisualControl);
+                    }
                 }));
             }
             catch

@@ -91,6 +91,11 @@ namespace ZombieGame.Game
             CollisionLeave += OnCollisionLeave;
         }
 
+        protected virtual void Chase(Entity target, float speedMagnitude)
+        {
+            RigidBody.SetVelocity(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite.Normalized * speedMagnitude);
+        }
+
         /// <summary>
         /// Carrega a sprite para a entidade atual
         /// </summary>
@@ -149,7 +154,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Método que aciona funções que precisam ser disparadas constantemente
         /// </summary>
-        protected void Update()
+        protected virtual void Update()
         {
             UpdateVisualControl();
             CheckCollision();
@@ -182,12 +187,12 @@ namespace ZombieGame.Game
             try
             {
                 List<Entity> currentCollisions = new List<Entity>();
-                foreach (var e in Entities)
+                foreach (var e in Entities.ToArray())
                 {
-                    if (RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash)
+                    if (e != null && RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash)
                     {
                         currentCollisions.Add(e);
-                        if (!Collisions.Contains(e))
+                        if (!Collisions.ToArray().Contains(e))
                         {
                             var d = RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint);
                             CollisionEnter.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
@@ -195,12 +200,15 @@ namespace ZombieGame.Game
                     }
                 }
 
-                foreach (var e in Collisions)
+                foreach (var e in Collisions.ToArray())
                 {
-                    if (!currentCollisions.Contains(e))
-                        CollisionLeave.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
-                    else if (currentCollisions.Contains(e))
-                        CollisionStay.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                    if (e != null)
+                    {
+                        if (!currentCollisions.Contains(e))
+                            CollisionLeave.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                        else if (currentCollisions.Contains(e))
+                            CollisionStay.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                    }
                 }
 
                 Collisions = currentCollisions;
@@ -211,6 +219,17 @@ namespace ZombieGame.Game
             }
         }
 
+        public Entity GetNearestPlayer()
+        {
+            var d1 = GameMaster.Player1.Character.RigidBody.CenterPoint.DistanceBetween(RigidBody.CenterPoint);
+            var d2 = GameMaster.Player2.Character.RigidBody.CenterPoint.DistanceBetween(RigidBody.CenterPoint);
+
+            if (d1 <= d2)
+                return GameMaster.Player1.Character;
+            else
+                return GameMaster.Player2.Character;
+        }
+
         /// <summary>
         /// Retorna um conjunto de entidades no raio especificado
         /// </summary>
@@ -218,11 +237,16 @@ namespace ZombieGame.Game
         /// <returns>Entity(Array)</returns>
         public Entity[] GetNearbyEntities(float radius)
         {
-            List<Entity> entities = new List<Entity>();
-            foreach (var e in Entities)
-                if ((e.RigidBody.CenterPoint + RigidBody.CenterPoint).Magnitude <= radius)
-                    entities.Add(e);
-            return entities.ToArray();
+            try
+            {
+                List<Entity> entities = new List<Entity>();
+                foreach (var e in Entities.ToArray())
+                    if ((e.RigidBody.CenterPoint - RigidBody.CenterPoint).Magnitude <= radius)
+                        entities.Add(e);
+                return entities.ToArray();
+            }
+            catch { }
+            return null;
         }
 
         /// <summary>

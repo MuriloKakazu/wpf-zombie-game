@@ -19,7 +19,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>
-        public float FireRate { get { return CoolDownTime * 60; } }
+        public float FireRate { get; protected set; }
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>
@@ -31,7 +31,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Tempo de espera entre cada disparo de projéteis, em segundos
         /// </summary>
-        public float CoolDownTime { get; protected set; }
+        public float CoolDownTime { get { return 60 / FireRate; } }
         /// <summary>
         /// Retorna se a arma está em tempo de espera entre os disparos
         /// </summary>
