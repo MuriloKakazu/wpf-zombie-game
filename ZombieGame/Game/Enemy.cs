@@ -5,39 +5,58 @@ using System.Text;
 using System.Threading.Tasks;
 using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
+using ZombieGame.Physics.Events;
 using static ZombieGame.Game.GameMaster;
 
 namespace ZombieGame.Game
 {
-    public class Zombie : Character
+    public abstract class Enemy : Character
     {
         /// <summary>
-        /// Retorna o tipo de zumbi
+        /// Retorna o tipo de inimigo
         /// </summary>
-        public ZombieTag ZbTag { get; set; }
-
-        /// <summary>
-        /// Retorna a velocidade do zumbi
-        /// </summary>
-        public Vector Velocity { get; set; }]
-
-        //spawn x and y
-
+        public EnemyTypes Type { get; set; }
 
         /// <summary>
         /// ctor
         /// </summary>
-        /// <param name="zbTag">O tipo de zumbi</param>
-        public Zombie(ZombieTag zbTag) : base(zbTag.ToString(), Tags.Enemy)
+        /// <param name="type">O tipo de inimigo</param>
+        public Enemy(EnemyTypes type) : base(type.ToString(), Tags.Enemy)
         {
-            ZbTag = zbTag;
+            Type = type;
+            //RigidBody.IgnoreCollisions = true;
+            RigidBody.UseRotation = true;
             SetMoney();
             SetHealth();
             SetExperience();
         }
 
+        protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
+        {
+            if (e.Collider.Tag == Tags.Player)
+            {
+                var colliderChar = Character.FromHashCode(e.Collider.Hash);
+                if (colliderChar != null)
+                {
+                    colliderChar.Damage(10);
+                    colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 500);
+                    RigidBody.AddVelocity(e.CollisionDirection.Normalized * e.Collider.RigidBody.Velocity.Magnitude);
+                }
+            }
+        }
+
+        protected override void OnCollisionStay(object sender, CollisionEventArgs e)
+        {
+
+        }
+
+        protected override void OnCollisionLeave(object sender, CollisionEventArgs e)
+        {
+            
+        }
+
         /// <summary>
-        /// O método para definir quando de dinheiro o zumbi dropará.
+        /// O método para definir quando de dinheiro o inimigo dropará.
         /// <para>Se trata de um valor definido entre um range</para>
         /// </summary>
         private void SetMoney()
@@ -48,21 +67,21 @@ namespace ZombieGame.Game
             else
                 avgLvls = Player1.Character.Level;
 
-            switch (ZbTag)
+            switch (Type)
             {
-                case ZombieTag.Normal:
+                case EnemyTypes.Zombie:
                     maxMoney = 20 * avgLvls + 10 * Level;
                     minMoney = 5 * avgLvls + 10 * Level;
                     break;
-                case ZombieTag.Runner:
+                case EnemyTypes.Runner:
                     maxMoney = 50 * avgLvls + 20 * Level;
                     minMoney = 20 * avgLvls + 15 * Level;
                     break;
-                case ZombieTag.Tank:
+                case EnemyTypes.Tanker:
                     maxMoney = 100 * avgLvls + 30 * Level;
                     minMoney = 40 * avgLvls + 20 * Level;
                     break;
-                case ZombieTag.Boss:
+                case EnemyTypes.Boss:
                     maxMoney = 1000 * avgLvls + 300 * Level;
                     minMoney = 400 * avgLvls + 200 * Level;
                     break;
@@ -72,44 +91,44 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// O método para definir a vida do zumbi.
+        /// O método para definir a vida do inimigo.
         /// </summary>
         private void SetHealth()
         {
-            switch (ZbTag)
+            switch (Type)
             {
-                case ZombieTag.Normal:
+                case EnemyTypes.Zombie:
                     Health = 50 * Level;
                     break;
-                case ZombieTag.Runner:
+                case EnemyTypes.Runner:
                     Health = 30 * Level;
                     break;
-                case ZombieTag.Tank:
+                case EnemyTypes.Tanker:
                     Health = 100 * Level + 100;
                     break;
-                case ZombieTag.Boss:
+                case EnemyTypes.Boss:
                     Health = 400 * Level + 200;
                     break;
             }
         }
 
         /// <summary>
-        /// O método para definir a experiência que o zumbi dará ao morrer.
+        /// O método para definir a experiência que o inimigo dará ao morrer.
         /// </summary>
         private void SetExperience()
         {
-            switch (ZbTag)
+            switch (Type)
             {
-                case ZombieTag.Normal:
+                case EnemyTypes.Zombie:
                     Experience = 25 * Level;
                     break;
-                case ZombieTag.Runner:
+                case EnemyTypes.Runner:
                     Experience = 35 * Level;
                     break;
-                case ZombieTag.Tank:
+                case EnemyTypes.Tanker:
                     Experience = 40 * Level;
                     break;
-                case ZombieTag.Boss:
+                case EnemyTypes.Boss:
                     Experience = 20 * Level + 10 * Level * Level;
                     break;
             }

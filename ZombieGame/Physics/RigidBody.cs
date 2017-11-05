@@ -10,7 +10,7 @@ using ZombieGame.Physics.Extensions;
 
 namespace ZombieGame.Physics
 {
-    public class RigidBody
+    public sealed class RigidBody
     {
         /// <summary>
         /// Retângulo do corpo
@@ -19,11 +19,15 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Massa do corpo (kg)
         /// </summary>
-        public float Mass { get; protected set; }
+        public float Mass { get; private set; }
         /// <summary>
         /// Vetor posição do corpo
         /// </summary>
-        public Vector Position { get; protected set; }
+        public Vector Position { get; private set; }
+        /// <summary>
+        /// Vetor que aponta para frente do corpo
+        /// </summary>
+        public Vector Front { get; private set; }
         /// <summary>
         /// Vetor posição central do corpo
         /// </summary>
@@ -31,47 +35,43 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Vetor tamanho do corpo em pixels
         /// </summary>
-        public Vector Size { get; protected set; }
+        public Vector Size { get; private set; }
         /// <summary>
         /// Vetor força resultante aplicado ao corpo (N)
         /// </summary>
-        public Vector Force { get; protected set; }
+        public Vector Force { get; private set; }
         /// <summary>
         /// Vetor velocidade aplicado ao corpo (m/s)
         /// </summary>
-        public Vector Velocity { get; protected set; }
+        public Vector Velocity { get; private set; }
         /// <summary>
         /// Vetor aceleração aplicado ao corpo (m/s^2)
         /// </summary>
-        public Vector Acceleration { get; protected set; }
+        public Vector Acceleration { get; private set; }
         /// <summary>
         /// Rotação do corpo (graus)
         /// </summary>
-        public float Rotation { get; protected set; }
+        public float Rotation { get; private set; }
         /// <summary>
         /// Coeficiente de arrasto do corpo
         /// </summary>
-        public float Drag { get; protected set; }
+        public float Drag { get; private set; }
         /// <summary>
         /// Define se deve-se permitir a rotação do corpo
         /// </summary>
         public bool UseRotation { get; set; }
         /// <summary>
-        /// Define se o corpo estará sujeito à ação da gravidade
-        /// </summary>
-        public bool UseGravity { get; set; }
-        /// <summary>
-        /// Define se o corpo estará sujeito à mudança automática de posição
+        /// Define se o corpo terá uma posição fixa
         /// </summary>
         public bool FixedPosition { get; set; }
-        /// <summary>
-        /// Define se o corpo está aterrado
-        /// </summary>
-        public bool IsGrounded { get; set; }
         /// <summary>
         /// Define se o corpo ignorará colisões
         /// </summary>
         public bool IgnoreCollisions { get; set; }
+        /// <summary>
+        /// Retorna se o corpo está acelerando
+        /// </summary>
+        public bool IsAccelerating { get { return Acceleration.Magnitude != 0; } }
 
         /// <summary>
         /// ctor
@@ -79,13 +79,14 @@ namespace ZombieGame.Physics
         public RigidBody()
         {
             Mass = 1f;
-            Position = Vector.Zero;
+            Position = Vector.OffScreen;
+            Front = Vector.Right;
             Size = Vector.Zero;
             Acceleration = Vector.Zero;
             Velocity = Vector.Zero;
             Force = Vector.Zero;
-            UseGravity = false;
-            Drag = 0.1f;
+            Rotation = 0;
+            Drag = 1f;
         }
 
         /// <summary>
@@ -113,6 +114,15 @@ namespace ZombieGame.Physics
         public void AddForce(Vector f)
         {
             Force += f;
+        }
+
+        /// <summary>
+        /// Subtrai um vetor força do corpo
+        /// </summary>
+        /// <param name="f">Vetor força</param>
+        public void RemoveForce(Vector f)
+        {
+            Force -= f;
         }
 
         /// <summary>
@@ -165,41 +175,19 @@ namespace ZombieGame.Physics
         /// </summary>
         public void Update()
         {
-            if (!FixedPosition)
+            Acceleration = Force / Mass;
+
+            if (Velocity.Magnitude > 0)
             {
-                //Acceleration = Force / Mass;
-
-                //if (UseGravity)
-                //    Acceleration += Vector.EarthGravity;
-
-                //Velocity += Acceleration * Time.Delta;
-                //Position += Velocity * Time.Delta;
-
-                //Force.Approximate(Vector.Zero, Drag);
-
-                //if (UseGravity)
-                //    Velocity.Approximate(Vector.EarthGravity, Drag);
-                //else
-                //    Velocity.Approximate(Vector.Zero, Drag);
-
-                if (UseGravity && !IsGrounded)
-                    Force += Vector.EarthGravity * Mass / Time.Delta;
-
-                Acceleration = Force / Mass;
-
-                //if (UseGravity && !IsGrounded)
-                //    Acceleration += Vector.EarthGravity * 1000;
-
-                Velocity += Acceleration * Time.Delta;
+                if (UseRotation)
+                    Rotation = MathExtension.RadiansToDegrees(Velocity.AngleBetween(Vector.Right));
+                Front = Velocity.Normalized;
+            }
+            Velocity += Acceleration * Time.Delta;
+            if (!FixedPosition)
                 Position += Velocity * Time.Delta;
 
-                Force.Approximate(Vector.Zero, 10);
-
-                //if (UseGravity)
-                //    Velocity.Approximate(Vector.EarthGravity, Drag);
-                //else
-                //    Velocity.Approximate(Vector.Zero, Drag);
-            }
+            Force.Approximate(Vector.Zero, 10);
         }
     }
 }

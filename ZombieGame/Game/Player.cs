@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ZombieGame.Game.Enums;
+using ZombieGame.IO;
+using ZombieGame.IO.Serialization;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
@@ -14,27 +16,34 @@ namespace ZombieGame.Game
         /// Número do jogador
         /// </summary>
         public int PlayerNumber { get; set; }
-        
+        /// <summary>
+        /// Retorna se o jogador está sendo controlado por uma pessoa
+        /// </summary>
+        public bool IsHuman { get; set; }
         /// <summary>
         /// Personagem do jogador
         /// </summary>
         public Character Character { get; set; }
+        /// <summary>
+        /// Retorna o noem de usuário do jogador
+        /// </summary>
+        public string Username { get; set; }
+        /// <summary>
+        /// Retorna se o jogador está ativo
+        /// </summary>
+        public bool IsPlaying { get; internal set; }
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="playerNumber">Número do jogador</param>
-        public Player(int playerNumber)
+        public Player(int playerNumber, string name)
         {
             PlayerNumber = playerNumber;
-            Character = new Character(string.Format("Player{0}", playerNumber.ToString()), Tags.Player);
+            Character = new Character(name, Tags.Player);
+            Character.LoadSprite(GlobalPaths.CharacterSprites + "player" + playerNumber + ".png");
             GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
         }
-
-        /// <summary>
-        /// Retorna se o jogador está ou não jogando.
-        /// </summary>
-        public bool IsPlaying { get; set; }
 
         /// <summary>
         /// Evento a ser disparado quando o timer de atualização é decorrido
@@ -55,38 +64,30 @@ namespace ZombieGame.Game
             Character.IsFiring = Convert.ToBoolean(Input.GetAxis(AxisTypes.Fire, PlayerNumber));
             var x = Input.GetAxis(AxisTypes.Horizontal, PlayerNumber);
             var y = Input.GetAxis(AxisTypes.Vertical, PlayerNumber);
-            var v1 = new Vector(x);
-            var v2 = new Vector(0, y);
-            if (x != 0 && y != 0)
-            {
-                if (x < 0 && y < 0)
-                {
-                    x = (float)Math.Cos(v1.AngleBetween(v2)) * x;
-                    y = (float)Math.Cos(v1.AngleBetween(v2)) * y;
-                }
-                else if (x > 0 && y > 0)
-                {
-                    x = (float)Math.Cos(v2.AngleBetween(v1)) * x;
-                    y = (float)Math.Cos(v2.AngleBetween(v1)) * y;
-                }
-                else if (x < 0 && y > 0)
-                {
-                    x = (float)Math.Cos(v1.AngleBetween(v2)) * x;
-                    y = (float)Math.Cos(v1.AngleBetween(v2)) * y;
-                }
-                else if (x > 0 && y < 0)
-                {
-                    x = (float)Math.Cos(v2.AngleBetween(v1)) * x;
-                    y = (float)Math.Cos(v2.AngleBetween(v1)) * y;
-                }
-            }
             var r = new Vector(x, y);
             var speedMult = 150f;
             if (Character.IsSprinting)
                 speedMult += 100;
-            Character.RigidBody.SetVelocity(r * speedMult);
-            if (r.Magnitude != 0)
-                Character.FacingDirection = r.Normalized;
+            if (x != 0 && y != 0)
+            {
+                var mag = r.Magnitude;
+                r.X = (float)Math.Abs(Math.Sin(speedMult / mag)) * r.X;
+                r.Y = (float)Math.Abs(Math.Sin(speedMult / mag)) * r.Y;
+            }
+               
+            if (Character.RigidBody.IsAccelerating)
+            {
+                Character.RigidBody.SetVelocity(r);
+                Character.RigidBody.RemoveForce(Character.RigidBody.Force / 10f);
+            }
+            else
+                Character.RigidBody.SetVelocity(r * speedMult);
+
+            if (Character.IsFiring && !Character.Weapon.IsCoolingDown)
+                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
+                {
+                    Character.LaunchProjectile();
+                });
         }
     }
 }

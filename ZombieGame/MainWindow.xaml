@@ -4,16 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZombieGame"
+        xmlns:controls="clr-namespace:ZombieGame.Game.Controls"
         mc:Ignorable="d"
-        Title="Client" Height="720" Width="1280">
-    <Grid>
+        Title="ZombieGame Client" Height="720" Width="1280" ResizeMode="CanMinimize" MinWidth="1280" MinHeight="720">
+    <Grid x:Name="___No_Name_">
         <DockPanel>
-            <ToolBar DockPanel.Dock="Top" >
-                <Button Content="Debug" Click="Button_Click"/>
-            </ToolBar>
-            <Canvas x:Name="Camera" DockPanel.Dock="Top">
-                <Button x:Name="Rectangle1" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="323" Canvas.Top="152" Content="1" FontWeight="Bold" FontSize="10"/>
-                <Button x:Name="Rectangle2" Height="50" Width="50" RenderTransformOrigin="0.5,0.5" Canvas.Left="416" Canvas.Top="152" Content="2" FontWeight="Bold" FontSize="10"/>
+            <Canvas x:Name="Camera" DockPanel.Dock="Top" Width="1274" Height="691">
+                <controls:VisualControl x:Name="Scene">
+                    <controls:VisualControl.Background>
+                        <ImageBrush Stretch="Fill"/>
+                    </controls:VisualControl.Background>
+                </controls:VisualControl>
             </Canvas>
         </DockPanel>
     </Grid>

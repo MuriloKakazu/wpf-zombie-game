@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Timers;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Prefabs.Weapons;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
@@ -19,10 +20,6 @@ namespace ZombieGame.Game
         /// </summary>
         public Weapon Weapon { get; set; }
         /// <summary>
-        /// Direção a qual o personagem está voltado
-        /// </summary>
-        public Vector FacingDirection { get; set; }
-        /// <summary>
         /// Retorna se o personagem está correndo
         /// </summary>
         public bool IsSprinting { get; set; }
@@ -31,12 +28,9 @@ namespace ZombieGame.Game
         /// </summary>
         public bool IsFiring { get; set; }
         /// <summary>
-        /// Retorna se o personagem pertence a um jogador
+        /// Retorna se o personagem está vivo
         /// </summary>
-        public bool IsAPlayer { get { return Tag == Tags.Player; } }
-        #endregion
-
-        #region Methods
+        public bool IsAlive { get { return Health > 0; } }
         /// <summary>
         /// Retorna a quantidade de dinheiro do personagem
         /// </summary>
@@ -50,12 +44,15 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna a saúde do personagem
         /// </summary>
-        public int Health { get; set; }
+        public int Health { get; protected set; }
 
         /// <summary>
-        /// Retorna a experiência adiquirida pelo personagem
+        /// Retorna a experiência adquirida pelo personagem
         /// </summary>
         public int Experience { get; set; }
+        #endregion
+
+        #region Methods
 
         /// <summary>
         /// ctor
@@ -64,16 +61,55 @@ namespace ZombieGame.Game
         /// <param name="tag">Tag do personagem</param>
         public Character(string name, Tags tag) : base(name, tag)
         {
-            Weapon = new Weapon();
-            FacingDirection = Vector.Zero;
+            Level = 1;
+            Weapon = new Pistol();
             Characters.Add(this);
+        }
+
+        public virtual void LaunchProjectile()
+        {
+            Weapon.StartCoolDown();
+            Projectile p = Projectile.OfType(Weapon.ProjectileType);
+            p.Owner = this;
+            p.Launch(RigidBody.Front);
+        }
+
+        public virtual void Damage(int quantity)
+        {
+            Health -= quantity;
+            CheckForDeath();
+        }
+
+        public virtual void SetHealth(int quantity)
+        {
+            Health = quantity;
+            CheckForDeath();
+        }
+
+        public virtual void AddHealth(int quantity)
+        {
+            Health += quantity;
+            CheckForDeath();
+        }
+
+        protected virtual void CheckForDeath()
+        {
+            if (Health <= 0)
+                Kill();
+        }
+
+        public virtual void Kill()
+        {
+            Health = 0;
+            if (!IsPlayer)
+                Destroy();
         }
 
         /// <summary>
         /// Retorna um conjunto de personagens no raio especificado
         /// </summary>
         /// <param name="radius">Raio de procura</param>
-        /// <returns>Entity(Array)</returns>
+        /// <returns>Character(Array)</returns>
         public Character[] GetNearbyCharacters(float radius)
         {
             List<Character> characters = new List<Character>();
@@ -81,6 +117,23 @@ namespace ZombieGame.Game
                 if ((c.RigidBody.CenterPoint + RigidBody.CenterPoint).Magnitude <= radius)
                     characters.Add(c);
             return characters.ToArray();
+        }
+
+        public static Character FromHashCode(Guid hash)
+        {
+            foreach (Character c in Characters)
+                if (c.Hash == hash)
+                    return c;
+            return null;
+        }
+
+        protected override void Destroy()
+        {
+            if (IsAlive)
+                Kill();
+            Weapon.Destroy();
+            Characters.Remove(this);
+            base.Destroy();
         }
         #endregion
     }

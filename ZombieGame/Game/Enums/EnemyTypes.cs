@@ -3,11 +3,11 @@
     /// <summary>
     /// Enumeração dos tipos de Zumbis.
     /// </summary>
-    public enum ZombieTag
+    public enum EnemyTypes
     {
-        Normal,
+        Zombie,
         Runner,
-        Tank,
+        Tanker,
         Boss
         //Necromancer,
         //Thrower,

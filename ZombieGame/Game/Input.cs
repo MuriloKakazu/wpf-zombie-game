@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using ZombieGame.Debug;
 using ZombieGame.Game.Enums;
 
 namespace ZombieGame.Game
@@ -27,16 +28,16 @@ namespace ZombieGame.Game
                     if (type == AxisTypes.Horizontal)
                     {
                         if (Keyboard.IsKeyDown(Key.A))
-                            output = -1;
-                        else if (Keyboard.IsKeyDown(Key.D))
-                            output = 1;
+                            output += -1;
+                        if (Keyboard.IsKeyDown(Key.D))
+                            output += 1;
                     }
                     else if (type == AxisTypes.Vertical)
                     {
                         if (Keyboard.IsKeyDown(Key.S))
-                            output = -1;
-                        else if (Keyboard.IsKeyDown(Key.W))
-                            output = 1;
+                            output += -1;
+                        if (Keyboard.IsKeyDown(Key.W))
+                            output += 1;
                         //if (Keyboard.IsKeyDown(Key.W))
                         //    output = 1;
                     }
@@ -56,16 +57,16 @@ namespace ZombieGame.Game
                     if (type == AxisTypes.Horizontal)
                     {
                         if (Keyboard.IsKeyDown(Key.Left))
-                            output = -1;
-                        else if (Keyboard.IsKeyDown(Key.Right))
-                            output = 1;
+                            output += -1;
+                        if (Keyboard.IsKeyDown(Key.Right))
+                            output += 1;
                     }
                     else if (type == AxisTypes.Vertical)
                     {
                         if (Keyboard.IsKeyDown(Key.Down))
-                            output = -1;
-                        else if (Keyboard.IsKeyDown(Key.Up))
-                            output = 1;
+                            output += -1;
+                        if (Keyboard.IsKeyDown(Key.Up))
+                            output += 1;
                         //if (Keyboard.IsKeyDown(Key.Up))
                         //    output = 1;
                     }
@@ -85,6 +86,14 @@ namespace ZombieGame.Game
                 {
                     GameMaster.Player1.Character.RigidBody.SetPosition(Physics.Vector.Zero);
                     GameMaster.Player2.Character.RigidBody.SetPosition(Physics.Vector.Zero);
+                }
+                else if (Keyboard.IsKeyDown(Key.F1))
+                {
+                    if (!DebugMonitor.HasAnOpenInstance)
+                    {
+                        DebugMonitor dm = new DebugMonitor();
+                        dm.Show();
+                    }
                 }
             });
             return output;

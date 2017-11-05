@@ -22,10 +22,17 @@ namespace ZombieGame.Debug
     /// </summary>
     public partial class DebugMonitor : Window
     {
+        public static bool HasAnOpenInstance { get; protected set; }
+        protected Timer Updater { get; set; }
+
         public DebugMonitor()
         {
             InitializeComponent();
-            GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
+            Updater = new Timer();
+            Updater.Elapsed += UpdateTimer_Elapsed;
+            Updater.Interval = 1000;
+            Updater.Enabled = true;
+            HasAnOpenInstance = true;
         }
 
         /// <summary>
@@ -38,101 +45,60 @@ namespace ZombieGame.Debug
             Dispatcher.Invoke(new Action(() =>
             {
                 List.Items.Clear();
-                var player = GameMaster.Player1;
-                var pos1 = player.Character.RigidBody.Position;
-
-                List.Items.Add(new Label() { Content = string.Format("Player 1:") });
-                List.Items.Add(new Label() { Content = string.Format("IsSprinting: {0}", player.Character.IsSprinting) });
-                List.Items.Add(new Label() { Content = string.Format("IsGrounded: {0}", player.Character.RigidBody.IsGrounded) });
-                List.Items.Add(new Label()
+                foreach (var v in Entity.Entities)
                 {
-                    Content = string.Format("Force: X: {0} Y: {1} Z: {2}",
-                                            player.Character.RigidBody.Force.X,
-                                            player.Character.RigidBody.Force.Y,
-                                            player.Character.RigidBody.Force.Z)
-                });
-
-                List.Items.Add(new Label()
-                {
-                    Content = string.Format("Velocity: X: {0} Y: {1} Z: {2}",
-                                            player.Character.RigidBody.Velocity.X,
-                                            player.Character.RigidBody.Velocity.Y,
-                                            player.Character.RigidBody.Velocity.Z)
-                });
-
-                List.Items.Add(new Label()
-                {
-                    Content = string.Format("Acceleration: X: {0} Y: {1} Z: {2}",
-                                            player.Character.RigidBody.Acceleration.X,
-                                            player.Character.RigidBody.Acceleration.Y,
-                                            player.Character.RigidBody.Acceleration.Z)
-                });
-
-                List.Items.Add(new Label()
-                {
-                    Content = string.Format("Bounds: X: {0} Y: {1} Width: {2} Height: {3}\n" +
-                                            "TL: {4},{5} TR: {6},{7} BL: {8},{9} BR: {10},{11} CT: {12},{13} CL: {14},{15} CR: {16},{17} CB: {18},{19} C: {20},{21}",
-                                            player.Character.RigidBody.Bounds.Left, player.Character.RigidBody.Bounds.Top,
-                                            player.Character.RigidBody.Bounds.Width, player.Character.RigidBody.Bounds.Height,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.TopLeft).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.TopLeft).Y,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.TopRight).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.TopRight).Y,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.BottomLeft).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.BottomLeft).Y,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.BottomRight).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.BottomRight).Y,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.CenterTop).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.CenterTop).Y,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.CenterLeft).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.CenterLeft).Y,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.CenterRight).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.CenterRight).Y,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.CenterBottom).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.CenterBottom).Y,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.Center).X,
-                                            player.Character.RigidBody.Bounds.GetVector(Physics.Enums.RectPositions.Center).Y)
-                });
-
-                player = GameMaster.Player2;
-                var pos2 = player.Character.RigidBody.Position;
-
-                List.Items.Add(new Label() { Content = string.Format("Player 2:") });
-                List.Items.Add(new Label() { Content = string.Format("IsSprinting: {0}", player.Character.IsSprinting) });
-                List.Items.Add(new Label() { Content = string.Format("IsGrounded: {0}", player.Character.RigidBody.IsGrounded) });
-                List.Items.Add(new Label()
-                {
-                    Content = string.Format("Force: X: {0} Y: {1} Z: {2}",
-                                            player.Character.RigidBody.Force.X,
-                                            player.Character.RigidBody.Force.Y,
-                                            player.Character.RigidBody.Force.Z)
-                });
-
-                List.Items.Add(new Label()
-                {
-                    Content = string.Format("Velocity: X: {0} Y: {1} Z: {2}",
-                                            player.Character.RigidBody.Velocity.X,
-                                            player.Character.RigidBody.Velocity.Y,
-                                            player.Character.RigidBody.Velocity.Z)
-                });
-
-                List.Items.Add(new Label()
-                {
-                    Content = string.Format("Acceleration: X: {0} Y: {1} Z: {2}",
-                                            player.Character.RigidBody.Acceleration.X,
-                                            player.Character.RigidBody.Acceleration.Y,
-                                            player.Character.RigidBody.Acceleration.Z)
-                });
-
-                List.Items.Add(new Label()
-                {
-                    Content = string.Format("Bounds: X: {0} Y: {1} Width: {2} Height: {3}",
-                                            player.Character.RigidBody.Bounds.Left,
-                                            player.Character.RigidBody.Bounds.Top,
-                                            player.Character.RigidBody.Bounds.Width,
-                                            player.Character.RigidBody.Bounds.Height)
-                });
+                    List.Items.Add(new Label() { Content = "-------------------" });
+                    List.Items.Add(new Label() { Content = "Name: " + v.Name });
+                    List.Items.Add(new Label() { Content = "Hash: " + v.Hash });
+                    List.Items.Add(new Label() { Content = "Tag: " + v.Tag.ToString() });
+                    List.Items.Add(new Label() { Content = "IsPlayer: " + v.IsPlayer });
+                    List.Items.Add(new Label() { Content = "Sprite: " + v.Sprite.Uri });
+                    List.Items.Add(new Label() { Content = "IgnoreCollision: " + v.RigidBody.IgnoreCollisions });
+                    List.Items.Add(new Label() { Content = "Mass: " + v.RigidBody.Mass });
+                    List.Items.Add(new Label() { Content = "UseRotation: " + v.RigidBody.UseRotation });
+                    List.Items.Add(new Label() { Content = "Rotation: " + v.RigidBody.Rotation });
+                    List.Items.Add(new Label()
+                    {
+                        Content = string.Format("Position: X: {0} Y: {1} Z: {2}",
+                                                v.RigidBody.Position.X,
+                                                v.RigidBody.Position.Y,
+                                                v.RigidBody.Position.Z)
+                    });
+                    List.Items.Add(new Label()
+                    {
+                        Content = string.Format("Size: X: {0} Y: {1} Z: {2}",
+                            v.RigidBody.Size.X,
+                            v.RigidBody.Size.Y,
+                            v.RigidBody.Size.Z)
+                    });
+                    List.Items.Add(new Label()
+                    {
+                        Content = string.Format("Velocity: X: {0} Y: {1} Z: {2}",
+                            v.RigidBody.Velocity.X,
+                            v.RigidBody.Velocity.Y,
+                            v.RigidBody.Velocity.Z)
+                    });
+                    List.Items.Add(new Label()
+                    {
+                        Content = string.Format("Force: X: {0} Y: {1} Z: {2}",
+                                                v.RigidBody.Force.X,
+                                                v.RigidBody.Force.Y,
+                                                v.RigidBody.Force.Z)
+                    });
+                    List.Items.Add(new Label()
+                    {
+                        Content = string.Format("Acceleration: X: {0} Y: {1} Z: {2}",
+                            v.RigidBody.Acceleration.X,
+                            v.RigidBody.Acceleration.Y,
+                            v.RigidBody.Acceleration.Z)
+                    });
+                }
             }));
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            HasAnOpenInstance = false;
         }
     }
 }

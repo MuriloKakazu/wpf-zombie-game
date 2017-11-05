@@ -1,4 +1,5 @@
 ﻿using System;
+using ZombieGame.Physics.Extensions;
 
 namespace ZombieGame.Physics
 {
@@ -8,7 +9,7 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Vetor (0, 0, 0)
         /// </summary>
-        public static Vector Zero { get { return new Vector(); } }
+        public static Vector Zero { get { return new Vector(0, 0, 0); } }
         /// <summary>
         /// Vetor (0, 1, 0)
         /// </summary>
@@ -29,6 +30,10 @@ namespace ZombieGame.Physics
         /// Vetor (0, -9.807, 0)
         /// </summary>
         public static Vector EarthGravity { get { return Vector.Down * 9.807f; } }
+        /// <summary>
+        /// Vetor (10,000; 10,000)
+        /// </summary>
+        public static Vector OffScreen { get { return new Vector(10000, 10000); } }
         #endregion
 
         #region Operators
@@ -204,7 +209,7 @@ namespace ZombieGame.Physics
         /// </summary>
         public Vector Opposite
         {
-            get { return this * -1; }
+            get { return -this; }
         }
         /// <summary>
         /// Retorna se o vetor tem módulo igual a 1
@@ -222,6 +227,17 @@ namespace ZombieGame.Physics
         public Vector(float x = 0, float y = 0, float z = 0)
         {
             Set(x, y, z);
+        }
+
+        /// <summary>
+        /// ctor.
+        /// </summary>
+        /// <param name="x">Valor no eixo X</param>
+        /// <param name="y">Valor no eixo Y</param>
+        /// <param name="z">Valor no eixo Z</param>
+        public Vector(double x = 0, double y = 0, double z = 0)
+        {
+            Set((float)x, (float)y, (float)z);
         }
 
         /// <summary>
@@ -244,7 +260,6 @@ namespace ZombieGame.Physics
         /// <returns></returns>
         public Vector PointedAt(Vector position)
         {
-            //return this + (position - this);
             return this - position;
         }
 
@@ -258,9 +273,18 @@ namespace ZombieGame.Physics
             return (this + v).Magnitude;
         }
 
+        /// <summary>
+        /// Retorna o ângulo entre dois vetores, em radianos
+        /// </summary>
+        /// <param name="v">Segundo vetor</param>
+        /// <returns>Ângulo em radianos</returns>
         public float AngleBetween(Vector v)
         {
-            return (float)Math.Atan2(v.Y - Y, v.X - X);
+            return MathExtension.DegreesToRadians((float)System.Windows.Vector.AngleBetween(
+                new System.Windows.Vector(X, Y), 
+                new System.Windows.Vector(v.X, v.Y)));
+            //return (float)Math.Atan2(Y - v.Y, X - v.X);
+            //return (float)Math.Atan2(v.Y - Y, v.X - X) * 2;
         }
 
         /// <summary>

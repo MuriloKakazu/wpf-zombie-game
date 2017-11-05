@@ -6,9 +6,7 @@
         Camera,
         Player,
         Enemy,
-        LeftWall,
-        RightWall,
-        BottomWall,
-        TopWall
+        Projectile,
+        Wall
     }
 }

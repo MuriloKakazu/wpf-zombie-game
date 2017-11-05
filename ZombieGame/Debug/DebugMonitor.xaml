@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ZombieGame.Debug"
         mc:Ignorable="d"
-        Title="DebugMonitor" Height="300" Width="300">
+        Title="DebugMonitor" Height="300" Width="300" Closed="Window_Closed">
     <Grid>
         <ListView x:Name="List" />
     </Grid>
