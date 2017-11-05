@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZombieGame.Game.Enums;
+﻿using ZombieGame.Game.Enums;
 using ZombieGame.Game.Prefabs.Weapons;
 using ZombieGame.Physics;
 
@@ -19,11 +14,15 @@ namespace ZombieGame.Game
         /// <summary>
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>
-        public float FireRate { get { return CoolDownTime * 60; } }
+        public float FireRate { get; protected set; }
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>
         public int Ammo { get; set; }
+        /// <summary>
+        /// O tempo para recarregar a arma
+        /// </summary>
+        public float ReloadTime { get; set; }
         /// <summary>
         /// Módulo da velocidade do projétil da arma
         /// </summary>
@@ -31,7 +30,17 @@ namespace ZombieGame.Game
         /// <summary>
         /// Tempo de espera entre cada disparo de projéteis, em segundos
         /// </summary>
-        public float CoolDownTime { get; protected set; }
+        public float CoolDownTime
+        {
+            get
+            {
+                if (FireRate > 1000)
+                    return 60 / 1000;
+                else if (FireRate < 30)
+                    return 60 / 30;
+                return 60 / FireRate;
+            }
+        }
         /// <summary>
         /// Retorna se a arma está em tempo de espera entre os disparos
         /// </summary>
@@ -48,8 +57,9 @@ namespace ZombieGame.Game
         /// Tipo de projétil da arma
         /// </summary>
         public ProjectileTypes ProjectileType { get; set; }
-	    #endregion
+        #endregion
 
+        #region Methods
         public Weapon(WeaponTypes type, ProjectileTypes pType)
         {
             Type = type;
@@ -77,5 +87,6 @@ namespace ZombieGame.Game
         {
             GameMaster.UpdateTimer.Elapsed -= UpdateTimer_Elapsed;
         }
+        #endregion
     }
 }

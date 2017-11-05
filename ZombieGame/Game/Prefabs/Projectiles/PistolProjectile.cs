@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZombieGame.Game.Enums;
+﻿using ZombieGame.Game.Enums;
 using ZombieGame.IO;
+using static ZombieGame.Game.GameMaster;
 
 namespace ZombieGame.Game.Prefabs.Projectiles
 {
     public sealed class PistolProjectile : Projectile
     {
-        public PistolProjectile() : base(ProjectileTypes.PistolProjectile)
+        public PistolProjectile() : base(ProjectileTypes.Pistol)
         {
-            this.HitDamage = 1;
-            this.SpeedMagnitude = 400;
+            HitDamage = PDB.pistolDmg;
+            SpeedMagnitude = PDB.pistolSpd;
             LoadSprite(GlobalPaths.ProjectileSprites + "pistolprojectile.png");
             RigidBody.Resize(new Physics.Vector(10, 10));
         }

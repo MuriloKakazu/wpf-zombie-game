@@ -34,10 +34,28 @@ namespace ZombieGame.Game
         /// Tipo do projétil
         /// </summary>
         public ProjectileTypes Type { get; protected set; }
+
+        /// <summary>
+        /// O valor primitivo da velocidade
+        /// </summary>
+        private float speedMagnitude = 400;
+
         /// <summary>
         /// Módulo da velocidade do projétil
         /// </summary>
-        public float SpeedMagnitude { get; protected set; }
+        public float SpeedMagnitude
+        {
+            get { return speedMagnitude; }
+            protected set
+            {
+                if (value < 250)
+                    speedMagnitude = 250;
+                else if (value > 1500)
+                    speedMagnitude = 1500;
+                else
+                    speedMagnitude = value;
+            }
+        }
 
         /// <summary>
         /// ctor
@@ -75,15 +93,16 @@ namespace ZombieGame.Game
         /// <returns>Projectile</returns>
         public static Projectile OfType(ProjectileTypes type)
         {
-            if (type == ProjectileTypes.HeavyMGProjectile)
+
+            if (type == ProjectileTypes.HeavyMG)
                 return new HeavyMGProjectile();
             else if (type == ProjectileTypes.Missile)
                 return new Missile();
-            else if (type == ProjectileTypes.PistolProjectile)
+            else if (type == ProjectileTypes.Pistol)
                 return new PistolProjectile();
-            else if (type == ProjectileTypes.RifleProjectile)
+            else if (type == ProjectileTypes.Rifle)
                 return new RifleProjectile();
-            else if (type == ProjectileTypes.SniperProjectile)
+            else if (type == ProjectileTypes.Sniper)
                 return new SniperProjectile();
             return null;
         }

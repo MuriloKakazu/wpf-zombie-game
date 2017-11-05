@@ -37,6 +37,10 @@ namespace ZombieGame.IO
         /// </summary>
         public static string Sprites { get { return Resources + "sprites/"; } }
         /// <summary>
+        /// Diretório de dados das armas do jogo
+        /// </summary>
+        public static string DB { get { return Resources + "db/"; } }
+        /// <summary>
         /// Diretório de sprites de personagens
         /// </summary>
         public static string CharacterSprites { get { return Sprites + "characters/"; } }
