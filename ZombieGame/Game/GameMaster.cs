@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
+using ZombieGame.Game.Prefabs.DataBase;
+using ZombieGame.IO.Serialization;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
@@ -31,12 +33,23 @@ namespace ZombieGame.Game
         /// Retorna todos os cenários de jogo disponíveis
         /// </summary>
         public static Scene[] Scenes { get; private set; }
+        /// <summary>
+        /// Retorna os dados de todos os projéteis
+        /// </summary>
+        public static ProjectilesDB PDB { get; private set; }
+
+        /// <summary>
+        /// Retorna os dados de todas as armas
+        /// </summary>
+        public static WeaponsDB WDB { get; private set; }
 
         /// <summary>
         /// Define as configurações iniciais do jogo
         /// </summary>
         public static void Setup()
         {
+            PDB = PDB.LoadFrom(IO.GlobalPaths.DB + "Projectiles.xlm");
+            WDB = WDB.LoadFrom(IO.GlobalPaths.DB + "Weapons.xlm");
             UpdateTimer = new Timer();
             UpdateTimer.Interval = 1;
             UpdateTimer.Enabled = true;
@@ -49,6 +62,44 @@ namespace ZombieGame.Game
             Player2.Character.RigidBody.SetPosition(new Vector(500, 0));
             Player1.Character.RigidBody.Resize(new Vector(50, 50));
             Player2.Character.RigidBody.Resize(new Vector(50, 50));
+            
+
+         
+            /**ProjectilesDB p = new ProjectilesDB();
+            WeaponsDB w = new WeaponsDB();
+
+            p.HMGdmg = 7;
+            p.HMGspd = 450;
+            w.HMGfr = 700;
+            w.HMGammo = 150;
+            w.HMGrt = 5.4f;
+
+            p.missileDmg = 100;
+            p.missileSpd = 250;
+            w.missileFR = 30;
+            w.missileAmmo = 1;
+            w.missileRT = 4.7f;
+
+            p.pistolDmg = 5;
+            p.pistolSpd = 300;
+            w.pistolFR = 300;
+            w.pistolAmmo = 15;
+            w.pistolRT = 1.2f;
+
+            p.rifleDmg = 10;
+            p.rifleSpd = 450;
+            w.rifleFR = 800;
+            w.rifleAmmo = 30;
+            w.rifleRT = 2.4f;
+
+            p.sniperDmg = 50;
+            p.sniperSpd = 1500;
+            w.sniperFR = 45;
+            w.sniperAmmo = 5;
+            w.sniperRT = 4.5f;
+
+            p.SaveTo(IO.GlobalPaths.DB + "Projectiles.xlm");
+            w.SaveTo(IO.GlobalPaths.DB + "Weapons.xlm");*/
         }
     }
 }

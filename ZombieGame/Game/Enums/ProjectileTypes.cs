@@ -8,10 +8,10 @@ namespace ZombieGame.Game.Enums
 {
     public enum ProjectileTypes
     {
-        RifleProjectile,
-        SniperProjectile,
-        PistolProjectile,
-        HeavyMGProjectile,
+        Rifle,
+        Sniper,
+        Pistol,
+        HeavyMG,
         Missile,
     }
 }

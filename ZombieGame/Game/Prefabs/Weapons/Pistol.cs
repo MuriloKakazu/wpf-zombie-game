@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZombieGame.Game.Enums;
+﻿using ZombieGame.Game.Enums;
+using static ZombieGame.Game.GameMaster;
 
 namespace ZombieGame.Game.Prefabs.Weapons
 {
     public sealed class Pistol : Weapon
     {
-        public Pistol() : base(WeaponTypes.Pistol, ProjectileTypes.PistolProjectile)
+        public Pistol() : base(WeaponTypes.Pistol, ProjectileTypes.Pistol)
         {
-            FireRate = 60f;
+            FireRate = WDB.pistolFR;
+            ReloadTime = WDB.pistolRT;
+            Ammo = WDB.pistolAmmo;
         }
     }
 }
