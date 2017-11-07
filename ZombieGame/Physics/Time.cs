@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -10,6 +12,7 @@ namespace ZombieGame.Physics
 {
     public static class Time
     {
+        public static Timer InternalTimer { get; private set; }
         /// <summary>
         /// Retorna a diferença de tempo em milisegundos desde a última decorrência do timer de atualização
         /// </summary>
@@ -19,12 +22,12 @@ namespace ZombieGame.Physics
         /// </summary>
         private static DateTime LastUpdate { get; set; }
 
-        /// <summary>
-        /// Inscreve o objeto atual no evento de decorrência do timer de atualização
-        /// </summary>
-        public static void ListenToTimer(Timer t)
+        public static void Setup()
         {
-            t.Elapsed += UpdateTimer_Elapsed;
+            InternalTimer = new Timer();
+            InternalTimer.Elapsed += OnElapsed;
+            InternalTimer.Interval = 10;
+            InternalTimer.Enabled = true;
         }
 
         /// <summary>
@@ -32,7 +35,7 @@ namespace ZombieGame.Physics
         /// </summary>
         /// <param name="sender">Objeto que invocou o evento</param>
         /// <param name="e">Informações a respeito do evento</param>
-        private static void UpdateTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private static void OnElapsed(object sender, ElapsedEventArgs e)
         {
             float d = DateTime.Now.Millisecond - LastUpdate.Millisecond;
             if (d > 0)

@@ -44,12 +44,25 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna a saúde do personagem
         /// </summary>
-        public int Health { get; protected set; }
+        public float Health { get; protected set; }
 
         /// <summary>
         /// Retorna a experiência adquirida pelo personagem
         /// </summary>
         public int Experience { get; set; }
+
+        /// <summary>
+        /// Retorna se o personagem está atordoado
+        /// </summary>
+        public bool IsStunned { get; protected set; }
+        /// <summary>
+        /// Tempo que o personagem passou atordoado em ms
+        /// </summary>
+        protected float TimeStunned { get; set; }
+        /// <summary>
+        /// Tempo que o atordoamento deve durar em ms
+        /// </summary>
+        protected float TargetStunTime { get; set; }
         #endregion
 
         #region Methods
@@ -61,6 +74,7 @@ namespace ZombieGame.Game
         /// <param name="tag">Tag do personagem</param>
         public Character(string name, Tags tag) : base(name, tag)
         {
+            Health = 50;
             Level = 1;
             Weapon = new RPG();
             Characters.Add(this);
@@ -74,35 +88,62 @@ namespace ZombieGame.Game
             p.Launch(RigidBody.Front);
         }
 
-        public virtual void Damage(int quantity)
+        public virtual void Damage(Character damager, float quantity)
         {
             Health -= quantity;
-            CheckForDeath();
+            if (!IsAlive)
+                Kill(killer: damager);
         }
 
-        public virtual void SetHealth(int quantity)
+        public virtual void SetHealth(float quantity)
         {
             Health = quantity;
-            CheckForDeath();
-        }
-
-        public virtual void AddHealth(int quantity)
-        {
-            Health += quantity;
-            CheckForDeath();
-        }
-
-        protected virtual void CheckForDeath()
-        {
-            if (Health <= 0)
+            if (!IsAlive)
                 Kill();
         }
 
-        public virtual void Kill()
+        public virtual void AddHealth(float quantity)
+        {
+            Health += quantity;
+            if (!IsAlive)
+                Kill();
+        }
+
+        public virtual void Kill(Character killer)
+        {
+            if (!this.IsPlayer)
+                Console.WriteLine("{0} was killed by {1}", this.Name, killer.Name);
+
+            Health = 0;
+            if (!IsPlayer)
+                Destroy();
+        }
+
+        protected virtual void Kill()
         {
             Health = 0;
             if (!IsPlayer)
                 Destroy();
+        }
+
+        public virtual void Stun(float timeMs)
+        {
+            IsStunned = true;
+            TimeStunned = 0;
+            TargetStunTime = timeMs;
+        }
+
+        protected override void Update()
+        {
+            base.Update();
+            if (IsStunned)
+            {
+                TimeStunned += (float)Time.Delta * 1000;
+                if (TimeStunned >= TargetStunTime)
+                {
+                    IsStunned = false;
+                }
+            }
         }
 
         /// <summary>
@@ -150,7 +191,7 @@ namespace ZombieGame.Game
             return null;
         }
 
-        protected override void Destroy()
+        public override void Destroy()
         {
             if (IsAlive)
                 Kill();

@@ -12,6 +12,7 @@ namespace ZombieGame.Physics
 {
     public sealed class RigidBody
     {
+
         /// <summary>
         /// Retângulo do corpo
         /// </summary>
@@ -67,7 +68,7 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Define se o corpo terá uma posição fixa
         /// </summary>
-        public bool FixedPosition { get; set; }
+        public bool Frozen { get; private set; }
         /// <summary>
         /// Define se o corpo ignorará colisões
         /// </summary>
@@ -92,6 +93,21 @@ namespace ZombieGame.Physics
             Rotation = 0;
             Drag = 1f;
             SpeedMultiplier = 1f;
+        }
+        
+        public void Freeze()
+        {
+            Frozen = true;
+        }
+
+        public void Unfreeze()
+        {
+            Frozen = false;
+        }
+
+        public void PointAt(Vector location)
+        {
+            Front = location.Normalized;
         }
 
         /// <summary>
@@ -175,25 +191,34 @@ namespace ZombieGame.Physics
             Velocity = v;
         }
 
+        public void SetDrag(float d)
+        {
+            Drag = d;
+        }
+
         /// <summary>
         /// Método que aciona funções que precisam ser disparadas constantemente
         /// </summary>
         public void Update()
         {
-            Acceleration = Force / Mass;
-
             if (Velocity.Magnitude > 0)
             {
                 if (UseRotation)
-                    Rotation = MathExtension.RadiansToDegrees(Velocity.AngleBetween(Vector.Right));
-                Front = Velocity.Normalized;
+                    Rotation = MathExtension.RadiansToDegrees(Front.AngleBetween(Vector.Right));
+                //Front = Velocity.Normalized;
             }
-            Velocity += Acceleration * Time.Delta;
-            Velocity *= SpeedMultiplier;
-            if (!FixedPosition)
-                Position += Velocity * Time.Delta;
 
-            Force.Approximate(Vector.Zero, 10);
+            if (!Frozen)
+            {
+                Acceleration = Force / Mass;
+                Velocity += Acceleration * (float)Time.Delta;
+                //Acceleration = Velocity / Time.Delta;
+                Position += Velocity * (float)Time.Delta * 10;
+            }
+
+            //Velocity.Approximate(Vector.Zero, 10 * Time.Delta);
+            //Acceleration.Approximate(Vector.Zero, 10 * Time.Delta);
+            Force.Approximate(Vector.Zero, 10 * (float)Time.Delta);
         }
     }
 }

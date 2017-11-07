@@ -10,6 +10,7 @@ namespace ZombieGame.Game.Prefabs.Projectiles
         {
             HitDamage = PDB.pistolDmg;
             SpeedMagnitude = PDB.pistolSpd;
+            KnockbackMagnitude = 10;
             LoadSprite(GlobalPaths.ProjectileSprites + "pistolprojectile.png");
             RigidBody.Resize(new Physics.Vector(10, 10));
         }

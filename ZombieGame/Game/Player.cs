@@ -41,8 +41,9 @@ namespace ZombieGame.Game
         {
             PlayerNumber = playerNumber;
             Character = new Character(name, Tags.Player);
+            Character.SetHealth(100);
             Character.LoadSprite(GlobalPaths.CharacterSprites + "player" + playerNumber + ".png");
-            GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
+            Time.InternalTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
         /// <summary>
@@ -60,34 +61,42 @@ namespace ZombieGame.Game
         /// </summary>
         public void Update()
         {
-            Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisTypes.Sprint, PlayerNumber));
-            Character.IsFiring = Convert.ToBoolean(Input.GetAxis(AxisTypes.Fire, PlayerNumber));
-            var x = Input.GetAxis(AxisTypes.Horizontal, PlayerNumber);
-            var y = Input.GetAxis(AxisTypes.Vertical, PlayerNumber);
-            var r = new Vector(x, y);
-            var speedMult = 150f;
-            if (Character.IsSprinting)
-                speedMult += 100;
-            if (x != 0 && y != 0)
+            if (!Character.IsStunned)
             {
-                var mag = r.Magnitude;
-                r.X = (float)Math.Abs(Math.Sin(speedMult / mag)) * r.X;
-                r.Y = (float)Math.Abs(Math.Sin(speedMult / mag)) * r.Y;
-            }
-               
-            if (Character.RigidBody.IsAccelerating)
-            {
-                Character.RigidBody.SetVelocity(r);
-                Character.RigidBody.RemoveForce(Character.RigidBody.Force / 10f);
+                Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisTypes.Sprint, PlayerNumber));
+                Character.IsFiring = Convert.ToBoolean(Input.GetAxis(AxisTypes.Fire, PlayerNumber));
+                var x = Input.GetAxis(AxisTypes.Horizontal, PlayerNumber);
+                var y = Input.GetAxis(AxisTypes.Vertical, PlayerNumber);
+                var r = new Vector(x, y);
+                var speedMult = 20f;
+                if (Character.IsSprinting)
+                    speedMult += 10;
+                if (x != 0 && y != 0)
+                {
+                    var mag = r.Magnitude;
+                    r.X = (float)Math.Abs(Math.Sin(speedMult / mag)) * r.X;
+                    r.Y = (float)Math.Abs(Math.Sin(speedMult / mag)) * r.Y;
+                }
+
+                Character.RigidBody.SetVelocity(r.Normalized * speedMult);
+                if (r.Magnitude > 0)
+                {
+                    if (Character.RigidBody.Acceleration.Magnitude > 0)
+                        Character.RigidBody.Acceleration.Approximate(Vector.Zero, 10);
+                    Character.RigidBody.SetForce(Character.RigidBody.Force / 1.1f);
+                    Character.RigidBody.PointAt(r);
+                }
+
+                if (Character.IsFiring && !Character.Weapon.IsCoolingDown)
+                    System.Windows.Application.Current.Dispatcher.Invoke(delegate
+                    {
+                        Character.LaunchProjectile();
+                    });
             }
             else
-                Character.RigidBody.SetVelocity(r * speedMult);
-
-            if (Character.IsFiring && !Character.Weapon.IsCoolingDown)
-                System.Windows.Application.Current.Dispatcher.Invoke((Action)delegate
-                {
-                    Character.LaunchProjectile();
-                });
+            {
+                Character.RigidBody.SetVelocity(Vector.Zero);
+            }
         }
     }
 }

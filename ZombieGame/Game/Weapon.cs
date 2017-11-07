@@ -7,6 +7,8 @@ namespace ZombieGame.Game
     public abstract class Weapon
     {
         #region Properties
+
+        public string Name { get; protected set; }
         /// <summary>
         /// Dano da arma por projétil
         /// </summary>
@@ -60,32 +62,34 @@ namespace ZombieGame.Game
         #endregion
 
         #region Methods
-        public Weapon(WeaponTypes type, ProjectileTypes pType)
+        public Weapon(string name, WeaponTypes type, ProjectileTypes pType)
         {
+            Name = name;
             Type = type;
             ProjectileType = pType;
-            GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
         public void StartCoolDown()
         {
+            Time.InternalTimer.Elapsed += UpdateTimer_Elapsed;
             IsCoolingDown = true;
         }
 
         protected virtual void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            DeltaT += Time.Delta;
+            DeltaT += (float)Time.Delta;
 
             if (DeltaT >= CoolDownTime)
             {
                 IsCoolingDown = false;
                 DeltaT = 0;
+                Time.InternalTimer.Elapsed -= UpdateTimer_Elapsed;
             }
         }
 
         public void Destroy()
         {
-            GameMaster.UpdateTimer.Elapsed -= UpdateTimer_Elapsed;
+            Time.InternalTimer.Elapsed -= UpdateTimer_Elapsed;
         }
         #endregion
     }

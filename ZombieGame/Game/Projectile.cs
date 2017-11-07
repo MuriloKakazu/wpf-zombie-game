@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Prefabs.Projectiles;
 using ZombieGame.Physics;
+using ZombieGame.Physics.Enums;
 using ZombieGame.Physics.Events;
 using ZombieGame.Physics.Extensions;
 
@@ -38,7 +39,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// O valor primitivo da velocidade
         /// </summary>
-        private float speedMagnitude = 400;
+        private float speedMagnitude = 40;
 
         /// <summary>
         /// Módulo da velocidade do projétil
@@ -48,20 +49,21 @@ namespace ZombieGame.Game
             get { return speedMagnitude; }
             protected set
             {
-                if (value < 250)
-                    speedMagnitude = 250;
-                else if (value > 1500)
-                    speedMagnitude = 1500;
+                if (value < 25)
+                    speedMagnitude = 25;
+                else if (value > 150)
+                    speedMagnitude = 150;
                 else
                     speedMagnitude = value;
             }
         }
+        public float KnockbackMagnitude { get; protected set; }
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="type">Tipo de projétil</param>
-        public Projectile(ProjectileTypes type) : base(type.ToString(), Tags.Projectile)
+        public Projectile(ProjectileTypes type) : base(type.ToString() + "Projectile", Tags.Projectile)
         {
             Projectiles.Add(this);
         }
@@ -72,8 +74,9 @@ namespace ZombieGame.Game
         /// <param name="dir">Direção de lançamento</param>
         public void Launch(Vector dir)
         {
-            RigidBody.SetPosition(Owner.RigidBody.CenterPoint);
+            RigidBody.SetPosition(new Vector(Owner.RigidBody.CenterPoint.X - RigidBody.Size.X / 2, Owner.RigidBody.CenterPoint.Y + RigidBody.Size.Y / 2));
             RigidBody.UseRotation = true;
+            RigidBody.PointAt(dir);
             RigidBody.SetVelocity(dir.Normalized * SpeedMagnitude);
         }
 
@@ -89,8 +92,23 @@ namespace ZombieGame.Game
             {
                 foreach (var t in targets)
                 {
-                    t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * 500);
-                    Console.WriteLine("Projectile exploded on {0}", t.Name);
+                    if (!t.IsPlayer)
+                    {
+                        t.Stun(3000);
+                        t.Damage(damager: this.Owner, quantity: HitDamage);
+                    }
+                    else
+                    {
+                        t.Stun(1000);
+                        t.Damage(damager: this.Owner, quantity: HitDamage / 10);
+                    }
+                    //t.RigidBody.SetForce(Vector.Zero);
+                    t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * 1000);
+                    //t.RigidBody.SetVelocity(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * KnockbackMagnitude * 10);
+
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("{0} exploded on {0}", Name, t.Name);
+                    Console.ResetColor();
                 }
             }
         }
@@ -126,61 +144,38 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// Checa colisão com outras entidades
-        /// </summary>
-        protected override void CheckCollision()
-        {
-            try
-            {
-                List<Entity> currentCollisions = new List<Entity>();
-                foreach (var e in Entities.ToArray())
-                {
-                    if (e != null && RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash)
-                    {
-                        currentCollisions.Add(e);
-                        if (!Collisions.ToArray().Contains(e))
-                        {
-                            var d = RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint);
-                            OnCollisionEnter(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
-                        }
-                    }
-                }
-
-                foreach (var e in Collisions.ToArray())
-                {
-                    if (e != null)
-                    {
-                        if (!currentCollisions.Contains(e))
-                            OnCollisionLeave(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
-                        else if (currentCollisions.Contains(e))
-                            OnCollisionStay(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
-                    }
-                }
-
-                Collisions = currentCollisions;
-            }
-            catch { }
-        }
-
-        /// <summary>
         /// Evento a ser disparado quando o projétil entra em colisão com outro objeto
         /// </summary>
         /// <param name="sender">Objeto que invocou o evento</param>
         /// <param name="e">Informações da colisão</param>
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
-            Console.WriteLine("Projectile collided with {0}", e.Collider.Name);
+            if (e.Collider.IsCamera)
+                return;
+
+            if (e.Collider != Owner)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("{0} collided with {1}", Name, e.Collider.Name);
+                Console.ResetColor();
+            }
 
             var colliderChar = Character.FromHashCode(e.Collider.Hash);
 
             if (e.Collider != Owner)
             {
-                if (colliderChar != null)
+                if (IsExplosive)
                 {
-                    colliderChar.Damage(HitDamage);
-                    colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 100);
-                    if (IsExplosive)
-                        ExplodeAt(RigidBody.CenterPoint, 200);
+                    ExplodeAt(RigidBody.CenterPoint, explosionRadius: 200);
+                    Destroy();
+                }
+                else if (colliderChar != null)
+                {
+                    if (!colliderChar.IsPlayer)
+                        colliderChar.Damage(damager: this.Owner, quantity: HitDamage);
+                    else
+                        colliderChar.Damage(damager: this.Owner, quantity: HitDamage / 10);
+                    colliderChar.RigidBody.AddVelocity(e.CollisionDirection.Opposite.Normalized * KnockbackMagnitude);
                     Destroy();
                 }
                 else if (e.Collider.Tag == Tags.Projectile)
@@ -188,6 +183,11 @@ namespace ZombieGame.Game
                     var p = Projectile.FromHashCode(e.Collider.Hash);
                     if (p != null && p.Owner != Owner)
                     {
+                        if (p.IsExplosive)
+                            p.ExplodeAt(RigidBody.CenterPoint, explosionRadius: 200);
+                        if (this.IsExplosive)
+                            ExplodeAt(RigidBody.CenterPoint, explosionRadius: 200);
+                        p.Destroy();
                         Destroy();
                     }
                 }
@@ -200,7 +200,7 @@ namespace ZombieGame.Game
             {
                 if (colliderChar != null)
                 {
-                    colliderChar.RigidBody.AddForce(colliderChar.RigidBody.Front.Opposite * 1000);
+                    colliderChar.RigidBody.AddVelocity(e.Collider.RigidBody.Front.Opposite * 20);
                 }
             }
         }
@@ -245,7 +245,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Destrói o projétil para liberar espaço na memória
         /// </summary>
-        protected override void Destroy()
+        public override void Destroy()
         {
             base.Destroy();
             Projectiles.Remove(this);

@@ -5,7 +5,7 @@ namespace ZombieGame.Game.Prefabs.Weapons
 {
     public sealed class RPG : Weapon
     {
-        public RPG() : base(WeaponTypes.Missile, ProjectileTypes.Missile)
+        public RPG() : base(WeaponTypes.Explosive.ToString(), WeaponTypes.Explosive, ProjectileTypes.Missile)
         {
             FireRate = WDB.missileFR;
             ReloadTime = WDB.missileRT;

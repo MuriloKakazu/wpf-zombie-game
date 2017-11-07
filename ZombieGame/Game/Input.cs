@@ -84,8 +84,7 @@ namespace ZombieGame.Game
 
                 if (Keyboard.IsKeyDown(Key.F5))
                 {
-                    GameMaster.Player1.Character.RigidBody.SetPosition(Physics.Vector.Zero);
-                    GameMaster.Player2.Character.RigidBody.SetPosition(Physics.Vector.Zero);
+                    GameMaster.Player1.Character.RigidBody.SetForce(GameMaster.Player1.Character.RigidBody.Front.Opposite.Normalized * 100);
                 }
                 else if (Keyboard.IsKeyDown(Key.F1))
                 {
@@ -94,6 +93,19 @@ namespace ZombieGame.Game
                         DebugMonitor dm = new DebugMonitor();
                         dm.Show();
                     }
+                }
+                else if (Keyboard.IsKeyDown(Key.F2))
+                {
+                    if (Enemy.Enemies.Count < 10)
+                    {
+                        for (int i = 0; i < 10; i++)
+                            EnemySpawner.SpawnZombie();
+                    }
+                }
+                else if (Keyboard.IsKeyDown(Key.F3))
+                {
+                    foreach (var e in Enemy.Enemies.ToArray())
+                        e.Kill(GameMaster.GetPlayer(player).Character);
                 }
             });
             return output;

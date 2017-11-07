@@ -56,6 +56,8 @@ namespace ZombieGame.Game.Prefabs.OtherEntities
                     e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X > RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X)
                     e.Collider.RigidBody.SetPosition(new Vector(RigidBody.Position.X + RigidBody.Size.X, e.Collider.RigidBody.Position.Y));
             }
+            if (e.Collider.RigidBody.Force.Magnitude > 0)
+                e.Collider.RigidBody.SetForce(Vector.Zero);
         }
 
         protected override void OnCollisionLeave(object sender, CollisionEventArgs e)

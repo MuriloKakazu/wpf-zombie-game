@@ -7,12 +7,12 @@
         xmlns:controls="clr-namespace:ZombieGame.Game.Controls"
         mc:Ignorable="d"
         Title="ZombieGame Client" Height="720" Width="1280" ResizeMode="CanMinimize" MinWidth="1280" MinHeight="720">
-    <Grid x:Name="___No_Name_">
+    <Grid>
         <DockPanel>
-            <Canvas x:Name="Camera" DockPanel.Dock="Top" Width="1274" Height="691">
+            <Canvas x:Name="Camera" x:FieldModifier="public" DockPanel.Dock="Top" Width="1274" Height="691">
                 <controls:VisualControl x:Name="Scene">
                     <controls:VisualControl.Background>
-                        <ImageBrush Stretch="Fill"/>
+                        <ImageBrush Stretch="Fill" ImageSource="C:\Users\yurik\source\repos\clones\zombiegame\ZombieGame\bin\Debug\resources\scenes\defaultScene\bg.png"/>
                     </controls:VisualControl.Background>
                 </controls:VisualControl>
             </Canvas>

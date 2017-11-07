@@ -34,6 +34,8 @@ namespace ZombieGame.Physics
         /// Vetor (10,000; 10,000)
         /// </summary>
         public static Vector OffScreen { get { return new Vector(10000, 10000); } }
+
+        public static Vector WindowSize { get { return new Vector(1274, 691); } }
         #endregion
 
         #region Operators
@@ -270,7 +272,7 @@ namespace ZombieGame.Physics
         /// <returns>Float</returns>
         public float DistanceBetween(Vector v)
         {
-            return (this + v).Magnitude;
+            return (this - v).Magnitude;
         }
 
         /// <summary>

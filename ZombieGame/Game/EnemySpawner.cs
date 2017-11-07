@@ -27,27 +27,31 @@ namespace ZombieGame.Game
         public static void SpawnTanker()
         {
             var e = new Tanker();
+            e.RigidBody.SetPosition(GetRandomPositionOffscreen());
         }
 
         public static void SpawnZombie()
         {
             var e = new Zombie();
+            e.RigidBody.SetPosition(GetRandomPositionOffscreen());
         }
 
         public static void SpawnRunner()
         {
             var e = new Runner();
+            e.RigidBody.SetPosition(GetRandomPositionOffscreen());
         }
 
         public static void SpawnBoss()
         {
             var e = new Boss();
+            e.RigidBody.SetPosition(GetRandomPositionOffscreen());
         }
 
-        public static Vector GetRandomPositionOffscreen()
+        private static Vector GetRandomPositionOffscreen()
         {
             ///
-            return Vector.Zero;
+            return new Vector(500 + R.Next(-500, 500), -500 + R.Next(-200, 200));
         }
     }
 }

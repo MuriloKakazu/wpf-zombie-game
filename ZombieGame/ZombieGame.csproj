@@ -68,6 +68,7 @@
     <Compile Include="Game\Prefabs\Characters\Zombie.cs" />
     <Compile Include="Game\Prefabs\DataBase\ProjectilesDB.cs" />
     <Compile Include="Game\Prefabs\DataBase\WeaponsDB.cs" />
+    <Compile Include="Game\Prefabs\OtherEntities\Camera.cs" />
     <Compile Include="Game\Prefabs\OtherEntities\Wall.cs" />
     <Compile Include="Game\Prefabs\Projectiles\HeavyMGProjectile.cs" />
     <Compile Include="Game\Prefabs\Projectiles\Missile.cs" />

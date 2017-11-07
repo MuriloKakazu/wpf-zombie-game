@@ -12,6 +12,8 @@ namespace ZombieGame.Game
 {
     public abstract class Enemy : Character
     {
+        public static List<Enemy> Enemies = new List<Enemy>();
+
         /// <summary>
         /// Retorna o tipo de inimigo
         /// </summary>
@@ -28,38 +30,63 @@ namespace ZombieGame.Game
             SetMoney();
             SetHealth();
             SetExperience();
+            Enemies.Add(this);
         }
 
         protected override void Update()
         {
             base.Update();
 
-            Chase(GetNearestPlayer(), 250);
+            if (!IsStunned)
+                Chase(GetNearestPlayer(), 10);
+            else
+                RigidBody.SetVelocity(Vector.Zero);
         }
 
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
-            if (e.Collider.Tag == Tags.Player)
+            if (e.Collider.IsPlayer)
             {
                 var colliderChar = Character.FromHashCode(e.Collider.Hash);
                 if (colliderChar != null)
-                {
-                    colliderChar.Damage(10);
-                    colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 2000);
-                    RigidBody.AddForce(e.CollisionDirection.Normalized * 2000);
-                    //RigidBody.AddVelocity(e.CollisionDirection.Normalized * e.Collider.RigidBody.Velocity.Magnitude);
-                }
+                    colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 1000);
             }
+            //else if (e.Collider.IsEnemy)
+            //{
+            //    RigidBody.SetVelocity(e.CollisionDirection.Normalized * 200);
+            //}
         }
 
         protected override void OnCollisionStay(object sender, CollisionEventArgs e)
         {
+            //base.OnCollisionStay(sender, e);
+            if (e.Collider.IsCamera)
+                return;
 
+            if (e.Collider.Tag != Tags.Projectile && e.Collider.Tag != Tags.Wall)
+            {
+                var colliderChar = Character.FromHashCode(e.Collider.Hash);
+                if (colliderChar != null && colliderChar.IsPlayer)
+                    colliderChar.Damage(damager: this, quantity: 1);
+
+                RigidBody.SetVelocity(e.CollisionDirection.Normalized * e.Collider.RigidBody.Velocity.Magnitude);
+                RigidBody.AddForce(e.CollisionDirection.Normalized * 5);
+            }
         }
 
         protected override void OnCollisionLeave(object sender, CollisionEventArgs e)
         {
-            
+            //if (e.Collider.IsEnemy)
+            //    RigidBody.SetForce(Vector.Zero);
+        }
+
+        protected virtual void Chase(Entity target, float speedMagnitude)
+        {
+            if (RigidBody.Acceleration.Magnitude > 0)
+                RigidBody.Acceleration.Approximate(Vector.Zero, 10);
+            RigidBody.SetForce(RigidBody.Force / 1.1f);
+            RigidBody.SetVelocity(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite.Normalized * speedMagnitude);
+            RigidBody.PointAt(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite);
         }
 
         /// <summary>
@@ -139,6 +166,12 @@ namespace ZombieGame.Game
                     Experience = 20 * Level + 10 * Level * Level;
                     break;
             }
+        }
+
+        public override void Destroy()
+        {
+            Enemies.Remove(this);
+            base.Destroy();
         }
 
     }

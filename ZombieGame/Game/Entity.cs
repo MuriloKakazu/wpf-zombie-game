@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -67,6 +68,10 @@ namespace ZombieGame.Game
         /// Retorna se a entidade é um inimigo
         /// </summary>
         public bool IsEnemy { get { return Tag == Tags.Enemy; } }
+        /// <summary>
+        /// Retorna se a entidade é uma câmera
+        /// </summary>
+        public bool IsCamera { get { return Tag == Tags.Camera; } }
         #endregion
 
         #region Methods
@@ -77,7 +82,6 @@ namespace ZombieGame.Game
         /// <param name="tag">Tag da entidade</param>
         public Entity(string name, Tags tag)
         {
-            VisualControl = new VisualControl();
             Sprite = new Sprite("Not set");
             Hash = Guid.NewGuid();
             Name = name;
@@ -85,15 +89,13 @@ namespace ZombieGame.Game
             RigidBody = new RigidBody();
             Collisions = new List<Entity>();
             Entities.Add(this);
-            GameMaster.UpdateTimer.Elapsed += UpdateTimer_Elapsed;
+            VisualControl = new VisualControl();
+            Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddVisualComponent(VisualControl);
+            UpdateVisualControl();
+            Time.InternalTimer.Elapsed += UpdateTimer_Elapsed;
             CollisionEnter += OnCollisionEnter;
             CollisionStay += OnCollisionStay;
             CollisionLeave += OnCollisionLeave;
-        }
-
-        protected virtual void Chase(Entity target, float speedMagnitude)
-        {
-            RigidBody.SetVelocity(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite.Normalized * speedMagnitude);
         }
 
         /// <summary>
@@ -114,6 +116,8 @@ namespace ZombieGame.Game
         protected virtual void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
             //Console.WriteLine("Collision enter: '{0}' and '{1}'", Name, e.Collider.Name);
+            //if (e.Collider.IsEnemy)
+            //    e.Collider.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 20000);
         }
 
         /// <summary>
@@ -123,10 +127,10 @@ namespace ZombieGame.Game
         /// <param name="e">Informações a respeito da colisão</param>
         protected virtual void OnCollisionStay(object sender, CollisionEventArgs e)
         {
-            if (e.Collider.Tag != Tags.Projectile && e.Collider.Tag != Tags.Wall)
+            if (e.Collider.Tag != Tags.Projectile && e.Collider.Tag != Tags.Wall && !e.Collider.IsCamera)
             {
-                //RigidBody.AddForce(e.CollisionDirection.Normalized * 50);
                 RigidBody.AddVelocity(e.CollisionDirection * e.Collider.RigidBody.Velocity.Magnitude);
+                RigidBody.PointAt(e.CollisionDirection.Opposite);
             }
         }
 
@@ -195,7 +199,7 @@ namespace ZombieGame.Game
                         if (!Collisions.ToArray().Contains(e))
                         {
                             var d = RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint);
-                            CollisionEnter.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                            CollisionEnter?.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
                         }
                     }
                 }
@@ -205,9 +209,9 @@ namespace ZombieGame.Game
                     if (e != null)
                     {
                         if (!currentCollisions.Contains(e))
-                            CollisionLeave.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                            CollisionLeave?.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
                         else if (currentCollisions.Contains(e))
-                            CollisionStay.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
+                            CollisionStay?.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
                     }
                 }
 
@@ -252,10 +256,14 @@ namespace ZombieGame.Game
         /// <summary>
         /// Destrói a entidade caso ela não precise mais ser utilizada
         /// </summary>
-        protected virtual void Destroy()
+        public virtual void Destroy()
         {
+            App.Current.Dispatcher.Invoke(delegate
+            {
+                Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().RemoveVisualComponent(VisualControl);
+            });
             Entities.Remove(this);
-            GameMaster.UpdateTimer.Elapsed -= UpdateTimer_Elapsed;
+            Time.InternalTimer.Elapsed -= UpdateTimer_Elapsed;
             CollisionEnter -= OnCollisionEnter;
             CollisionStay -= OnCollisionStay;
             CollisionLeave -= OnCollisionLeave;

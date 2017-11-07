@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Input;
 using ZombieGame.Game.Prefabs.DataBase;
+using ZombieGame.Game.Prefabs.OtherEntities;
 using ZombieGame.IO.Serialization;
 using ZombieGame.Physics;
 
@@ -14,9 +15,9 @@ namespace ZombieGame.Game
     public static class GameMaster
     {
         /// <summary>
-        /// Timer de atualização da Física
+        /// Câmera do jogo
         /// </summary>
-        public static Timer UpdateTimer { get; private set; }
+        public static Camera Camera { get; private set; }
         /// <summary>
         /// Jogador 1
         /// </summary>
@@ -48,12 +49,10 @@ namespace ZombieGame.Game
         /// </summary>
         public static void Setup()
         {
-            PDB = PDB.LoadFrom(IO.GlobalPaths.DB + "Projectiles.xlm");
-            WDB = WDB.LoadFrom(IO.GlobalPaths.DB + "Weapons.xlm");
-            UpdateTimer = new Timer();
-            UpdateTimer.Interval = 1;
-            UpdateTimer.Enabled = true;
-            Time.ListenToTimer(UpdateTimer);
+            PDB = PDB.LoadFrom(IO.GlobalPaths.DB + "Projectiles.xml");
+            WDB = WDB.LoadFrom(IO.GlobalPaths.DB + "Weapons.xml");
+            Time.Setup();
+            Camera = new Camera();
             Player1 = new Player(1, "Player1");
             Player2 = new Player(2, "Player2");
             Player1.Character.RigidBody.UseRotation = true;
@@ -62,44 +61,18 @@ namespace ZombieGame.Game
             Player2.Character.RigidBody.SetPosition(new Vector(500, 0));
             Player1.Character.RigidBody.Resize(new Vector(50, 50));
             Player2.Character.RigidBody.Resize(new Vector(50, 50));
-            
 
-         
-            /**ProjectilesDB p = new ProjectilesDB();
-            WeaponsDB w = new WeaponsDB();
+            for (int i = 0; i < 1; i++)
+                EnemySpawner.SpawnZombie();
+        }
 
-            p.HMGdmg = 7;
-            p.HMGspd = 450;
-            w.HMGfr = 700;
-            w.HMGammo = 150;
-            w.HMGrt = 5.4f;
-
-            p.missileDmg = 100;
-            p.missileSpd = 250;
-            w.missileFR = 30;
-            w.missileAmmo = 1;
-            w.missileRT = 4.7f;
-
-            p.pistolDmg = 5;
-            p.pistolSpd = 300;
-            w.pistolFR = 300;
-            w.pistolAmmo = 15;
-            w.pistolRT = 1.2f;
-
-            p.rifleDmg = 10;
-            p.rifleSpd = 450;
-            w.rifleFR = 800;
-            w.rifleAmmo = 30;
-            w.rifleRT = 2.4f;
-
-            p.sniperDmg = 50;
-            p.sniperSpd = 1500;
-            w.sniperFR = 45;
-            w.sniperAmmo = 5;
-            w.sniperRT = 4.5f;
-
-            p.SaveTo(IO.GlobalPaths.DB + "Projectiles.xlm");
-            w.SaveTo(IO.GlobalPaths.DB + "Weapons.xlm");*/
+        public static Player GetPlayer(int number)
+        {
+            if (number == 1)
+                return Player1;
+            else if (number == 2)
+                return Player2;
+            return null;
         }
     }
 }
