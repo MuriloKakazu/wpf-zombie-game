@@ -5,7 +5,7 @@ namespace ZombieGame.Physics
 {
     public class Vector
     {
-        #region Static Properties
+        #region Properties
         /// <summary>
         /// Vetor (0, 0, 0)
         /// </summary>
@@ -27,15 +27,64 @@ namespace ZombieGame.Physics
         /// </summary>
         public static Vector Right { get { return new Vector(1, 0, 0); } }
         /// <summary>
-        /// Vetor (0, -9.807, 0)
-        /// </summary>
-        public static Vector EarthGravity { get { return Vector.Down * 9.807f; } }
-        /// <summary>
-        /// Vetor (10,000; 10,000)
+        /// Vetor (10000, 10000)
         /// </summary>
         public static Vector OffScreen { get { return new Vector(10000, 10000); } }
-
+        /// <summary>
+        /// Vetor (1274, 691)
+        /// </summary>
         public static Vector WindowSize { get { return new Vector(1274, 691); } }
+
+        /// <summary>
+        /// Retorna o valor no eixo X
+        /// </summary>
+        public float X { get; set; }
+        /// <summary>
+        /// Retorna o valor no eixo Y
+        /// </summary>
+        public float Y { get; set; }
+        /// <summary>
+        /// Retorna o valor no eixo Z
+        /// </summary>
+        public float Z { get; set; }
+        /// <summary>
+        /// Retorna o módulo do vetor
+        /// </summary>
+        public float Magnitude
+        {
+            get
+            {
+                return (float)Math.Sqrt(Math.Pow(X, 2) +
+                                        Math.Pow(Y, 2) +
+                                        Math.Pow(Z, 2));
+            }
+        }
+        /// <summary>
+        /// Retorna a parte unitária do vetor
+        /// </summary>
+        public Vector Normalized
+        {
+            get
+            {
+                var mag = Magnitude;
+
+                if (Magnitude == 0)
+                    return Vector.Zero;
+                else
+                    return new Vector(X / mag, Y / mag, Z / mag);
+            }
+        }
+        /// <summary>
+        /// Retorna o vetor oposto
+        /// </summary>
+        public Vector Opposite
+        {
+            get { return -this; }
+        }
+        /// <summary>
+        /// Retorna se o vetor tem módulo igual a 1
+        /// </summary>
+        public bool IsNormalized { get { return Math.Round(Magnitude, 2) == 1; } } // 0.995 e 1.005 são considerados como 1
         #endregion
 
         #region Operators
@@ -165,63 +214,17 @@ namespace ZombieGame.Physics
         }
         #endregion
 
-        #region Properties
-        /// <summary>
-        /// Retorna o valor no eixo X
-        /// </summary>
-        public float X { get; set; }
-        /// <summary>
-        /// Retorna o valor no eixo Y
-        /// </summary>
-        public float Y { get; set; }
-        /// <summary>
-        /// Retorna o valor no eixo Z
-        /// </summary>
-        public float Z { get; set; }
-
-        /// <summary>
-        /// Retorna o módulo do vetor
-        /// </summary>
-        public float Magnitude
-        {
-            get
-            {
-                return (float)Math.Sqrt(Math.Pow(X, 2) + 
-                                        Math.Pow(Y, 2) + 
-                                        Math.Pow(Z, 2));
-            }
-        }
-        /// <summary>
-        /// Retorna a parte unitária do vetor
-        /// </summary>
-        public Vector Normalized
-        {
-            get
-            {
-                var mag = Magnitude;
-
-                if (Magnitude == 0)
-                    return Vector.Zero;
-                else
-                    return new Vector(X / mag, Y / mag, Z / mag);
-            }
-        }
-        /// <summary>
-        /// Retorna o vetor oposto
-        /// </summary>
-        public Vector Opposite
-        {
-            get { return -this; }
-        }
-        /// <summary>
-        /// Retorna se o vetor tem módulo igual a 1
-        /// </summary>
-        public bool IsNormalized { get { return Math.Round(Magnitude, 2) == 1; } } // 0.995 e 1.005 são considerados como 1
-        #endregion
-
         #region Methods
         /// <summary>
-        /// ctor.
+        /// ctor
+        /// </summary>
+        public Vector()
+        {
+
+        }
+
+        /// <summary>
+        /// ctor
         /// </summary>
         /// <param name="x">Valor no eixo X</param>
         /// <param name="y">Valor no eixo Y</param>
@@ -232,7 +235,7 @@ namespace ZombieGame.Physics
         }
 
         /// <summary>
-        /// ctor.
+        /// ctor
         /// </summary>
         /// <param name="x">Valor no eixo X</param>
         /// <param name="y">Valor no eixo Y</param>
@@ -285,8 +288,6 @@ namespace ZombieGame.Physics
             return MathExtension.DegreesToRadians((float)System.Windows.Vector.AngleBetween(
                 new System.Windows.Vector(X, Y), 
                 new System.Windows.Vector(v.X, v.Y)));
-            //return (float)Math.Atan2(Y - v.Y, X - v.X);
-            //return (float)Math.Atan2(v.Y - Y, v.X - X) * 2;
         }
 
         /// <summary>

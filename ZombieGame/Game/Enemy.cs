@@ -1,23 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
-using static ZombieGame.Game.GameMaster;
 
 namespace ZombieGame.Game
 {
     public abstract class Enemy : Character
     {
-        public static List<Enemy> Enemies = new List<Enemy>();
+        #region Properties
+        /// <summary>
+        /// Lista estática de todos os inimigos ativos
+        /// </summary>
+        private static List<Enemy> Enemies = new List<Enemy>();
 
         /// <summary>
         /// Retorna o tipo de inimigo
         /// </summary>
         public EnemyTypes Type { get; set; }
+        #endregion
+
+        #region Methods
+        /// <summary>
+        /// Retorna todos os inimigos ativos
+        /// </summary>
+        /// <returns></returns>
+        public static Enemy[] GetAllActiveEnemies()
+        {
+            return Enemies.ToArray();
+        }
 
         /// <summary>
         /// ctor
@@ -33,6 +44,9 @@ namespace ZombieGame.Game
             Enemies.Add(this);
         }
 
+        /// <summary>
+        /// Método que aciona funções que precisam ser disparadas constantemente
+        /// </summary>
         protected override void Update()
         {
             base.Update();
@@ -43,6 +57,94 @@ namespace ZombieGame.Game
                 RigidBody.SetVelocity(Vector.Zero);
         }
 
+        /// <summary>
+        /// Faz com que o inimigo persiga um alvo
+        /// </summary>
+        /// <param name="target">Alvo</param>
+        /// <param name="speedMagnitude">Magnitude da velocidade de perseguição</param>
+        protected virtual void Chase(Entity target, float speedMagnitude)
+        {
+            if (RigidBody.Acceleration.Magnitude > 0)
+                RigidBody.Acceleration.Approximate(Vector.Zero, 10);
+            RigidBody.SetForce(RigidBody.Force / 1.1f);
+            RigidBody.SetVelocity(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite.Normalized * speedMagnitude);
+            RigidBody.PointAt(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite);
+        }
+
+        /// <summary>
+        /// Define quanto de dinheiro o inimigo dará ao morrer.
+        /// <para>Se trata de um valor definido entre um range</para>
+        /// </summary>
+        private void SetMoney()
+        {
+            int maxMoney = default(int), minMoney = default(int), avgLvls = 0;
+
+            foreach (var p in GameMaster.Players)
+                avgLvls += p.Character.Level;
+
+            avgLvls /= GameMaster.Players.Length;
+
+            switch (Type)
+            {
+                case EnemyTypes.Walker:
+                    maxMoney = 20 * avgLvls + 10 * Level;
+                    minMoney = 5 * avgLvls + 10 * Level;
+                    break;
+                case EnemyTypes.Boss:
+                    maxMoney = 1000 * avgLvls + 300 * Level;
+                    minMoney = 400 * avgLvls + 200 * Level;
+                    break;
+            }
+
+            Money = new Random().Next(minMoney, maxMoney);
+        }
+
+        /// <summary>
+        /// Define a vida do inimigo.
+        /// </summary>
+        private void SetHealth()
+        {
+            switch (Type)
+            {
+                case EnemyTypes.Walker:
+                    Health = 50 * Level;
+                    break;
+                case EnemyTypes.Boss:
+                    Health = 400 * Level + 200;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Define a experiência que o inimigo dará ao morrer.
+        /// </summary>
+        private void SetExperience()
+        {
+            switch (Type)
+            {
+                case EnemyTypes.Walker:
+                    Experience = 25 * Level;
+                    break;
+                case EnemyTypes.Boss:
+                    Experience = 20 * Level + 10 * Level * Level;
+                    break;
+            }
+        }
+
+        /// <summary>
+        /// Destrói o objeto, liberando memória
+        /// </summary>
+        public override void Destroy()
+        {
+            Enemies.Remove(this);
+            base.Destroy();
+        }
+
+        /// <summary>
+        /// Evento a ser disparado quando a entidade entra em colisão com outra entidade
+        /// </summary>
+        /// <param name="sender">Objeto que invocou o evento</param>
+        /// <param name="e">Informações a respeito da colisão</param>
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
             if (e.Collider.IsPlayer)
@@ -57,6 +159,11 @@ namespace ZombieGame.Game
             //}
         }
 
+        /// <summary>
+        /// Evento a ser disparado quando a entidade mantém-se em colisão com outra entidade
+        /// </summary>
+        /// <param name="sender">Objeto que invocou o evento</param>
+        /// <param name="e">Informações a respeito da colisão</param>
         protected override void OnCollisionStay(object sender, CollisionEventArgs e)
         {
             //base.OnCollisionStay(sender, e);
@@ -74,105 +181,16 @@ namespace ZombieGame.Game
             }
         }
 
+        /// <summary>
+        /// Evento a ser disparado quando a entidade sai de uma colisão com outra entidade
+        /// </summary>
+        /// <param name="sender">Objeto que invocou o evento</param>
+        /// <param name="e">Informações a respeito da colisão</param>
         protected override void OnCollisionLeave(object sender, CollisionEventArgs e)
         {
             //if (e.Collider.IsEnemy)
             //    RigidBody.SetForce(Vector.Zero);
         }
-
-        protected virtual void Chase(Entity target, float speedMagnitude)
-        {
-            if (RigidBody.Acceleration.Magnitude > 0)
-                RigidBody.Acceleration.Approximate(Vector.Zero, 10);
-            RigidBody.SetForce(RigidBody.Force / 1.1f);
-            RigidBody.SetVelocity(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite.Normalized * speedMagnitude);
-            RigidBody.PointAt(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite);
-        }
-
-        /// <summary>
-        /// O método para definir quando de dinheiro o inimigo dropará.
-        /// <para>Se trata de um valor definido entre um range</para>
-        /// </summary>
-        private void SetMoney()
-        {
-            int maxMoney = default(int), minMoney = default(int), avgLvls;
-            if (Player2.IsPlaying)
-                avgLvls = (Player1.Character.Level + Player2.Character.Level) / 2;
-            else
-                avgLvls = Player1.Character.Level;
-
-            switch (Type)
-            {
-                case EnemyTypes.Zombie:
-                    maxMoney = 20 * avgLvls + 10 * Level;
-                    minMoney = 5 * avgLvls + 10 * Level;
-                    break;
-                case EnemyTypes.Runner:
-                    maxMoney = 50 * avgLvls + 20 * Level;
-                    minMoney = 20 * avgLvls + 15 * Level;
-                    break;
-                case EnemyTypes.Tanker:
-                    maxMoney = 100 * avgLvls + 30 * Level;
-                    minMoney = 40 * avgLvls + 20 * Level;
-                    break;
-                case EnemyTypes.Boss:
-                    maxMoney = 1000 * avgLvls + 300 * Level;
-                    minMoney = 400 * avgLvls + 200 * Level;
-                    break;
-            }
-
-            Money = new Random().Next(minMoney, maxMoney);
-        }
-
-        /// <summary>
-        /// O método para definir a vida do inimigo.
-        /// </summary>
-        private void SetHealth()
-        {
-            switch (Type)
-            {
-                case EnemyTypes.Zombie:
-                    Health = 50 * Level;
-                    break;
-                case EnemyTypes.Runner:
-                    Health = 30 * Level;
-                    break;
-                case EnemyTypes.Tanker:
-                    Health = 100 * Level + 100;
-                    break;
-                case EnemyTypes.Boss:
-                    Health = 400 * Level + 200;
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// O método para definir a experiência que o inimigo dará ao morrer.
-        /// </summary>
-        private void SetExperience()
-        {
-            switch (Type)
-            {
-                case EnemyTypes.Zombie:
-                    Experience = 25 * Level;
-                    break;
-                case EnemyTypes.Runner:
-                    Experience = 35 * Level;
-                    break;
-                case EnemyTypes.Tanker:
-                    Experience = 40 * Level;
-                    break;
-                case EnemyTypes.Boss:
-                    Experience = 20 * Level + 10 * Level * Level;
-                    break;
-            }
-        }
-
-        public override void Destroy()
-        {
-            Enemies.Remove(this);
-            base.Destroy();
-        }
-
+        #endregion
     }
 }

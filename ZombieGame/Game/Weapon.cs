@@ -1,6 +1,5 @@
 ﻿using System.Xml.Serialization;
 using ZombieGame.Game.Enums;
-using ZombieGame.Game.Prefabs.Weapons;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
@@ -8,12 +7,14 @@ namespace ZombieGame.Game
     public class Weapon
     {
         #region Properties
-
+        /// <summary>
+        /// Nome da arma
+        /// </summary>
         public string Name { get; set; }
         /// <summary>
-        /// Dano da arma por projétil
+        /// Dano da arma por segundo
         /// </summary>
-        public float Damage { get { return Projectile.OfType(ProjectileType).HitDamage; } }
+        public float DPS { get { return Projectile.HitDamage * FireRate / 60; } }
         /// <summary>
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>
@@ -26,10 +27,6 @@ namespace ZombieGame.Game
         /// O tempo para recarregar a arma
         /// </summary>
         public float ReloadTime { get; set; }
-        /// <summary>
-        /// Módulo da velocidade do projétil da arma
-        /// </summary>
-        public float BulletVelocity { get { return Projectile.OfType(ProjectileType).SpeedMagnitude; } }
         /// <summary>
         /// Tempo de espera entre cada disparo de projéteis, em segundos
         /// </summary>
@@ -59,33 +56,51 @@ namespace ZombieGame.Game
         /// </summary>
         public WeaponTypes WeaponType { get; set; }
         /// <summary>
-        /// Tipo de projétil da arma
+        /// Tipos de projéteis aceitos pela arma
         /// </summary>
-        public ProjectileTypes ProjectileType { get; set; }
+        public ProjectileTypes[] AcceptedProjectileTypes { get; set; }
+        /// <summary>
+        /// Projétil atual da arma
+        /// </summary>
+        [XmlIgnore]
+        public Projectile Projectile { get; protected set; }
         #endregion
 
         #region Methods
+        /// <summary>
+        /// ctor
+        /// </summary>
         public Weapon()
         {
-                
+            Projectile = new Projectile();
         }
 
-        public Weapon(string name, WeaponTypes type, ProjectileTypes pType)
+        /// <summary>
+        /// Redefine o projétil atual da arma
+        /// </summary>
+        /// <param name="p">Novo projétil</param>
+        public void SetProjectile(Projectile p)
         {
-            Name = name;
-            WeaponType = type;
-            ProjectileType = pType;
+            Projectile = p;
         }
 
+        /// <summary>
+        /// Inicia o processo de resfriamento da arma
+        /// </summary>
         public void StartCoolDown()
         {
             Time.InternalTimer.Elapsed += UpdateTimer_Elapsed;
             IsCoolingDown = true;
         }
 
+        /// <summary>
+        /// Evento a ser disparado quando o intervalo do timer de atualização é decorrido
+        /// </summary>
+        /// <param name="sender">Objeto que invocou o evento</param>
+        /// <param name="e">Informações a respeito do evento</param>
         protected virtual void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            DeltaT += (float)Time.Delta;
+            DeltaT += Time.Delta;
 
             if (DeltaT >= CoolDownTime)
             {
@@ -95,9 +110,34 @@ namespace ZombieGame.Game
             }
         }
 
+        /// <summary>
+        /// Destrói o objeto, liberando memória
+        /// </summary>
         public void Destroy()
         {
             Time.InternalTimer.Elapsed -= UpdateTimer_Elapsed;
+            Projectile.Destroy();
+        }
+
+        /// <summary>
+        /// Retorna um clone profundo da instância atual
+        /// </summary>
+        /// <returns>Weapon</returns>
+        public Weapon Clone()
+        {
+            var copy = new Weapon()
+            {
+                AcceptedProjectileTypes = AcceptedProjectileTypes,
+                Ammo = Ammo,
+                DeltaT = DeltaT,
+                FireRate = FireRate,
+                IsCoolingDown = IsCoolingDown,
+                Name = Name,
+                Projectile = Projectile.Clone(),
+                ReloadTime = ReloadTime,
+                WeaponType = WeaponType
+            };
+            return copy;
         }
         #endregion
     }

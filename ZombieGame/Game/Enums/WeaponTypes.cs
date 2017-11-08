@@ -2,12 +2,12 @@
 {
     public enum WeaponTypes
     {
+        None,
+        Bow,
         Pistol,
-        AssaultRifle,
-        SniperRifle,
-        HMG,
-        SMG, 
+        Rifle,
+        MachineGun,
+        Shotgun,
         RocketLauncher,
-        Throwable,
     }
 }

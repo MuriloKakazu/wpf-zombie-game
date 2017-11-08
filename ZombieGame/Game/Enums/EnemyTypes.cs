@@ -5,11 +5,7 @@
     /// </summary>
     public enum EnemyTypes
     {
-        Zombie,
-        Runner,
-        Tanker,
+        Walker,
         Boss
-        //Necromancer,
-        //Thrower,
     }
 }

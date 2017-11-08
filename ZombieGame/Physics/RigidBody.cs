@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using ZombieGame.Game;
+using System.Xml.Serialization;
 using ZombieGame.Physics.Enums;
 using ZombieGame.Physics.Extensions;
 
 namespace ZombieGame.Physics
 {
+    [Serializable]
     public sealed class RigidBody
     {
-
+        #region Properties
         /// <summary>
         /// Retângulo do corpo
         /// </summary>
@@ -20,14 +17,16 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Massa do corpo (kg)
         /// </summary>
-        public float Mass { get; private set; }
+        public float Mass { get; set; }
         /// <summary>
         /// Vetor posição do corpo
         /// </summary>
+        [XmlIgnore]
         public Vector Position { get; private set; }
         /// <summary>
         /// Vetor que aponta para frente do corpo
         /// </summary>
+        [XmlIgnore]
         public Vector Front { get; private set; }
         /// <summary>
         /// Vetor posição central do corpo
@@ -36,48 +35,58 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Vetor tamanho do corpo em pixels
         /// </summary>
-        public Vector Size { get; private set; }
+        public Vector Size { get; set; }
         /// <summary>
         /// Vetor força resultante aplicado ao corpo (N)
         /// </summary>
+        [XmlIgnore]
         public Vector Force { get; private set; }
         /// <summary>
         /// Vetor velocidade aplicado ao corpo (m/s)
         /// </summary>
+        [XmlIgnore]
         public Vector Velocity { get; private set; }
         /// <summary>
         /// Vetor aceleração aplicado ao corpo (m/s^2)
         /// </summary>
+        [XmlIgnore]
         public Vector Acceleration { get; private set; }
         /// <summary>
         /// Rotação do corpo (graus)
         /// </summary>
+        [XmlIgnore]
         public float Rotation { get; private set; }
         /// <summary>
         /// Coeficiente de arrasto do corpo
         /// </summary>
+        [XmlIgnore]
         public float Drag { get; private set; }
         /// <summary>
         /// Multiplicador do módulo da velocidade
         /// </summary>
-        public float SpeedMultiplier { get; private set; }
+        public float SpeedMultiplier { get; set; }
         /// <summary>
         /// Define se deve-se permitir a rotação do corpo
         /// </summary>
+        [XmlIgnore]
         public bool UseRotation { get; set; }
         /// <summary>
-        /// Define se o corpo terá uma posição fixa
+        /// Define se o corpo terá movimento
         /// </summary>
+        [XmlIgnore]
         public bool Frozen { get; private set; }
         /// <summary>
         /// Define se o corpo ignorará colisões
         /// </summary>
+        [XmlIgnore]
         public bool IgnoreCollisions { get; set; }
         /// <summary>
         /// Retorna se o corpo está acelerando
         /// </summary>
         public bool IsAccelerating { get { return Acceleration.Magnitude != 0; } }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// ctor
         /// </summary>
@@ -95,16 +104,26 @@ namespace ZombieGame.Physics
             SpeedMultiplier = 1f;
         }
         
+        /// <summary>
+        /// Congela o corpo, impedindo seu movimento
+        /// </summary>
         public void Freeze()
         {
             Frozen = true;
         }
 
+        /// <summary>
+        /// Descongela o corpo, permitindo seu movimento
+        /// </summary>
         public void Unfreeze()
         {
             Frozen = false;
         }
 
+        /// <summary>
+        /// Aponta a frente do corpo a uma direção
+        /// </summary>
+        /// <param name="location"></param>
         public void PointAt(Vector location)
         {
             Front = location.Normalized;
@@ -191,6 +210,10 @@ namespace ZombieGame.Physics
             Velocity = v;
         }
 
+        /// <summary>
+        /// Redefine o coeficiente de arrasto do corpo
+        /// </summary>
+        /// <param name="d"></param>
         public void SetDrag(float d)
         {
             Drag = d;
@@ -201,24 +224,18 @@ namespace ZombieGame.Physics
         /// </summary>
         public void Update()
         {
-            if (Velocity.Magnitude > 0)
-            {
-                if (UseRotation)
+            if (Velocity.Magnitude > 0 && UseRotation)
                     Rotation = MathExtension.RadiansToDegrees(Front.AngleBetween(Vector.Right));
-                //Front = Velocity.Normalized;
-            }
 
             if (!Frozen)
             {
                 Acceleration = Force / Mass;
-                Velocity += Acceleration * (float)Time.Delta;
-                //Acceleration = Velocity / Time.Delta;
-                Position += Velocity * (float)Time.Delta * 10;
+                Velocity += Acceleration * Time.Delta;
+                Position += Velocity * Time.Delta * 10;
             }
 
-            //Velocity.Approximate(Vector.Zero, 10 * Time.Delta);
-            //Acceleration.Approximate(Vector.Zero, 10 * Time.Delta);
-            Force.Approximate(Vector.Zero, 10 * (float)Time.Delta);
+            Force.Approximate(Vector.Zero, 10 * Time.Delta);
         }
+        #endregion
     }
 }

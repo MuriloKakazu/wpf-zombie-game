@@ -1,38 +1,46 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Xml.Serialization;
 using ZombieGame.Game.Enums;
 using ZombieGame.IO;
-using ZombieGame.IO.Serialization;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
 {
+    [Serializable]
     public class Player
     {
+        #region Properties
         /// <summary>
         /// Número do jogador
         /// </summary>
+        [XmlIgnore]
         public int PlayerNumber { get; set; }
         /// <summary>
         /// Retorna se o jogador está sendo controlado por uma pessoa
         /// </summary>
+        [XmlIgnore]
         public bool IsHuman { get; set; }
         /// <summary>
         /// Personagem do jogador
         /// </summary>
+        [XmlIgnore]
         public Character Character { get; set; }
         /// <summary>
-        /// Retorna o noem de usuário do jogador
+        /// Retorna o nome de usuário do jogador
         /// </summary>
         public string Username { get; set; }
         /// <summary>
+        /// Retorna a pontuação do jogador
+        /// </summary>
+        public double Score { get; set; }
+        /// <summary>
         /// Retorna se o jogador está ativo
         /// </summary>
+        [XmlIgnore]
         public bool IsPlaying { get; internal set; }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// ctor
         /// </summary>
@@ -90,7 +98,7 @@ namespace ZombieGame.Game
                 if (Character.IsFiring && !Character.Weapon.IsCoolingDown)
                     System.Windows.Application.Current.Dispatcher.Invoke(delegate
                     {
-                        Character.LaunchProjectile();
+                        Character.ShootAt(Character.RigidBody.Front);
                     });
             }
             else
@@ -98,5 +106,6 @@ namespace ZombieGame.Game
                 Character.RigidBody.SetVelocity(Vector.Zero);
             }
         }
+        #endregion
     }
 }

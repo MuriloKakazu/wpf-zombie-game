@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZombieGame.Game.Enums;
+﻿using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Enums;
 using ZombieGame.Physics.Events;
 using ZombieGame.Physics.Extensions;
 
-namespace ZombieGame.Game.Prefabs.OtherEntities
+namespace ZombieGame.Game.Prefabs.Entities
 {
     public sealed class Wall : Entity
     {
@@ -20,14 +15,9 @@ namespace ZombieGame.Game.Prefabs.OtherEntities
             Type = type;
         }
 
-        protected override void CheckCollision()
-        {
-            base.CheckCollision();
-        }
-
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
-            base.OnCollisionEnter(sender, e);
+            // Garantir que nada seja feito
         }
 
         protected override void OnCollisionStay(object sender, CollisionEventArgs e)
@@ -62,7 +52,7 @@ namespace ZombieGame.Game.Prefabs.OtherEntities
 
         protected override void OnCollisionLeave(object sender, CollisionEventArgs e)
         {
-            base.OnCollisionLeave(sender, e);
+            // Garantir que nada seja feito
         }
 
     }

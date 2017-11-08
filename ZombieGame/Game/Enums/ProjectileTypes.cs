@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ZombieGame.Game.Enums
+﻿namespace ZombieGame.Game.Enums
 {
     public enum ProjectileTypes
     {
         Arrow,
         HollowPoint,
+        FMJ,
+        RoundNose,
         LessLethal,
         Buckshot,
-        Explosive,
-        Incendiary,
+        Rocket,
         Throwable,
     }
 }

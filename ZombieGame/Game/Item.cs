@@ -14,6 +14,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// The number of instanced items.
         /// </summary>
+        [XmlIgnore]
         public static int NumberOfItens = 0;
 
         /// <summary>
@@ -30,26 +31,33 @@ namespace ZombieGame.Game
         /// Return the owner of the item.
         /// <para>The item just have an owner if the variable 'sold' is true</para>
         /// </summary>
-        public Character Owner { get; set; } //If null, dont have an owner
+        [XmlIgnore]
+        public Character Owner { get; set; }
 
         /// <summary>
         /// Return type of the item.
         /// </summary>
-        [XmlIgnore]
         public ItemType Type { get; set; }
 
         /// <summary>
         /// Return if the item was sold to someone.
         /// </summary>
+        [XmlIgnore]
         public bool Sold { get; set; }
 
         /// <summary>
         /// Return the ID of the item.
         /// </summary>
+        [XmlIgnore]
         public int ItemID { get; set; }
         #endregion
 
         #region Methods
+        public Item()
+        {
+
+        }
+
         /// <summary>
         /// ctor
         /// </summary>
@@ -71,11 +79,6 @@ namespace ZombieGame.Game
             Sold = sold;
             ItemID = ++NumberOfItens;
             Owner = owner;
-        }
-
-        public Item()
-        {
-
         }
         #endregion
     }

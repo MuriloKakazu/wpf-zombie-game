@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using ZombieGame.Debug;
 using ZombieGame.Game.Enums;
 
 namespace ZombieGame.Game
@@ -38,8 +33,6 @@ namespace ZombieGame.Game
                             output += -1;
                         if (Keyboard.IsKeyDown(Key.W))
                             output += 1;
-                        //if (Keyboard.IsKeyDown(Key.W))
-                        //    output = 1;
                     }
                     else if (type == AxisTypes.Fire)
                     {
@@ -67,8 +60,6 @@ namespace ZombieGame.Game
                             output += -1;
                         if (Keyboard.IsKeyDown(Key.Up))
                             output += 1;
-                        //if (Keyboard.IsKeyDown(Key.Up))
-                        //    output = 1;
                     }
                     else if (type == AxisTypes.Fire)
                     {
@@ -82,30 +73,26 @@ namespace ZombieGame.Game
                     }
                 }
 
-                if (Keyboard.IsKeyDown(Key.F5))
-                {
-                    GameMaster.Player1.Character.RigidBody.SetForce(GameMaster.Player1.Character.RigidBody.Front.Opposite.Normalized * 100);
-                }
                 else if (Keyboard.IsKeyDown(Key.F1))
                 {
-                    if (!DebugMonitor.HasAnOpenInstance)
-                    {
-                        DebugMonitor dm = new DebugMonitor();
-                        dm.Show();
-                    }
+                    //if (!DebugMonitor.HasAnOpenInstance)
+                    //{
+                    //    DebugMonitor dm = new DebugMonitor();
+                    //    dm.Show();
+                    //}
+                    Console.WriteLine("F2: spawn enemies");
+                    Console.WriteLine("F3: kill all enemies");
                 }
                 else if (Keyboard.IsKeyDown(Key.F2))
                 {
-                    if (Enemy.Enemies.Count < 10)
-                    {
-                        for (int i = 0; i < 10; i++)
-                            EnemySpawner.SpawnZombie();
-                    }
+                    //if (Enemy.GetAllActiveEnemies().Length < 20)
+                    //for (int i = 0; i < 10; i++)
+                    //    EnemySpawner.SpawnZombie();
                 }
                 else if (Keyboard.IsKeyDown(Key.F3))
                 {
-                    foreach (var e in Enemy.Enemies.ToArray())
-                        e.Kill(GameMaster.GetPlayer(player).Character);
+                    foreach (var e in Enemy.GetAllActiveEnemies())
+                        e.Kill(killer: GameMaster.GetPlayer(player).Character);
                 }
             });
             return output;

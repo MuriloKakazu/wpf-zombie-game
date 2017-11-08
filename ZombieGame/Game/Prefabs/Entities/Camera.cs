@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 
-namespace ZombieGame.Game.Prefabs.OtherEntities
+namespace ZombieGame.Game.Prefabs.Entities
 {
     public sealed class Camera : Entity
     {
@@ -35,12 +31,12 @@ namespace ZombieGame.Game.Prefabs.OtherEntities
 
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
-            
+            // Garantir que nada seja feito
         }
 
         protected override void OnCollisionStay(object sender, CollisionEventArgs e)
         {
-            
+            // Garantir que nada seja feito
         }
     }
 }

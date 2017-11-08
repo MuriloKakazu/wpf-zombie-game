@@ -16,8 +16,7 @@ using ZombieGame.Debug;
 using ZombieGame.Game;
 using ZombieGame.Game.Controls;
 using ZombieGame.Game.Enums;
-using ZombieGame.Game.Prefabs.Characters;
-using ZombieGame.Game.Prefabs.OtherEntities;
+using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Enums;
 using ZombieGame.Physics.Extensions;
@@ -67,6 +66,7 @@ namespace ZombieGame
         {
             Camera.Children.Remove(v);
         }
+
 
         /// <summary>
         /// Move os retângulos de acordo com a posição dos jogadores
