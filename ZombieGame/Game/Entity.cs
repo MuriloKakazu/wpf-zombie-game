@@ -25,7 +25,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Lista estática copntendo todas as entidades ativas
         /// </summary>
-        public static List<Entity> Entities = new List<Entity>();
+        protected static List<Entity> Entities = new List<Entity>();
 
         public delegate void CollisionHandler(object sender, CollisionEventArgs e);
         public event CollisionHandler CollisionEnter;
@@ -223,6 +223,10 @@ namespace ZombieGame.Game
             }
         }
 
+        /// <summary>
+        /// Retorna o jogador mais próximo da entidade
+        /// </summary>
+        /// <returns>Player Entity</returns>
         public Entity GetNearestPlayer()
         {
             var d1 = GameMaster.Player1.Character.RigidBody.CenterPoint.DistanceBetween(RigidBody.CenterPoint);
@@ -269,6 +273,8 @@ namespace ZombieGame.Game
             CollisionLeave -= OnCollisionLeave;
             Collisions.Clear();
         }
+
+        public Entity[] GetAllActive
         #endregion
     }
 }

@@ -12,7 +12,7 @@ using ZombieGame.Physics.Extensions;
 
 namespace ZombieGame.Game
 {
-    public abstract class Projectile : Entity
+    public class Projectile : Entity
     {
         /// <summary>
         /// Lista de todos os projéteis ativos
@@ -35,12 +35,10 @@ namespace ZombieGame.Game
         /// Tipo do projétil
         /// </summary>
         public ProjectileTypes Type { get; protected set; }
-
         /// <summary>
         /// O valor primitivo da velocidade
         /// </summary>
         private float speedMagnitude = 40;
-
         /// <summary>
         /// Módulo da velocidade do projétil
         /// </summary>
@@ -57,6 +55,9 @@ namespace ZombieGame.Game
                     speedMagnitude = value;
             }
         }
+        /// <summary>
+        /// Módulo 
+        /// </summary>
         public float KnockbackMagnitude { get; protected set; }
 
         /// <summary>

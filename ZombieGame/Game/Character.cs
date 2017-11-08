@@ -13,7 +13,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Lista estática copntendo todos os personagens ativos
         /// </summary>
-        public static List<Character> Characters = new List<Character>();
+        protected static List<Character> Characters = new List<Character>();
 
         /// <summary>
         /// Arma do personagem
@@ -35,22 +35,18 @@ namespace ZombieGame.Game
         /// Retorna a quantidade de dinheiro do personagem
         /// </summary>
         public int Money { get; set; }
-
         /// <summary>
         /// Retorna o nível do personagem
         /// </summary>
         public int Level { get; set; }
-
         /// <summary>
         /// Retorna a saúde do personagem
         /// </summary>
         public float Health { get; protected set; }
-
         /// <summary>
         /// Retorna a experiência adquirida pelo personagem
         /// </summary>
         public int Experience { get; set; }
-
         /// <summary>
         /// Retorna se o personagem está atordoado
         /// </summary>
@@ -66,7 +62,6 @@ namespace ZombieGame.Game
         #endregion
 
         #region Methods
-
         /// <summary>
         /// ctor
         /// </summary>
@@ -80,14 +75,23 @@ namespace ZombieGame.Game
             Characters.Add(this);
         }
 
-        public virtual void LaunchProjectile()
+        /// <summary>
+        /// Atira um projétil na direção indicada
+        /// </summary>
+        /// <param name="direction">Direção do tiro</param>
+        public virtual void ShootAt(Vector direction)
         {
             Weapon.StartCoolDown();
             Projectile p = Projectile.OfType(Weapon.ProjectileType);
             p.Owner = this;
-            p.Launch(RigidBody.Front);
+            p.Launch(direction);
         }
 
+        /// <summary>
+        /// Diminui pontos de saúde do personagem
+        /// </summary>
+        /// <param name="damager">Origem do dano</param>
+        /// <param name="quantity">Quantia de dano</param>
         public virtual void Damage(Character damager, float quantity)
         {
             Health -= quantity;
@@ -95,6 +99,10 @@ namespace ZombieGame.Game
                 Kill(killer: damager);
         }
 
+        /// <summary>
+        /// Define a vida do personagem
+        /// </summary>
+        /// <param name="quantity">Valor da saúde</param>
         public virtual void SetHealth(float quantity)
         {
             Health = quantity;
@@ -102,6 +110,10 @@ namespace ZombieGame.Game
                 Kill();
         }
 
+        /// <summary>
+        /// Aumenta pontos de saúde do personagem
+        /// </summary>
+        /// <param name="quantity">Valor a ser adicionado</param>
         public virtual void AddHealth(float quantity)
         {
             Health += quantity;
@@ -109,6 +121,10 @@ namespace ZombieGame.Game
                 Kill();
         }
 
+        /// <summary>
+        /// Mata o personagem
+        /// </summary>
+        /// <param name="killer">Entidade que matou o personagem</param>
         public virtual void Kill(Character killer)
         {
             if (!this.IsPlayer)
@@ -119,6 +135,9 @@ namespace ZombieGame.Game
                 Destroy();
         }
 
+        /// <summary>
+        /// Mata o personagem
+        /// </summary>
         protected virtual void Kill()
         {
             Health = 0;
@@ -126,6 +145,10 @@ namespace ZombieGame.Game
                 Destroy();
         }
 
+        /// <summary>
+        /// Atordoa o personagem por um tempo limitado
+        /// </summary>
+        /// <param name="timeMs">Tempo, em milisegundos, que o personagem estará atordoado</param>
         public virtual void Stun(float timeMs)
         {
             IsStunned = true;
@@ -133,6 +156,9 @@ namespace ZombieGame.Game
             TargetStunTime = timeMs;
         }
 
+        /// <summary>
+        /// Método que aciona funções que precisam ser disparadas constantemente
+        /// </summary>
         protected override void Update()
         {
             base.Update();
@@ -183,6 +209,11 @@ namespace ZombieGame.Game
             catch { return null; }
         }
 
+        /// <summary>
+        /// Retorna uma instância de personagem de acordo com seu código de identificação
+        /// </summary>
+        /// <param name="hash">Código de identificação do personagem</param>
+        /// <returns>Character</returns>
         public static Character FromHashCode(Guid hash)
         {
             foreach (Character c in Characters.ToArray())
@@ -191,6 +222,9 @@ namespace ZombieGame.Game
             return null;
         }
 
+        /// <summary>
+        /// Destrói o personagem
+        /// </summary>
         public override void Destroy()
         {
             if (IsAlive)

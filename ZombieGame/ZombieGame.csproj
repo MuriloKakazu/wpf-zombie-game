@@ -129,7 +129,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Physics\Bounds.cs" />
     <Compile Include="Physics\Events\CollisionEventArgs.cs" />
     <Compile Include="Physics\RigidBody.cs" />
     <Compile Include="Physics\Vector.cs" />

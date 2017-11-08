@@ -90,7 +90,7 @@ namespace ZombieGame.Game
                 if (Character.IsFiring && !Character.Weapon.IsCoolingDown)
                     System.Windows.Application.Current.Dispatcher.Invoke(delegate
                     {
-                        Character.LaunchProjectile();
+                        Character.ShootAt(Character.RigidBody.Front);
                     });
             }
             else

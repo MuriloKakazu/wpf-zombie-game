@@ -12,7 +12,10 @@ namespace ZombieGame.Game
 {
     public abstract class Enemy : Character
     {
-        public static List<Enemy> Enemies = new List<Enemy>();
+        /// <summary>
+        /// Lista estática de todos os inimigos ativos
+        /// </summary>
+        protected static List<Enemy> Enemies = new List<Enemy>();
 
         /// <summary>
         /// Retorna o tipo de inimigo
@@ -33,6 +36,9 @@ namespace ZombieGame.Game
             Enemies.Add(this);
         }
 
+        /// <summary>
+        /// Método que aciona funções que precisam ser disparadas constantemente
+        /// </summary>
         protected override void Update()
         {
             base.Update();
@@ -43,6 +49,11 @@ namespace ZombieGame.Game
                 RigidBody.SetVelocity(Vector.Zero);
         }
 
+        /// <summary>
+        /// Evento a ser disparado quando o inimigo entra em colisão com outra entidade
+        /// </summary>
+        /// <param name="sender">Objeto que invocou o evento</param>
+        /// <param name="e">Informações a respeito da colisão</param>
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
         {
             if (e.Collider.IsPlayer)
@@ -57,6 +68,11 @@ namespace ZombieGame.Game
             //}
         }
 
+        /// <summary>
+        /// Evento a ser disparado quando o inimigo mantém-se em colisão com outra entidade
+        /// </summary>
+        /// <param name="sender">Objeto que invocou o evento</param>
+        /// <param name="e">Informações a respeito da colisão</param>
         protected override void OnCollisionStay(object sender, CollisionEventArgs e)
         {
             //base.OnCollisionStay(sender, e);
@@ -74,12 +90,22 @@ namespace ZombieGame.Game
             }
         }
 
+        /// <summary>
+        /// Evento a ser disparado quando o inimigo sai de uma colisão com outra entidade
+        /// </summary>
+        /// <param name="sender">Objeto que invocou o evento</param>
+        /// <param name="e">Informações a respeito da colisão</param>
         protected override void OnCollisionLeave(object sender, CollisionEventArgs e)
         {
             //if (e.Collider.IsEnemy)
             //    RigidBody.SetForce(Vector.Zero);
         }
 
+        /// <summary>
+        /// Faz o inimigo perseguir um alvo
+        /// </summary>
+        /// <param name="target">Alvo a ser perseguido</param>
+        /// <param name="speedMagnitude">Módulo da velocidade da perseguição</param>
         protected virtual void Chase(Entity target, float speedMagnitude)
         {
             if (RigidBody.Acceleration.Magnitude > 0)
@@ -90,7 +116,7 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// O método para definir quando de dinheiro o inimigo dropará.
+        /// O método para definir quando de dinheiro o inimigo dropará
         /// <para>Se trata de um valor definido entre um range</para>
         /// </summary>
         private void SetMoney()
@@ -125,7 +151,7 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// O método para definir a vida do inimigo.
+        /// O método para definir a vida do inimigo
         /// </summary>
         private void SetHealth()
         {
@@ -147,7 +173,7 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// O método para definir a experiência que o inimigo dará ao morrer.
+        /// O método para definir a experiência que o inimigo dará ao morrer
         /// </summary>
         private void SetExperience()
         {
@@ -168,6 +194,9 @@ namespace ZombieGame.Game
             }
         }
 
+        /// <summary>
+        /// Destrói o inimigo
+        /// </summary>
         public override void Destroy()
         {
             Enemies.Remove(this);

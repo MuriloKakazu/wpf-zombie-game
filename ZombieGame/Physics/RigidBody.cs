@@ -201,24 +201,17 @@ namespace ZombieGame.Physics
         /// </summary>
         public void Update()
         {
-            if (Velocity.Magnitude > 0)
-            {
-                if (UseRotation)
+            if (Velocity.Magnitude > 0 && UseRotation)
                     Rotation = MathExtension.RadiansToDegrees(Front.AngleBetween(Vector.Right));
-                //Front = Velocity.Normalized;
-            }
 
             if (!Frozen)
             {
                 Acceleration = Force / Mass;
-                Velocity += Acceleration * (float)Time.Delta;
-                //Acceleration = Velocity / Time.Delta;
-                Position += Velocity * (float)Time.Delta * 10;
+                Velocity += Acceleration * Time.Delta;
+                Position += Velocity * Time.Delta * 10;
             }
 
-            //Velocity.Approximate(Vector.Zero, 10 * Time.Delta);
-            //Acceleration.Approximate(Vector.Zero, 10 * Time.Delta);
-            Force.Approximate(Vector.Zero, 10 * (float)Time.Delta);
+            Force.Approximate(Vector.Zero, 10 * Time.Delta);
         }
     }
 }
