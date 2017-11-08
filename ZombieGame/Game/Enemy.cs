@@ -72,8 +72,7 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// Define quanto de dinheiro o inimigo dará ao morrer.
-        /// <para>Se trata de um valor definido entre um range</para>
+        /// Define quanto de dinheiro o inimigo dará ao morrer
         /// </summary>
         private void SetMoney()
         {
@@ -100,7 +99,7 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// Define a vida do inimigo.
+        /// Define a vida do inimigo
         /// </summary>
         private void SetHealth()
         {
@@ -116,7 +115,7 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// Define a experiência que o inimigo dará ao morrer.
+        /// Define a experiência que o inimigo dará ao morrer
         /// </summary>
         private void SetExperience()
         {
