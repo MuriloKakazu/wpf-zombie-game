@@ -11,6 +11,21 @@ namespace ZombieGame.Game
         /// <summary>
         /// The list of itens that are selling in the store, or already have been sold.
         /// </summary>
-        public static List<Item> SellingItens = new List<Item>();
+        public static List<Item> SellingItems = new List<Item>();
+
+        public static void BuyItem(int itemID, Character character)
+        {
+            
+        }
+
+        private static Item FindItem(int itemID)
+        {
+            return null;
+        }
+
+        public static void SetSellingItems()
+        {
+
+        }
     }
 }

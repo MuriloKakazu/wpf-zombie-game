@@ -8,10 +8,12 @@ namespace ZombieGame.Game.Enums
 {
     public enum ProjectileTypes
     {
-        Rifle,
-        Sniper,
-        Pistol,
-        HeavyMG,
-        Missile,
+        Arrow,
+        HollowPoint,
+        LessLethal,
+        Buckshot,
+        Explosive,
+        Incendiary,
+        Throwable,
     }
 }

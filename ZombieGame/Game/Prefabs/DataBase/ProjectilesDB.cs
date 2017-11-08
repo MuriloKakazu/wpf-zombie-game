@@ -8,8 +8,8 @@ namespace ZombieGame.Game.Prefabs.DataBase
 {
     public class ProjectilesDB
     {
-        public int HMGdmg, missileDmg, pistolDmg, rifleDmg, sniperDmg;
-        public int HMGspd, missileSpd, pistolSpd, rifleSpd, sniperSpd;
+        
+        public Projectile HMG, Missile, Pistol, Rifle, Sniper;
     }
 }
 

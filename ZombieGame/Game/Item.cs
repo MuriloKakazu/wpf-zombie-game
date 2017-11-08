@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using ZombieGame.Game.Enums;
 
 namespace ZombieGame.Game
 {
     public class Item
     {
+        #region Properties
         /// <summary>
         /// The number of instanced items.
         /// </summary>
@@ -33,6 +35,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Return type of the item.
         /// </summary>
+        [XmlIgnore]
         public ItemType Type { get; set; }
 
         /// <summary>
@@ -44,19 +47,36 @@ namespace ZombieGame.Game
         /// Return the ID of the item.
         /// </summary>
         public int ItemID { get; set; }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="name">The name</param>
         /// <param name="price">The price</param>
         /// <param name="type">The type</param>
-        public Item(string name, int price, ItemType type)
+        public Item(string name, ItemType type)
         {
             Name = name;
-            Price = price;
             Type = type;
             ItemID = ++NumberOfItens;
+            Sold = false;
         }
+
+        public Item(string name, ItemType type, bool sold, Character owner)
+        {
+            Name = name;
+            Type = type;
+            Sold = sold;
+            ItemID = ++NumberOfItens;
+            Owner = owner;
+        }
+
+        public Item()
+        {
+
+        }
+        #endregion
     }
 }

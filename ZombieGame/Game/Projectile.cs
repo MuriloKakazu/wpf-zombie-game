@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Prefabs.Projectiles;
 using ZombieGame.Physics;
@@ -19,6 +20,7 @@ namespace ZombieGame.Game
         /// </summary>
         protected static List<Projectile> Projectiles = new List<Projectile>();
 
+        #region Properties
         /// <summary>
         /// Retorna se o projétil explode com o impacto
         /// </summary>
@@ -30,6 +32,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Entidade que invocou o projétil
         /// </summary>
+        [XmlIgnore]
         public Character Owner { get; set; }
         /// <summary>
         /// Tipo do projétil
@@ -58,7 +61,9 @@ namespace ZombieGame.Game
             }
         }
         public float KnockbackMagnitude { get; protected set; }
+        #endregion
 
+        #region Methods
         /// <summary>
         /// ctor
         /// </summary>
@@ -121,15 +126,15 @@ namespace ZombieGame.Game
         public static Projectile OfType(ProjectileTypes type)
         {
 
-            if (type == ProjectileTypes.HeavyMG)
+            if (type == ProjectileTypes.Buckshot)
                 return new HeavyMGProjectile();
-            else if (type == ProjectileTypes.Missile)
+            else if (type == ProjectileTypes.Explosive)
                 return new Missile();
-            else if (type == ProjectileTypes.Pistol)
+            else if (type == ProjectileTypes.LessLethal)
                 return new PistolProjectile();
-            else if (type == ProjectileTypes.Rifle)
+            else if (type == ProjectileTypes.Arrow)
                 return new RifleProjectile();
-            else if (type == ProjectileTypes.Sniper)
+            else if (type == ProjectileTypes.HollowPoint)
                 return new SniperProjectile();
             return null;
         }
@@ -250,5 +255,6 @@ namespace ZombieGame.Game
             base.Destroy();
             Projectiles.Remove(this);
         }
+        #endregion
     }
 }

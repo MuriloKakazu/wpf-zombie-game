@@ -5,7 +5,9 @@
         Pistol,
         AssaultRifle,
         SniperRifle,
-        HeavyMG,
-        Explosive,
+        HMG,
+        SMG, 
+        RocketLauncher,
+        Throwable,
     }
 }

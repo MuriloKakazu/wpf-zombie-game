@@ -1,14 +1,15 @@
-﻿using ZombieGame.Game.Enums;
+﻿using System.Xml.Serialization;
+using ZombieGame.Game.Enums;
 using ZombieGame.Game.Prefabs.Weapons;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
 {
-    public abstract class Weapon
+    public class Weapon
     {
         #region Properties
 
-        public string Name { get; protected set; }
+        public string Name { get; set; }
         /// <summary>
         /// Dano da arma por projétil
         /// </summary>
@@ -16,7 +17,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>
-        public float FireRate { get; protected set; }
+        public float FireRate { get; set; }
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>
@@ -46,15 +47,17 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna se a arma está em tempo de espera entre os disparos
         /// </summary>
-        public bool IsCoolingDown { get; protected set; }
+        [XmlIgnore]
+        public bool IsCoolingDown { get; set; }
         /// <summary>
         /// Diferença de tempo desde o último disparo, em segundos
         /// </summary>
-        public float DeltaT { get; protected set; }
+        [XmlIgnore]
+        public float DeltaT { get; set; }
         /// <summary>
         /// Tipo da arma
         /// </summary>
-        public WeaponTypes Type { get; set; }
+        public WeaponTypes WeaponType { get; set; }
         /// <summary>
         /// Tipo de projétil da arma
         /// </summary>
@@ -62,10 +65,15 @@ namespace ZombieGame.Game
         #endregion
 
         #region Methods
+        public Weapon()
+        {
+                
+        }
+
         public Weapon(string name, WeaponTypes type, ProjectileTypes pType)
         {
             Name = name;
-            Type = type;
+            WeaponType = type;
             ProjectileType = pType;
         }
 

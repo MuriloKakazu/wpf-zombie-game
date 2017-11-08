@@ -6,10 +6,10 @@ namespace ZombieGame.Game.Prefabs.Projectiles
 {
     public sealed class HeavyMGProjectile : Projectile
     {
-        public HeavyMGProjectile() : base(ProjectileTypes.HeavyMG)
+        public HeavyMGProjectile() : base(ProjectileTypes.Buckshot)
         {
-            HitDamage = PDB.HMGdmg;
-            SpeedMagnitude = PDB.HMGspd;
+            /*HitDamage = PDB.HMGdmg;
+            SpeedMagnitude = PDB.HMGspd;*/
             KnockbackMagnitude = 15;
             LoadSprite(GlobalPaths.ProjectileSprites + "pistolprojectile.png");
             RigidBody.Resize(new Physics.Vector(10, 10));

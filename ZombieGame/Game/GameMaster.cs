@@ -49,8 +49,15 @@ namespace ZombieGame.Game
         /// </summary>
         public static void Setup()
         {
-            PDB = PDB.LoadFrom(IO.GlobalPaths.DB + "Projectiles.xml");
-            WDB = WDB.LoadFrom(IO.GlobalPaths.DB + "Weapons.xml");
+            DataBase.Weapons.LoadFrom(IO.GlobalPaths.DB + "weapons.db");
+
+            
+            DataBase.Items = new List<Item>();
+            DataBase.Items.Add(new Item("x", Enums.ItemType.Weapon));
+            DataBase.Items.SaveTo(IO.GlobalPaths.DB + "items.db");
+
+            /*
+            Store.SetSellingItems();
             Time.Setup();
             Camera = new Camera();
             Player1 = new Player(1, "Player1");
@@ -63,7 +70,7 @@ namespace ZombieGame.Game
             Player2.Character.RigidBody.Resize(new Vector(50, 50));
 
             for (int i = 0; i < 1; i++)
-                EnemySpawner.SpawnZombie();
+                EnemySpawner.SpawnZombie();*/
         }
 
         public static Player GetPlayer(int number)

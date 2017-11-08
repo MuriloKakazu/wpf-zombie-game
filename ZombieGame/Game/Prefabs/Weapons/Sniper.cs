@@ -5,7 +5,7 @@ namespace ZombieGame.Game.Prefabs.Weapons
 {
     public sealed class Sniper : Weapon
     {
-        public Sniper() : base(WeaponTypes.SniperRifle.ToString(), WeaponTypes.SniperRifle, ProjectileTypes.Sniper)
+        public Sniper() : base(WeaponTypes.SniperRifle.ToString(), WeaponTypes.SniperRifle, ProjectileTypes.HollowPoint)
         {
             FireRate = WDB.sniperFR;
             ReloadTime = WDB.sniperRT;

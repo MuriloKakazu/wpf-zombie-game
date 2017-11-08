@@ -5,7 +5,7 @@ namespace ZombieGame.Game.Prefabs.Weapons
 {
     public sealed class Pistol : Weapon
     {
-        public Pistol() : base(WeaponTypes.Pistol.ToString(), WeaponTypes.Pistol, ProjectileTypes.Pistol)
+        public Pistol() : base(WeaponTypes.Pistol.ToString(), WeaponTypes.Pistol, ProjectileTypes.LessLethal)
         {
             FireRate = WDB.pistolFR;
             ReloadTime = WDB.pistolRT;

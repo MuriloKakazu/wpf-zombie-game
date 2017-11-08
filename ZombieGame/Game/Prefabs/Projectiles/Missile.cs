@@ -6,10 +6,10 @@ namespace ZombieGame.Game.Prefabs.Projectiles
 {
     public sealed class Missile : Projectile
     {
-        public Missile() : base(ProjectileTypes.Missile)
+        public Missile() : base(ProjectileTypes.Explosive)
         {
-            HitDamage = PDB.missileDmg;
-            SpeedMagnitude = PDB.missileSpd;
+            /*HitDamage = PDB.missileDmg;
+            SpeedMagnitude = PDB.missileSpd;*/
             IsExplosive = true;
             KnockbackMagnitude = 100;
             LoadSprite(GlobalPaths.ProjectileSprites + "missile.png");

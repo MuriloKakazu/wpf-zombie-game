@@ -57,6 +57,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Game\DataBase.cs" />
     <Compile Include="Game\EnemySpawner.cs" />
     <Compile Include="Game\Enums\ItemType.cs" />
     <Compile Include="Game\Enums\ProjectileTypes.cs" />
@@ -66,8 +67,10 @@
     <Compile Include="Game\Prefabs\Characters\Runner.cs" />
     <Compile Include="Game\Prefabs\Characters\Tanker.cs" />
     <Compile Include="Game\Prefabs\Characters\Zombie.cs" />
+    <Compile Include="Game\Prefabs\DataBase\ItemsDB.cs" />
     <Compile Include="Game\Prefabs\DataBase\ProjectilesDB.cs" />
     <Compile Include="Game\Prefabs\DataBase\WeaponsDB.cs" />
+    <Compile Include="Game\Prefabs\Items\AssaultRifle.cs" />
     <Compile Include="Game\Prefabs\OtherEntities\Camera.cs" />
     <Compile Include="Game\Prefabs\OtherEntities\Wall.cs" />
     <Compile Include="Game\Prefabs\Projectiles\HeavyMGProjectile.cs" />
@@ -76,9 +79,9 @@
     <Compile Include="Game\Prefabs\Projectiles\RifleProjectile.cs" />
     <Compile Include="Game\Prefabs\Projectiles\SniperProjectile.cs" />
     <Compile Include="Game\Prefabs\Weapons\HeavyMG.cs" />
-    <Compile Include="Game\Prefabs\Weapons\RPG.cs" />
     <Compile Include="Game\Prefabs\Weapons\Pistol.cs" />
     <Compile Include="Game\Prefabs\Weapons\Rifle.cs" />
+    <Compile Include="Game\Prefabs\Weapons\RPG.cs" />
     <Compile Include="Game\Prefabs\Weapons\Sniper.cs" />
     <Compile Include="Game\Projectile.cs" />
     <Compile Include="Game\Scene.cs" />
