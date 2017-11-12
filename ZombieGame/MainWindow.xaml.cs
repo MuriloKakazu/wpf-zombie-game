@@ -40,11 +40,11 @@ namespace ZombieGame
             Time.InternalTimer.Elapsed += UpdateTimer_Elapsed;
 
             BottomWall = new Wall(WallTypes.BottomWall);
-            BottomWall.RigidBody.SetPosition(new Physics.Vector(0, -Camera.Height));
+            BottomWall.RigidBody.SetPosition(new Physics.Vector(0, -Camera.Height + 10));
             BottomWall.RigidBody.Resize(new Physics.Vector(Camera.Width, 100));
             BottomWall.RigidBody.Freeze();
             TopWall = new Wall(WallTypes.TopWall);
-            TopWall.RigidBody.SetPosition(new Physics.Vector(0, 100));
+            TopWall.RigidBody.SetPosition(new Physics.Vector(0, 99));
             TopWall.RigidBody.Resize(new Physics.Vector(Camera.Width, 100));
             TopWall.RigidBody.Freeze();
             LeftWall = new Wall(WallTypes.LeftWall);
@@ -52,7 +52,7 @@ namespace ZombieGame
             LeftWall.RigidBody.Resize(new Physics.Vector(100, Camera.Height));
             LeftWall.RigidBody.Freeze();
             RightWall = new Wall(WallTypes.RightWall);
-            RightWall.RigidBody.SetPosition(new Physics.Vector(Camera.Width, 0));
+            RightWall.RigidBody.SetPosition(new Physics.Vector(Camera.Width - 10, 0));
             RightWall.RigidBody.Resize(new Physics.Vector(100, Camera.Height));
             RightWall.RigidBody.Freeze();
         }
@@ -65,6 +65,11 @@ namespace ZombieGame
         public void RemoveVisualComponent(VisualControl v)
         {
             Camera.Children.Remove(v);
+        }
+
+        public void SetCameraOpacity(float value)
+        {
+            Camera.Opacity = value;
         }
 
 

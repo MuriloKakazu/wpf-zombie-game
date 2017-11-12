@@ -3,6 +3,7 @@ using ZombieGame.Physics.Extensions;
 
 namespace ZombieGame.Physics
 {
+    [Serializable]
     public class Vector
     {
         #region Properties
@@ -147,78 +148,79 @@ namespace ZombieGame.Physics
         {
             return v1 * -1;
         }
-        /// <summary>
-        /// Retorna um booleano afirmando se o módulo de A é maior do que o módulo de B
-        /// </summary>
-        /// <param name="v1">Vetor A</param>
-        /// <param name="v2">Vetor B</param>
-        /// <returns>Bool</returns>
-        public static bool operator >(Vector v1, Vector v2)
-        {
-            return Math.Round(v1.Magnitude, 2) > Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
-        }
-        /// <summary>
-        /// Retorna um booleano afirmando se o módulo de A é menor do que o módulo de B
-        /// </summary>
-        /// <param name="v1">Vetor A</param>
-        /// <param name="v2">Vetor B</param>
-        /// <returns>Bool</returns>
-        public static bool operator <(Vector v1, Vector v2)
-        {
-            return Math.Round(v1.Magnitude, 2) < Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
-        }
-        /// <summary>
-        /// Retorna um booleano afirmando se o módulo de A é maior do que ou igual ao módulo de B
-        /// </summary>
-        /// <param name="v1">Vetor A</param>
-        /// <param name="v2">Vetor B</param>
-        /// <returns>Bool</returns>
-        public static bool operator >=(Vector v1, Vector v2)
-        {
-            return Math.Round(v1.Magnitude, 2) >= Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
-        }
-        /// <summary>
-        /// Retorna um booleano afirmando se o módulo de A é menor do que ou igual ao módulo de B
-        /// </summary>
-        /// <param name="v1">Vetor A</param>
-        /// <param name="v2">Vetor B</param>
-        /// <returns>Bool</returns>
-        public static bool operator <=(Vector v1, Vector v2)
-        {
-            return Math.Round(v1.Magnitude, 2) <= Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
-        }
-        /// <summary>
-        /// Retorna um booleano afirmando se os módulos dos vetores são iguais
-        /// </summary>
-        /// <param name="v1">Vetor A</param>
-        /// <param name="v2">Vetor B</param>
-        /// <returns>Bool</returns>
-        public static bool operator ==(Vector v1, Vector v2)
-        {
-            return Math.Round(v1.X, 2) == Math.Round(v2.X, 2) ^
-                   Math.Round(v1.Y, 2) == Math.Round(v2.Y, 2) ^
-                   Math.Round(v1.Z, 2) == Math.Round(v2.Z, 2); // 0.995 e 1.005 são considerados como 1
+        // Obsolete code
+        ///// <summary>
+        ///// Retorna um booleano afirmando se o módulo de A é maior do que o módulo de B
+        ///// </summary>
+        ///// <param name="v1">Vetor A</param>
+        ///// <param name="v2">Vetor B</param>
+        ///// <returns>Bool</returns>
+        //public static bool operator >(Vector v1, Vector v2)
+        //{
+        //    return Math.Round(v1.Magnitude, 2) > Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
+        //}
+        ///// <summary>
+        ///// Retorna um booleano afirmando se o módulo de A é menor do que o módulo de B
+        ///// </summary>
+        ///// <param name="v1">Vetor A</param>
+        ///// <param name="v2">Vetor B</param>
+        ///// <returns>Bool</returns>
+        //public static bool operator <(Vector v1, Vector v2)
+        //{
+        //    return Math.Round(v1.Magnitude, 2) < Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
+        //}
+        ///// <summary>
+        ///// Retorna um booleano afirmando se o módulo de A é maior do que ou igual ao módulo de B
+        ///// </summary>
+        ///// <param name="v1">Vetor A</param>
+        ///// <param name="v2">Vetor B</param>
+        ///// <returns>Bool</returns>
+        //public static bool operator >=(Vector v1, Vector v2)
+        //{
+        //    return Math.Round(v1.Magnitude, 2) >= Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
+        //}
+        ///// <summary>
+        ///// Retorna um booleano afirmando se o módulo de A é menor do que ou igual ao módulo de B
+        ///// </summary>
+        ///// <param name="v1">Vetor A</param>
+        ///// <param name="v2">Vetor B</param>
+        ///// <returns>Bool</returns>
+        //public static bool operator <=(Vector v1, Vector v2)
+        //{
+        //    return Math.Round(v1.Magnitude, 2) <= Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
+        //}
+        ///// <summary>
+        ///// Retorna um booleano afirmando se os módulos dos vetores são iguais
+        ///// </summary>
+        ///// <param name="v1">Vetor A</param>
+        ///// <param name="v2">Vetor B</param>
+        ///// <returns>Bool</returns>
+        //public static bool operator ==(Vector v1, Vector v2)
+        //{
+        //    return Math.Round(v1.X, 2) == Math.Round(v2.X, 2) ^
+        //           Math.Round(v1.Y, 2) == Math.Round(v2.Y, 2) ^
+        //           Math.Round(v1.Z, 2) == Math.Round(v2.Z, 2); // 0.995 e 1.005 são considerados como 1
 
-        }
-        /// <summary>
-        /// Retorna um booleano afirmando se os módulos dos vetores são diferentes
-        /// </summary>
-        /// <param name="v1">Vetor A</param>
-        /// <param name="v2">Vetor B</param>
-        /// <returns>Bool</returns>
-        public static bool operator !=(Vector v1, Vector v2)
-        {
-            return Math.Round(v1.X, 2) != Math.Round(v2.X, 2) ||
-                   Math.Round(v1.Y, 2) != Math.Round(v2.Y, 2) ||
-                   Math.Round(v1.Z, 2) != Math.Round(v2.Z, 2); // 0.995 e 1.005 são considerados como 1
-        }
+        //}
+        ///// <summary>
+        ///// Retorna um booleano afirmando se os módulos dos vetores são diferentes
+        ///// </summary>
+        ///// <param name="v1">Vetor A</param>
+        ///// <param name="v2">Vetor B</param>
+        ///// <returns>Bool</returns>
+        //public static bool operator !=(Vector v1, Vector v2)
+        //{
+        //    return Math.Round(v1.X, 2) != Math.Round(v2.X, 2) ||
+        //           Math.Round(v1.Y, 2) != Math.Round(v2.Y, 2) ||
+        //           Math.Round(v1.Z, 2) != Math.Round(v2.Z, 2); // 0.995 e 1.005 são considerados como 1
+        //}
         #endregion
 
         #region Methods
         /// <summary>
         /// ctor
         /// </summary>
-        public Vector()
+        public Vector() : this(0f, 0f, 0f)
         {
 
         }

@@ -5,6 +5,7 @@
     /// </summary>
     public enum EnemyTypes
     {
+        Undefined,
         Walker,
         Boss
     }

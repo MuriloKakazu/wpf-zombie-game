@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Interfaces;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 
 namespace ZombieGame.Game
 {
-    public abstract class Enemy : Character
+    public class Enemy : Character
     {
         #region Properties
         /// <summary>
@@ -17,7 +18,12 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna o tipo de inimigo
         /// </summary>
-        public EnemyTypes Type { get; set; }
+        public virtual EnemyTypes Type { get; protected set; }
+        /// <summary>
+        /// Retorna a pontuação que o inimigo dará ao morrer
+        /// </summary>
+        public virtual float DeathPoints { get; protected set; }
+        public virtual float MoneyDrop { get; protected set; }
         #endregion
 
         #region Methods
@@ -30,6 +36,28 @@ namespace ZombieGame.Game
             return Enemies.ToArray();
         }
 
+        public static Enemy Mount(ISerializableEnemy source)
+        {
+            Enemy e = new Enemy()
+            {
+                Name = source.Name,
+                DeathPoints = source.DeathPoints,
+                Hash = Guid.NewGuid(),
+                MoneyDrop = source.MoneyDrop,
+                Type = source.Type,
+            };
+            e.RigidBody.SetMass(source.Mass);
+            e.RigidBody.SpeedMultiplier = source.SpeedMultiplier;
+            e.RigidBody.Resize(source.Size);
+            e.Sprite.Uri = IO.GlobalPaths.EnemySprites + source.SpriteFileName;
+            return e;
+        }
+
+        public Enemy() : this(EnemyTypes.Undefined)
+        {
+
+        }
+
         /// <summary>
         /// ctor
         /// </summary>
@@ -38,9 +66,6 @@ namespace ZombieGame.Game
         {
             Type = type;
             RigidBody.UseRotation = true;
-            SetMoney();
-            SetHealth();
-            SetExperience();
             Enemies.Add(this);
         }
 
@@ -71,65 +96,65 @@ namespace ZombieGame.Game
             RigidBody.PointAt(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite);
         }
 
-        /// <summary>
-        /// Define quanto de dinheiro o inimigo dará ao morrer.
-        /// <para>Se trata de um valor definido entre um range</para>
-        /// </summary>
-        private void SetMoney()
-        {
-            int maxMoney = default(int), minMoney = default(int), avgLvls = 0;
+        ///// <summary>
+        ///// Define quanto de dinheiro o inimigo dará ao morrer.
+        ///// <para>Se trata de um valor definido entre um range</para>
+        ///// </summary>
+        //protected virtual void SetMoney()
+        //{
+        //    int maxMoney = default(int), minMoney = default(int), avgLvls = 0;
 
-            foreach (var p in GameMaster.Players)
-                avgLvls += p.Character.Level;
+        //    foreach (var p in GameMaster.Players)
+        //        avgLvls += p.Character.Level;
 
-            avgLvls /= GameMaster.Players.Length;
+        //    avgLvls /= GameMaster.Players.Length;
 
-            switch (Type)
-            {
-                case EnemyTypes.Walker:
-                    maxMoney = 20 * avgLvls + 10 * Level;
-                    minMoney = 5 * avgLvls + 10 * Level;
-                    break;
-                case EnemyTypes.Boss:
-                    maxMoney = 1000 * avgLvls + 300 * Level;
-                    minMoney = 400 * avgLvls + 200 * Level;
-                    break;
-            }
+        //    switch (Type)
+        //    {
+        //        case EnemyTypes.Walker:
+        //            maxMoney = 20 * avgLvls + 10 * Level;
+        //            minMoney = 5 * avgLvls + 10 * Level;
+        //            break;
+        //        case EnemyTypes.Boss:
+        //            maxMoney = 1000 * avgLvls + 300 * Level;
+        //            minMoney = 400 * avgLvls + 200 * Level;
+        //            break;
+        //    }
 
-            Money = new Random().Next(minMoney, maxMoney);
-        }
+        //    Money = new Random().Next(minMoney, maxMoney);
+        //}
 
-        /// <summary>
-        /// Define a vida do inimigo.
-        /// </summary>
-        private void SetHealth()
-        {
-            switch (Type)
-            {
-                case EnemyTypes.Walker:
-                    Health = 50 * Level;
-                    break;
-                case EnemyTypes.Boss:
-                    Health = 400 * Level + 200;
-                    break;
-            }
-        }
+        ///// <summary>
+        ///// Define a vida do inimigo.
+        ///// </summary>
+        //protected virtual void SetHealth()
+        //{
+        //    switch (Type)
+        //    {
+        //        case EnemyTypes.Walker:
+        //            Health = 50 * Level;
+        //            break;
+        //        case EnemyTypes.Boss:
+        //            Health = 400 * Level + 200;
+        //            break;
+        //    }
+        //}
 
-        /// <summary>
-        /// Define a experiência que o inimigo dará ao morrer.
-        /// </summary>
-        private void SetExperience()
-        {
-            switch (Type)
-            {
-                case EnemyTypes.Walker:
-                    Experience = 25 * Level;
-                    break;
-                case EnemyTypes.Boss:
-                    Experience = 20 * Level + 10 * Level * Level;
-                    break;
-            }
-        }
+        ///// <summary>
+        ///// Define a experiência que o inimigo dará ao morrer.
+        ///// </summary>
+        //protected virtual void SetExperience()
+        //{
+        //    switch (Type)
+        //    {
+        //        case EnemyTypes.Walker:
+        //            Experience = 25 * Level;
+        //            break;
+        //        case EnemyTypes.Boss:
+        //            Experience = 20 * Level + 10 * Level * Level;
+        //            break;
+        //    }
+        //}
 
         /// <summary>
         /// Destrói o objeto, liberando memória

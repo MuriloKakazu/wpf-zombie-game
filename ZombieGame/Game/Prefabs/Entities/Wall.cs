@@ -13,6 +13,8 @@ namespace ZombieGame.Game.Prefabs.Entities
         public Wall(WallTypes type) : base("Wall", Tags.Wall)
         {
             Type = type;
+            Sprite.Uri = IO.GlobalPaths.Sprites + "transparent.png";
+            Show();
         }
 
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)

@@ -28,8 +28,24 @@ namespace ZombieGame.Physics
         {
             InternalTimer = new Timer();
             InternalTimer.Elapsed += OnElapsed;
-            InternalTimer.Interval = 10;
-            InternalTimer.Enabled = true;
+            InternalTimer.Interval = 1;
+        }
+
+        /// <summary>
+        /// Pausa o timer interno
+        /// </summary>
+        public static void Pause()
+        {
+            InternalTimer.Stop();
+        }
+
+        /// <summary>
+        /// Resume o timer interno
+        /// </summary>
+        public static void Resume()
+        {
+            LastUpdate = DateTime.Now;
+            InternalTimer.Start();
         }
 
         /// <summary>

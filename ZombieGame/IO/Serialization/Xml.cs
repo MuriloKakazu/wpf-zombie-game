@@ -6,7 +6,7 @@ namespace ZombieGame.IO.Serialization
     public static class ObjectExtension
     {
         /// <summary>
-        /// Serializa uma instância de um objeto qualquer e o salva em um arquivo .xml
+        /// Serializa uma instância de um objeto qualquer e o salva no formato xml
         /// </summary>
         /// <typeparam name="T">Tipo de objeto</typeparam>
         /// <param name="obj">Objeto</param>
@@ -29,7 +29,7 @@ namespace ZombieGame.IO.Serialization
         }
 
         /// <summary>
-        /// Desserializa um objeto a partir de um arquivo .xml
+        /// Desserializa um objeto a partir de um arquivo no formato xml
         /// </summary>
         /// <typeparam name="T">Tipo de objeto</typeparam>
         /// <param name="obj">Objeto</param>

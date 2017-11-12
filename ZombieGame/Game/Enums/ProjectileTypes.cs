@@ -2,12 +2,11 @@
 {
     public enum ProjectileTypes
     {
+        Undefined,
         Arrow,
-        HollowPoint,
-        FMJ,
-        RoundNose,
-        LessLethal,
-        Buckshot,
+        Bullet,
+        Taser,
+        Shell,
         Rocket,
         Throwable,
     }

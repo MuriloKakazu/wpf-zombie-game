@@ -5,7 +5,6 @@ using ZombieGame.Physics;
 
 namespace ZombieGame.Game
 {
-    [Serializable]
     public class Character : Entity
     {
         #region Properties
@@ -17,47 +16,47 @@ namespace ZombieGame.Game
         /// <summary>
         /// Arma do personagem
         /// </summary>
-        public Weapon Weapon { get; set; }
+        public virtual Weapon Weapon { get; protected set; }
         /// <summary>
         /// Retorna se o personagem está correndo
         /// </summary>
-        public bool IsSprinting { get; set; }
+        public virtual bool IsSprinting { get; set; }
         /// <summary>
         /// Retorna se o personagem está atacando/atirando
         /// </summary>
-        public bool IsFiring { get; set; }
+        public virtual bool IsFiring { get; set; }
         /// <summary>
         /// Retorna se o personagem está vivo
         /// </summary>
-        public bool IsAlive { get { return Health > 0; } }
+        public virtual bool IsAlive { get { return Health > 0; } }
         /// <summary>
         /// Retorna a quantidade de dinheiro do personagem
         /// </summary>
-        public int Money { get; set; }
+        public virtual int Money { get; protected set; }
         /// <summary>
         /// Retorna o nível do personagem
         /// </summary>
-        public int Level { get; set; }
+        public virtual int Level { get; protected set; }
         /// <summary>
         /// Retorna a saúde do personagem
         /// </summary>
-        public float Health { get; protected set; }
+        public virtual float Health { get; protected set; }
         /// <summary>
         /// Retorna a experiência adquirida pelo personagem
         /// </summary>
-        public int Experience { get; set; }
+        public virtual int Experience { get; protected set; }
         /// <summary>
         /// Retorna se o personagem está atordoado
         /// </summary>
-        public bool IsStunned { get; protected set; }
+        public virtual bool IsStunned { get; protected set; }
         /// <summary>
         /// Tempo que o personagem passou atordoado em ms
         /// </summary>
-        protected float TimeStunned { get; set; }
+        protected virtual float TimeStunned { get; set; }
         /// <summary>
         /// Tempo que o atordoamento deve durar em ms
         /// </summary>
-        protected float TargetStunTime { get; set; }
+        protected virtual float TargetStunTime { get; set; }
         #endregion
 
         #region Methods
@@ -110,8 +109,8 @@ namespace ZombieGame.Game
         {
             Health = 50;
             Level = 1;
-            Weapon = Database.Weapons[4].Clone();
-            Weapon.SetProjectile(Database.Projectiles[3].Clone());
+            Weapon = Database.Weapons[3].Mount();
+            Weapon.SetProjectile(Database.Projectiles[5].Mount());
             Characters.Add(this);
             Show();
         }
@@ -125,7 +124,7 @@ namespace ZombieGame.Game
             Weapon.StartCoolDown();
             Projectile p = Weapon.Projectile.Clone();
             p.Owner = this;
-            p.Launch(direction);
+             p.Launch(direction);
         }
 
         /// <summary>
@@ -133,7 +132,7 @@ namespace ZombieGame.Game
         /// </summary>
         /// <param name="damager">Personagem que causou o dano</param>
         /// <param name="quantity">Quantidade de dano</param>
-        public virtual void Damage(Character damager, float quantity)
+        public virtual void Damage(Entity damager, float quantity)
         {
             Health -= quantity;
             if (!IsAlive)
@@ -166,14 +165,12 @@ namespace ZombieGame.Game
         /// Mata o personagem
         /// </summary>
         /// <param name="killer">Personagem que matou</param>
-        public virtual void Kill(Character killer)
+        public virtual void Kill(Entity killer)
         {
             if (!this.IsPlayer)
                 Console.WriteLine("{0} was killed by {1}", this.Name, killer.Name);
 
-            Health = 0;
-            if (!IsPlayer)
-                Destroy();
+            Kill();
         }
 
         /// <summary>
@@ -218,7 +215,7 @@ namespace ZombieGame.Game
         /// </summary>
         /// <param name="radius">Raio de procura</param>
         /// <returns>Character(Array)</returns>
-        public Character[] GetNearbyCharacters(float radius)
+        public virtual Character[] GetNearbyCharacters(float radius)
         {
             try
             {

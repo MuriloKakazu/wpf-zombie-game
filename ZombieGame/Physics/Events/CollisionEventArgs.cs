@@ -1,8 +1,9 @@
-﻿using ZombieGame.Game;
+﻿using System;
+using ZombieGame.Game;
 
 namespace ZombieGame.Physics.Events
 {
-    public class CollisionEventArgs
+    public class CollisionEventArgs : EventArgs
     {
         /// <summary>
         /// Entidade com a qual se colidiu

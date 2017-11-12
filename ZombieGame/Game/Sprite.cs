@@ -1,12 +1,14 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
 
 namespace ZombieGame.Game
 {
-    [Serializable]
     public class Sprite
     {
+        private static BitmapSource UnavailableSprite {  get { return new BitmapImage(new Uri(IO.GlobalPaths.Sprites + "unavailable.png")); } }
+
         /// <summary>
         /// Caminho do arquivo
         /// </summary>
@@ -15,8 +17,16 @@ namespace ZombieGame.Game
         /// <summary>
         /// Componente visual cuja imagem tem como fonte o caminho do arquivo
         /// </summary>
-        [XmlIgnore]
-        public BitmapSource Image { get { return new BitmapImage(new Uri(Uri)); } }
+        public BitmapSource Image
+        {
+            get
+            {
+                if (File.Exists(Uri))
+                    return new BitmapImage(new Uri(Uri));
+                else
+                    return UnavailableSprite;
+            }
+        }
 
         /// <summary>
         /// ctor

@@ -1,5 +1,7 @@
 ﻿using System.Xml.Serialization;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Interfaces;
+using ZombieGame.Game.Serializable;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
@@ -10,7 +12,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Nome da arma
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; protected set; }
         /// <summary>
         /// Dano da arma por segundo
         /// </summary>
@@ -18,15 +20,15 @@ namespace ZombieGame.Game
         /// <summary>
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>
-        public float FireRate { get; set; }
+        public float FireRate { get; protected set; }
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>
-        public int Ammo { get; set; }
+        public int Ammo { get; protected set; }
         /// <summary>
         /// O tempo para recarregar a arma
         /// </summary>
-        public float ReloadTime { get; set; }
+        public float ReloadTime { get; protected set; }
         /// <summary>
         /// Tempo de espera entre cada disparo de projéteis, em segundos
         /// </summary>
@@ -44,35 +46,50 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna se a arma está em tempo de espera entre os disparos
         /// </summary>
-        [XmlIgnore]
-        public bool IsCoolingDown { get; set; }
+        public bool IsCoolingDown { get; protected set; }
         /// <summary>
         /// Diferença de tempo desde o último disparo, em segundos
         /// </summary>
-        [XmlIgnore]
-        public float DeltaT { get; set; }
+        public float DeltaT { get; protected set; }
         /// <summary>
         /// Tipo da arma
         /// </summary>
-        public WeaponTypes WeaponType { get; set; }
+        public WeaponTypes Type { get; protected set; }
         /// <summary>
         /// Tipos de projéteis aceitos pela arma
         /// </summary>
-        public ProjectileTypes[] AcceptedProjectileTypes { get; set; }
+        public ProjectileTypes[] AcceptedProjectileTypes { get; protected set; }
         /// <summary>
         /// Projétil atual da arma
         /// </summary>
-        [XmlIgnore]
         public Projectile Projectile { get; protected set; }
         #endregion
 
         #region Methods
         /// <summary>
+        /// Monta uma instância do objeto Weapon
+        /// </summary>
+        /// <returns>Projectile</returns>
+        public static Weapon Mount(ISerializableWeapon source)
+        {
+            Weapon w = new Weapon()
+            {
+                AcceptedProjectileTypes = source.AcceptedProjectileTypes,
+                Ammo = source.Ammo,
+                Name = source.Name,
+                ReloadTime = source.ReloadTime,
+                FireRate = source.FireRate,
+                Type = source.Type,
+            };
+            return w;
+        }
+
+        /// <summary>
         /// ctor
         /// </summary>
         public Weapon()
         {
-            Projectile = new Projectile();
+            //Projectile = new SimpleProjectile();
         }
 
         /// <summary>
@@ -123,22 +140,22 @@ namespace ZombieGame.Game
         /// Retorna um clone profundo da instância atual
         /// </summary>
         /// <returns>Weapon</returns>
-        public Weapon Clone()
-        {
-            var copy = new Weapon()
-            {
-                AcceptedProjectileTypes = AcceptedProjectileTypes,
-                Ammo = Ammo,
-                DeltaT = DeltaT,
-                FireRate = FireRate,
-                IsCoolingDown = IsCoolingDown,
-                Name = Name,
-                Projectile = Projectile.Clone(),
-                ReloadTime = ReloadTime,
-                WeaponType = WeaponType
-            };
-            return copy;
-        }
+        //public Weapon Clone()
+        //{
+        //    var copy = new Weapon()
+        //    {
+        //        AcceptedProjectileTypes = AcceptedProjectileTypes,
+        //        Ammo = Ammo,
+        //        DeltaT = DeltaT,
+        //        FireRate = FireRate,
+        //        IsCoolingDown = IsCoolingDown,
+        //        Name = Name,
+        //        Projectile = Projectile.Clone(),
+        //        ReloadTime = ReloadTime,
+        //        WeaponType = WeaponType
+        //    };
+        //    return copy;
+        //}
         #endregion
     }
 }

@@ -2,7 +2,7 @@
 {
     public enum WeaponTypes
     {
-        None,
+        Undefined,
         Bow,
         Pistol,
         Rifle,

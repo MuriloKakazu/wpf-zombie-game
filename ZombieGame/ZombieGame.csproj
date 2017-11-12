@@ -57,19 +57,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Game\AnimatedEntity.cs" />
     <Compile Include="Game\Database.cs" />
     <Compile Include="Game\EnemySpawner.cs" />
+    <Compile Include="Game\Enums\Difficulties.cs" />
     <Compile Include="Game\Enums\ItemType.cs" />
+    <Compile Include="Game\Enums\GameplayStates.cs" />
     <Compile Include="Game\Enums\ProjectileTypes.cs" />
     <Compile Include="Game\Enums\WallTypes.cs" />
+    <Compile Include="Game\Interfaces\ISerializableEnemy.cs" />
+    <Compile Include="Game\Interfaces\ISerializableProjectile.cs" />
+    <Compile Include="Game\Interfaces\ISerializableWeapon.cs" />
     <Compile Include="Game\Item.cs" />
     <Compile Include="Game\Prefabs\Entities\Boss.cs" />
+    <Compile Include="Game\Prefabs\Entities\Explosion.cs" />
     <Compile Include="Game\Prefabs\Entities\Zombie.cs" />
     <Compile Include="Game\Prefabs\Entities\Camera.cs" />
     <Compile Include="Game\Prefabs\Entities\Wall.cs" />
     <Compile Include="Game\Projectile.cs" />
     <Compile Include="Game\Scene.cs" />
+    <Compile Include="Game\Serializable\SimpleEnemy.cs" />
+    <Compile Include="Game\Serializable\SimpleProjectile.cs" />
+    <Compile Include="Game\Serializable\SimpleWeapon.cs" />
     <Compile Include="Game\Sprite.cs" />
+    <Compile Include="Game\Spritesheet.cs" />
     <Compile Include="Game\Store.cs" />
     <Compile Include="IO\GlobalPaths.cs" />
     <Compile Include="IO\Serialization\Xml.cs" />

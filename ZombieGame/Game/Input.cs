@@ -72,28 +72,6 @@ namespace ZombieGame.Game
                             output = 1;
                     }
                 }
-
-                else if (Keyboard.IsKeyDown(Key.F1))
-                {
-                    //if (!DebugMonitor.HasAnOpenInstance)
-                    //{
-                    //    DebugMonitor dm = new DebugMonitor();
-                    //    dm.Show();
-                    //}
-                    Console.WriteLine("F2: spawn enemies");
-                    Console.WriteLine("F3: kill all enemies");
-                }
-                else if (Keyboard.IsKeyDown(Key.F2))
-                {
-                    //if (Enemy.GetAllActiveEnemies().Length < 20)
-                    //for (int i = 0; i < 10; i++)
-                    //    EnemySpawner.SpawnZombie();
-                }
-                else if (Keyboard.IsKeyDown(Key.F3))
-                {
-                    foreach (var e in Enemy.GetAllActiveEnemies())
-                        e.Kill(killer: GameMaster.GetPlayer(player).Character);
-                }
             });
             return output;
         }

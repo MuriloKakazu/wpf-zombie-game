@@ -26,7 +26,12 @@ namespace ZombieGame.Game.Prefabs.Entities
                 e.Collider.Destroy();
             }
             else if (e.Collider.IsPlayer)
+            {
+                Console.WriteLine("Respawning {0}", e.Collider.Name);
                 e.Collider.RigidBody.SetPosition(new Vector(500, -500));
+                e.Collider.RigidBody.SetVelocity(Vector.Zero);
+                e.Collider.RigidBody.SetForce(Vector.Zero);
+            }
         }
 
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)

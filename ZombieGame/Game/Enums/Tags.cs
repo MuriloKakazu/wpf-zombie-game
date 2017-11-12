@@ -7,6 +7,7 @@
         Player,
         Enemy,
         Projectile,
-        Wall
+        Wall,
+        VisualFX
     }
 }

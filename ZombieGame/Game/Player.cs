@@ -6,38 +6,33 @@ using ZombieGame.Physics;
 
 namespace ZombieGame.Game
 {
-    [Serializable]
     public class Player
     {
         #region Properties
         /// <summary>
         /// Número do jogador
         /// </summary>
-        [XmlIgnore]
-        public int PlayerNumber { get; set; }
+        public int PlayerNumber { get; protected set; }
         /// <summary>
         /// Retorna se o jogador está sendo controlado por uma pessoa
         /// </summary>
-        [XmlIgnore]
-        public bool IsHuman { get; set; }
+        public bool IsHuman { get; protected set; }
         /// <summary>
         /// Personagem do jogador
         /// </summary>
-        [XmlIgnore]
-        public Character Character { get; set; }
+        public Character Character { get; protected set; }
         /// <summary>
         /// Retorna o nome de usuário do jogador
         /// </summary>
-        public string Username { get; set; }
+        public string Username { get; protected set; }
         /// <summary>
         /// Retorna a pontuação do jogador
         /// </summary>
-        public double Score { get; set; }
+        public double Score { get; protected set; }
         /// <summary>
         /// Retorna se o jogador está ativo
         /// </summary>
-        [XmlIgnore]
-        public bool IsPlaying { get; internal set; }
+        public bool IsPlaying { get; protected set; }
         #endregion
 
         #region Methods

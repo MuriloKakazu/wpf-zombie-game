@@ -14,7 +14,6 @@ using ZombieGame.Physics.Extensions;
 
 namespace ZombieGame.Game
 {
-    [Serializable]
     public abstract class Entity
     {
         #region Properties
@@ -31,50 +30,50 @@ namespace ZombieGame.Game
         /// <summary>
         /// Código de identificação única do objeto
         /// </summary>
-        [XmlIgnore]
-        public Guid Hash { get; protected set; }
+        public virtual Guid Hash { get; protected set; }
         /// <summary>
         /// Retorna o nome da entidade
         /// </summary>
-        public string Name { get; set; }
+        public virtual string Name { get; protected set; }
         /// <summary>
         /// Retorna a Tag da entidade
         /// </summary>
-        [XmlIgnore]
-        public Tags Tag { get; protected set; }
+        public virtual Tags Tag { get; protected set; }
         /// <summary>
         /// Retorna o RigidBody da entidade
         /// </summary>
-        public RigidBody RigidBody { get; set; }
+        public virtual RigidBody RigidBody { get; protected set; }
         /// <summary>
         /// Retorna uma lista com todas as entidades as quais se está colidindo
         /// </summary>
-        protected List<Entity> Collisions { get; set; }
+        protected virtual List<Entity> Collisions { get; set; }
         /// <summary>
         /// Retorna o componente visual da entidade
-        [XmlIgnore]
-        public VisualControl VisualControl { get; set; }
+        public virtual VisualControl VisualControl { get; protected set; }
         /// <summary>
         /// Retorna a sprite da entidade
         /// </summary>
-        public Sprite Sprite { get; set; }
+        public virtual Sprite Sprite { get; protected set; }
         /// <summary>
         /// Retorna se a entidade pertence a um jogador
         /// </summary>
-        public bool IsPlayer { get { return Tag == Tags.Player; } }
+        public virtual bool IsPlayer { get { return Tag == Tags.Player; } }
         /// <summary>
         /// Retorna se a entidade é um inimigo
         /// </summary>
-        public bool IsEnemy { get { return Tag == Tags.Enemy; } }
+        public virtual bool IsEnemy { get { return Tag == Tags.Enemy; } }
         /// <summary>
         /// Retorna se a entidade é uma câmera
         /// </summary>
-        public bool IsCamera { get { return Tag == Tags.Camera; } }
+        public virtual bool IsCamera { get { return Tag == Tags.Camera; } }
         /// <summary>
         /// Retorna se a entidade é visível
         /// </summary>
-        [XmlIgnore]
-        public bool Visible { get; protected set; }
+        public virtual bool Visible { get; protected set; }
+        /// <summary>
+        /// Retorna se a entidade tem um componente visual instanciado
+        /// </summary>
+        public bool HasVisualControl { get { return VisualControl != null; } }
         #endregion
 
         #region Methods
@@ -87,12 +86,14 @@ namespace ZombieGame.Game
             return Entities.ToArray();
         }
 
+        protected Entity() { }
+
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="name">Nome da entidade</param>
         /// <param name="tag">Tag da entidade</param>
-        public Entity(string name, Tags tag)
+        public Entity(string name = "Unknown", Tags tag = Tags.Undefined)
         {
             Sprite = new Sprite();
             Hash = Guid.NewGuid();
@@ -101,21 +102,27 @@ namespace ZombieGame.Game
             RigidBody = new RigidBody();
             Collisions = new List<Entity>();
             Entities.Add(this);
-            VisualControl = new VisualControl();
+            CreateVisualControl();
             UpdateZIndex();
             Time.InternalTimer.Elapsed += UpdateTimer_Elapsed;
             CollisionEnter += OnCollisionEnter;
             CollisionStay += OnCollisionStay;
             CollisionLeave += OnCollisionLeave;
-            if (Tag == Tags.Wall)
-                Visible = true;
+        }
+
+        public virtual void CreateVisualControl()
+        {
+            App.Current.Dispatcher.Invoke(delegate
+            {
+                VisualControl = new VisualControl();
+            });
         }
 
         /// <summary>
         /// Carrega a sprite para a entidade atual
         /// </summary>
         /// <param name="path">Caminho do arquivo</param>
-        public void LoadSprite(string path)
+        public virtual void LoadSprite(string path)
         {
             Sprite = new Sprite(path);
             VisualControl.Image.Source = Sprite.Image;
@@ -124,7 +131,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Torna visível o componente visual da entidade
         /// </summary>
-        public void Show()
+        public virtual void Show()
         {
             if (!Visible)
             {
@@ -138,7 +145,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Torna invisível o compoente visual da entidade
         /// </summary>
-        public void Hide()
+        public virtual void Hide()
         {
             if (Visible)
             {
@@ -184,12 +191,17 @@ namespace ZombieGame.Game
         /// </summary>
         protected virtual void UpdateZIndex()
         {
-            if (Tag == Tags.Projectile)
-                Canvas.SetZIndex(VisualControl, 0);
-            else if (Tag == Tags.Enemy)
-                Canvas.SetZIndex(VisualControl, 1);
-            else if (Tag == Tags.Player)
-                Canvas.SetZIndex(VisualControl, 2);
+            App.Current.Dispatcher.Invoke(delegate
+            {
+                if (Tag == Tags.Projectile)
+                    Canvas.SetZIndex(VisualControl, 0);
+                else if (Tag == Tags.Enemy)
+                    Canvas.SetZIndex(VisualControl, 1);
+                else if (Tag == Tags.Player)
+                    Canvas.SetZIndex(VisualControl, 2);
+                else if (Tag == Tags.VisualFX)
+                    Canvas.SetZIndex(VisualControl, 3);
+            });
         }
 
         /// <summary>
@@ -202,7 +214,7 @@ namespace ZombieGame.Game
                 List<Entity> currentCollisions = new List<Entity>();
                 foreach (var e in Entities.ToArray())
                 {
-                    if (e != null && RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash && e.Visible && this.Visible)
+                    if (e != null && !RigidBody.IgnoreCollisions && !e.RigidBody.IgnoreCollisions && RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash && e.Visible && this.Visible)
                     {
                         currentCollisions.Add(e);
                         if (!Collisions.ToArray().Contains(e))
@@ -215,7 +227,7 @@ namespace ZombieGame.Game
 
                 foreach (var e in Collisions.ToArray())
                 {
-                    if (e != null && e.Visible && this.Visible)
+                    if (e != null && !RigidBody.IgnoreCollisions && !e.RigidBody.IgnoreCollisions && e.Visible && this.Visible)
                     {
                         if (!currentCollisions.Contains(e))
                             CollisionLeave?.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
@@ -236,7 +248,7 @@ namespace ZombieGame.Game
         /// Retorna a instância da entidade do jogador mais próximo
         /// </summary>
         /// <returns>Entity</returns>
-        public Entity GetNearestPlayer()
+        public virtual Entity GetNearestPlayer()
         {
             Dictionary<float, Entity> candidates = new Dictionary<float, Entity>();
 
@@ -246,9 +258,7 @@ namespace ZombieGame.Game
                 candidates.Add(distance, player.Character);
             }
 
-            Entity returnValue;
-
-            var success = candidates.TryGetValue(candidates.Keys.Min(), out returnValue);
+            var success = candidates.TryGetValue(candidates.Keys.Min(), out Entity returnValue);
 
             if (success)
                 return returnValue;
@@ -260,13 +270,13 @@ namespace ZombieGame.Game
         /// </summary>
         /// <param name="radius">Raio de procura</param>
         /// <returns>Entity(Array)</returns>
-        public Entity[] GetNearbyEntities(float radius)
+        public virtual Entity[] GetNearbyEntities(float radius)
         {
             try
             {
                 List<Entity> entities = new List<Entity>();
                 foreach (var e in Entities.ToArray())
-                    if ((e.RigidBody.CenterPoint - RigidBody.CenterPoint).Magnitude <= radius)
+                    if ((e.RigidBody.CenterPoint - RigidBody.CenterPoint).Magnitude <= radius && e.Hash != Hash)
                         entities.Add(e);
                 return entities.ToArray();
             }

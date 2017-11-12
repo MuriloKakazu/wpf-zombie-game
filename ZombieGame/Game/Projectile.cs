@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Interfaces;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 
 namespace ZombieGame.Game
 {
-    [Serializable]
     public class Projectile : Entity
     {
         #region Properties
@@ -18,50 +17,54 @@ namespace ZombieGame.Game
         private static List<Projectile> Projectiles = new List<Projectile>();
 
         /// <summary>
-        /// Retorna se o projétil atordoa ao impacto
+        /// Retorna se o projétil atordoa com o impacto
         /// </summary>
-        public bool IsStunner { get; set; }
+        public virtual bool IsStunner { get; protected set; }
         /// <summary>
         /// Retorna se o projétil explode com o impacto
         /// </summary>
-        public bool IsExplosive { get; set; }
+        public virtual bool IsExplosive { get; protected set; }
+        protected virtual bool IsExploding { get; set; }
         /// <summary>
         /// Dano de impacto do projétil
         /// </summary>
-        public int HitDamage { get; set; }
+        public virtual float HitDamage { get; protected set; }
         /// <summary>
         /// Entidade que invocou o projétil
         /// </summary>
-        [XmlIgnore]
-        public Character Owner { get; set; }
+        public virtual Character Owner { get; set; }
         /// <summary>
         /// Tipo do projétil
         /// </summary>
-        public ProjectileTypes Type { get; set; }
+        public virtual ProjectileTypes Type { get; protected set; }
         /// <summary>
         /// O valor primitivo da velocidade
         /// </summary>
-        private float speedMagnitude = 40;
+        private float baseSpeedMagnitude = 40;
         /// <summary>
         /// Módulo da velocidade do projétil
         /// </summary>
-        public float SpeedMagnitude
+        public virtual float SpeedMagnitude
         {
-            get { return speedMagnitude; }
+            get { return baseSpeedMagnitude; }
             set
             {
                 if (value < 25)
-                    speedMagnitude = 25;
+                    baseSpeedMagnitude = 25;
                 else if (value > 150)
-                    speedMagnitude = 150;
+                    baseSpeedMagnitude = 150;
                 else
-                    speedMagnitude = value;
+                    baseSpeedMagnitude = value;
             }
         }
         /// <summary>
         /// Coeficiente de ação do projétil sobre um corpo
         /// </summary>
-        public float KnockbackMagnitude { get; set; }
+        public virtual float KnockbackMagnitude { get; protected set; }
+        /// <summary>
+        /// Tempo em milisegundos que o projétil atordoa seu alvo
+        /// </summary>
+        public virtual float StunTimeMs { get; protected set; }
         #endregion
 
         #region Methods
@@ -92,12 +95,35 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
+        /// Monta uma instância de projétil
+        /// </summary>
+        /// <param name="source">Objeto serializável</param>
+        /// <returns>Projectile</returns>
+        public static Projectile Mount(ISerializableProjectile source)
+        {
+            var p = new Projectile()
+            {
+                Hash = Guid.NewGuid(),
+                HitDamage = source.HitDamage,
+                IsExplosive = source.IsExplosive,
+                IsStunner = source.IsStunner,
+                KnockbackMagnitude = source.KnockbackMagnitude,
+                Name = source.Name,
+                SpeedMagnitude = source.SpeedMagnitude,
+                StunTimeMs = source.StunTimeMs,
+                Tag = Tags.Projectile,
+                Type = source.Type,
+            };
+            p.RigidBody.Resize(source.Size);
+            p.Sprite.Uri = IO.GlobalPaths.ProjectileSprites + source.SpriteFileName;
+
+            return p;
+        }
+
+        /// <summary>
         /// ctor
         /// </summary>
-        public Projectile() : base("Projectile", Tags.Projectile)
-        {
-            Projectiles.Add(this);
-        }
+        protected Projectile() : this(ProjectileTypes.Undefined) { }
 
         /// <summary>
         /// ctor
@@ -112,7 +138,7 @@ namespace ZombieGame.Game
         /// Lança o projétil em uma direção
         /// </summary>
         /// <param name="dir">Direção de lançamento</param>
-        public void Launch(Vector dir)
+        public virtual void Launch(Vector dir)
         {
             RigidBody.SetPosition(new Vector(Owner.RigidBody.CenterPoint.X - RigidBody.Size.X / 2, Owner.RigidBody.CenterPoint.Y + RigidBody.Size.Y / 2));
             RigidBody.UseRotation = true;
@@ -122,12 +148,17 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// Cria uma explosão na posição solicitada
+        /// Explode o projétil
         /// </summary>
         /// <param name="pos">Posição da explosão</param>
-        protected void ExplodeAt(Vector pos, float explosionRadius)
+        protected virtual void Explode(float explosionRadius)
         {
+            var pos = RigidBody.CenterPoint;
+            IsExploding = true;
+
             var targets = Character.GetNearbyCharacters(pos, explosionRadius);
+            var nearbyProjectiles = GetNearbyProjectiles(50);
+            GameMaster.CurrentScene.SpawnExplosionAt(pos, explosionRadius, applyPhysics: false); // We will override the physics
 
             if (targets != null)
             {
@@ -135,22 +166,31 @@ namespace ZombieGame.Game
                 {
                     if (!t.IsPlayer)
                     {
-                        t.Stun(3000);
+                        t.Stun(StunTimeMs);
                         t.Damage(damager: this.Owner, quantity: HitDamage);
                     }
                     else
                     {
-                        t.Stun(1000);
+                        t.Stun(StunTimeMs / 3);
                         t.Damage(damager: this.Owner, quantity: HitDamage / 10);
                     }
 
-                    t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * 1000);
+                    //t.RigidBody.PointAt(pos.Normalized);
+                    t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * (explosionRadius * 5));
 
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("{0} exploded on {0}", Name, t.Name);
+                    Console.WriteLine("{0} exploded on {1}", Name, t.Name);
                     Console.ResetColor();
                 }
             }
+            if (nearbyProjectiles != null)
+            {
+                foreach (var p in nearbyProjectiles)
+                    if (p.IsExplosive && !p.IsExploding)
+                        p.Explode(explosionRadius: 200);
+            }
+
+            Destroy();
         }
 
         /// <summary>
@@ -175,10 +215,10 @@ namespace ZombieGame.Game
                 IsExplosive = IsExplosive,
                 Collisions = Collisions,
                 IsStunner = IsStunner,
+                StunTimeMs = StunTimeMs,
                 KnockbackMagnitude = KnockbackMagnitude,
                 Name = Name,
                 Owner = Owner,
-                RigidBody = new RigidBody() { Size = RigidBody.Size },
                 SpeedMagnitude = SpeedMagnitude,
                 Sprite = Sprite,
                 Tag = Tag,
@@ -186,12 +226,32 @@ namespace ZombieGame.Game
                 Visible = Visible,
                 VisualControl = new Controls.VisualControl()
             };
+            copy.RigidBody.Resize(RigidBody.Size);
             if (copy.Visible)
             {
                 System.Windows.Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddVisualComponent(VisualControl);
                 UpdateVisualControl();
             }
             return copy;
+        }
+
+        /// <summary>
+        /// Retorna um conjunto de projéteis no raio especificado
+        /// </summary>
+        /// <param name="radius">Raio de procura</param>
+        /// <returns>Entity(Array)</returns>
+        public virtual Projectile[] GetNearbyProjectiles(float radius)
+        {
+            try
+            {
+                List<Projectile> projectiles = new List<Projectile>();
+                foreach (var e in Projectiles.ToArray())
+                    if ((e.RigidBody.CenterPoint - RigidBody.CenterPoint).Magnitude <= radius && e.Hash != Hash)
+                        projectiles.Add(e);
+                return projectiles.ToArray();
+            }
+            catch { }
+            return null;
         }
 
         /// <summary>
@@ -218,14 +278,20 @@ namespace ZombieGame.Game
                 if (colliderChar != null)
                 {
                     if (!colliderChar.IsPlayer)
+                    {
                         colliderChar.Damage(damager: this.Owner, quantity: HitDamage);
+                        if (IsStunner)
+                            colliderChar.Stun(StunTimeMs);
+                    }
                     else
+                    {
                         colliderChar.Damage(damager: this.Owner, quantity: HitDamage / 10);
+                        if (IsStunner)
+                            colliderChar.Stun(StunTimeMs / 3);
+                    }
                     colliderChar.RigidBody.AddVelocity(e.CollisionDirection.Opposite.Normalized * KnockbackMagnitude);
                     if (IsExplosive)
-                        ExplodeAt(RigidBody.CenterPoint, explosionRadius: 200);
-                    if (IsStunner)
-                        colliderChar.Stun(1000);
+                        Explode(explosionRadius: 200);
                     Destroy();
                 }
                 else if (e.Collider.Tag == Tags.Projectile)
@@ -234,9 +300,9 @@ namespace ZombieGame.Game
                     if (p != null && p.Owner != Owner)
                     {
                         if (p.IsExplosive)
-                            p.ExplodeAt(p.RigidBody.CenterPoint, explosionRadius: 200);
+                            p.Explode(explosionRadius: 200);
                         if (IsExplosive)
-                            ExplodeAt(RigidBody.CenterPoint, explosionRadius: 200);
+                            Explode(explosionRadius: 200);
                         p.Destroy();
                         Destroy();
                     }
@@ -244,7 +310,7 @@ namespace ZombieGame.Game
                 else
                 {
                     if (IsExplosive)
-                        ExplodeAt(RigidBody.CenterPoint, explosionRadius: 200);
+                        Explode(explosionRadius: 200);
                     Destroy();
                 }
             }
