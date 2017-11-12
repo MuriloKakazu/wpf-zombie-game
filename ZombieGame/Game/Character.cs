@@ -99,7 +99,7 @@ namespace ZombieGame.Game
                     return c;
             return null;
         }
-
+        
         /// <summary>
         /// ctor
         /// </summary>
@@ -230,7 +230,7 @@ namespace ZombieGame.Game
         }
 
         /// <summary>
-        /// Destrói o objeto, liberando memória
+        /// Destrói o personagem
         /// </summary>
         public override void Destroy()
         {

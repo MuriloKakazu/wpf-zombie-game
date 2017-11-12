@@ -297,7 +297,7 @@ namespace ZombieGame.Game
             CollisionLeave -= OnCollisionLeave;
             Collisions.Clear();
         }
-
+      
         /// <summary>
         /// Evento a ser disparado quando a entidade entra em colisão com outra entidade
         /// </summary>

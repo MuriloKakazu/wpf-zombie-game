@@ -26,7 +26,7 @@ namespace ZombieGame.Game
         /// </summary>
         public int Ammo { get; protected set; }
         /// <summary>
-        /// O tempo para recarregar a arma
+        /// O tempo para recarregar a arma em ms
         /// </summary>
         public float ReloadTime { get; protected set; }
         /// <summary>
