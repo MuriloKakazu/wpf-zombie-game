@@ -1,8 +1,9 @@
 ﻿using System;
+using ZombieGame.Game.Entities;
 using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Physics;
 
-namespace ZombieGame.Game
+namespace ZombieGame.Game.Serializable
 {
     [Serializable]
     public class Scene
@@ -15,11 +16,11 @@ namespace ZombieGame.Game
         /// <summary>
         /// Imagem de fundo do cenário
         /// </summary>
-        public Sprite Background { get; set; }
+        public Background Background { get; set; }
         /// <summary>
         /// Entidades do mapa
         /// </summary>
-        public Entity[] Entities { get; set; }
+        public SimpleTile[] Tiles { get; set; }
         /// <summary>
         /// Posição de spawn do Jogador 1
         /// </summary>
@@ -34,9 +35,13 @@ namespace ZombieGame.Game
         /// <summary>
         /// ctor
         /// </summary>
-        public Scene()
+        public Scene() { }
+
+        public void Show()
         {
-            
+            Background.Show();
+            foreach (var e in Tiles)
+                e.Mount().Show();
         }
 
         /// <summary>

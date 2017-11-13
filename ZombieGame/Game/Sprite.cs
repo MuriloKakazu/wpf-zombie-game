@@ -7,7 +7,9 @@ namespace ZombieGame.Game
 {
     public class Sprite
     {
-        private static BitmapSource UnavailableSprite {  get { return new BitmapImage(new Uri(IO.GlobalPaths.Sprites + "unavailable.png")); } }
+        public static string UnavailableSprite { get { return IO.GlobalPaths.Sprites + "unavailable.png"; } }
+        public static string TransparentSprite { get { return IO.GlobalPaths.Sprites + "transparent.png"; } }
+        public static string DebugSprite { get { return IO.GlobalPaths.Sprites + "debug.png"; } }
 
         /// <summary>
         /// Caminho do arquivo
@@ -24,17 +26,14 @@ namespace ZombieGame.Game
                 if (File.Exists(Uri))
                     return new BitmapImage(new Uri(Uri));
                 else
-                    return UnavailableSprite;
+                    return new BitmapImage(new Uri(UnavailableSprite));
             }
         }
 
         /// <summary>
         /// ctor
         /// </summary>
-        public Sprite()
-        {
-            Uri = IO.GlobalPaths.Sprites + "unavailable.png";
-        }
+        public Sprite() : this(IO.GlobalPaths.Sprites + "unavailable.png") { }
 
         /// <summary>
         /// ctor

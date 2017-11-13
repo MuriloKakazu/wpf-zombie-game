@@ -127,6 +127,11 @@ namespace ZombieGame.Physics
             Rotation = MathExtension.RadiansToDegrees(Front.AngleBetween(Vector.Right));
         }
 
+        public void SetRotation(float value)
+        {
+            Rotation = value;
+        }
+
         /// <summary>
         /// Redefine a posição do corpo
         /// </summary>
@@ -232,7 +237,7 @@ namespace ZombieGame.Physics
                 Position += Velocity * Time.Delta * 10;
             }
 
-            Force.Approximate(Vector.Zero, Time.Delta * 10);
+            Force.Approximate(Vector.Zero, Time.Delta * 1000);
         }
         #endregion
     }

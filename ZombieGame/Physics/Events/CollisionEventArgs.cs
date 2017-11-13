@@ -1,5 +1,6 @@
 ﻿using System;
 using ZombieGame.Game;
+using ZombieGame.Game.Entities;
 
 namespace ZombieGame.Physics.Events
 {

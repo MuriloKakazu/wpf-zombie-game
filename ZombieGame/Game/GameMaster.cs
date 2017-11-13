@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using System.Windows.Input;
+using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Game.Serializable;
@@ -29,6 +31,7 @@ namespace ZombieGame.Game
         /// Returna se o programa estará ignorando a entrada de usuário
         /// </summary>
         private static bool IgnoreKeyPress { get; set; }
+        private static Background[] Backgrounds { get; set; }
         /// <summary>
         /// Câmera do jogo
         /// </summary>
@@ -49,6 +52,10 @@ namespace ZombieGame.Game
         /// Dificuldade do jogo
         /// </summary>
         public static Difficulties Difficulty { get; private set; }
+        public static Wall BottomWall { get; set; }
+        public static Wall TopWall { get; set; }
+        public static Wall LeftWall { get; set; }
+        public static Wall RightWall { get; set; }
         #endregion
 
         #region Methods
@@ -58,18 +65,46 @@ namespace ZombieGame.Game
         public static void Setup()
         {
             Time.Setup();
+            SetupDatabase();
+            SetupGameEntities();
             SetupInternalTimer();
             Resume();
-            SetupDatabase();
             Store.SetSellingItems();
-            SetupGameEntities();
-            SetupScene(new Scene());
+            SetupScene(Database.Scenes[0]);
             Pause();
+        }
+
+        private static void SetupBackgrounds()
+        {
+            List<Background> backgrounds = new List<Background>();
+        }
+
+        private static void ManageBackgrounds()
+        {
+            //var cameraCP = Camera.RigidBody.CenterPoint;
+
+            //foreach (var b in Backgrounds)
+            //{
+            //    var bPos = b.Position;
+            //    if (bPos.DistanceBetween(cameraCP) >= 1000)
+            //    {
+            //        if (bPos.PointedAt(cameraCP).X > 0)
+
+            //            b.Destroy();
+            //    }
+            //}
         }
 
         private static void SetupScene(Scene s)
         {
+            Entity.RemoveAllOfType(Tags.Tile);
+            if (CurrentScene != null)
+                CurrentScene.Background.Destroy();
             CurrentScene = s;
+            CurrentScene.Show();
+
+            GetPlayer(0).Character.RigidBody.SetPosition(s.Player1Spawn);
+            GetPlayer(1).Character.RigidBody.SetPosition(s.Player2Spawn);
         }
 
         /// <summary>
@@ -77,8 +112,7 @@ namespace ZombieGame.Game
         /// </summary>
         private static void SetupDatabase()
         {
-            Database.Weapons = Database.Weapons.LoadFrom(IO.GlobalPaths.DB + "weapons.db");
-            Database.Projectiles = Database.Projectiles.LoadFrom(IO.GlobalPaths.DB + "projectiles.db");
+            Database.Setup();
         }
 
         /// <summary>
@@ -98,6 +132,23 @@ namespace ZombieGame.Game
             Players = new Player[2];
             Players[0] = Player1;
             Players[1] = Player2;
+
+            BottomWall = new Wall(WallTypes.BottomWall);
+            BottomWall.RigidBody.SetPosition(new Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y - Camera.RigidBody.Size.Y));
+            BottomWall.RigidBody.Resize(new Vector(Camera.RigidBody.Size.X, 100));
+            BottomWall.RigidBody.Freeze();
+            TopWall = new Wall(WallTypes.TopWall);
+            TopWall.RigidBody.SetPosition(new Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y));
+            TopWall.RigidBody.Resize(new Vector(Camera.RigidBody.Size.X, 100));
+            TopWall.RigidBody.Freeze();
+            LeftWall = new Wall(WallTypes.LeftWall);
+            LeftWall.RigidBody.SetPosition(new Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y));
+            LeftWall.RigidBody.Resize(new Vector(100, Camera.RigidBody.Size.Y));
+            LeftWall.RigidBody.Freeze();
+            RightWall = new Wall(WallTypes.RightWall);
+            RightWall.RigidBody.SetPosition(new Vector(Camera.RigidBody.Size.X, 0));
+            RightWall.RigidBody.Resize(new Vector(100, Camera.RigidBody.Size.Y));
+            RightWall.RigidBody.Freeze();
         }
 
         /// <summary>
@@ -105,8 +156,7 @@ namespace ZombieGame.Game
         /// </summary>
         private static void SetupInternalTimer()
         {
-            InternalTimer = new Timer();
-            InternalTimer.Interval = 1;
+            InternalTimer = new Timer { Interval = 1 };
             InternalTimer.Elapsed += InternalTimer_Elapsed;
             InternalTimer.Start();
         }
@@ -119,6 +169,17 @@ namespace ZombieGame.Game
         private static void InternalTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             CheckForUserInput();
+            //ManageBackground();
+        }
+
+        public static void HideCursor()
+        {
+            Mouse.OverrideCursor = Cursors.None;
+        }
+
+        public static void ShowCursor()
+        {
+            Mouse.OverrideCursor = Cursors.Arrow;
         }
 
         /// <summary>
@@ -133,18 +194,21 @@ namespace ZombieGame.Game
                     if (Keyboard.IsKeyDown(Key.Escape))
                     {
                         if (GameplayState == GameplayStates.Paused)
+                        {
                             Resume();
+                            HideCursor();
+                        }
                         else if (GameplayState == GameplayStates.Running)
+                        {
                             Pause();
+                            ShowCursor();
+                        }
 
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
                     }
                     else if (Keyboard.IsKeyDown(Key.F1))
                     {
-                        Console.WriteLine("F2: spawn enemies");
-                        Console.WriteLine("F3: kill all enemies");
-
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
                     }
@@ -159,7 +223,7 @@ namespace ZombieGame.Game
                     }
                     else if (Keyboard.IsKeyDown(Key.F3))
                     {
-                        foreach (var ae in Enemy.GetAllActiveEnemies())
+                        foreach (var ae in Enemy.GetAllActive())
                             ae.Kill(killer: GameMaster.GetPlayer(1).Character);
 
                         IgnoreKeyPress = true;
@@ -190,6 +254,8 @@ namespace ZombieGame.Game
         public static void Pause()
         {
             Time.Pause();
+            foreach(var e in AnimatedEntity.GetAllActive())
+                e.PauseAnimation();
             GameplayState = GameplayStates.Paused;
             App.Current.Windows.OfType<MainWindow>().FirstOrDefault().SetCameraOpacity(0.5f);
             Console.WriteLine("Game paused");
@@ -201,6 +267,8 @@ namespace ZombieGame.Game
         public static void Resume()
         {
             Time.Resume();
+            foreach (var e in AnimatedEntity.GetAllActive())
+                e.ResumeAnimation();
             GameplayState = GameplayStates.Running;
             App.Current.Windows.OfType<MainWindow>().FirstOrDefault().SetCameraOpacity(1f);
 
@@ -214,9 +282,14 @@ namespace ZombieGame.Game
         /// <returns>Player</returns>
         public static Player GetPlayer(int number)
         {
-            if (Players.Length >= number)
-                return Players[number + 1];
-            else return null;
+            try
+            {
+                if (Players.Length >= number)
+                    return Players[number];
+                else return null;
+            }
+            catch { }
+            return null;
         }
         #endregion
     }

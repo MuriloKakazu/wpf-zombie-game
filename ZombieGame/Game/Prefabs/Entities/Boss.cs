@@ -1,4 +1,5 @@
-﻿using ZombieGame.Game.Enums;
+﻿using ZombieGame.Game.Entities;
+using ZombieGame.Game.Enums;
 
 namespace ZombieGame.Game.Prefabs.Entities
 {

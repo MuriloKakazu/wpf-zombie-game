@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using ZombieGame.Game.Interfaces;
 using ZombieGame.Game.Serializable;
+using ZombieGame.IO.Serialization;
+using ZombieGame.Physics;
 
 namespace ZombieGame.Game
 {
@@ -19,8 +22,19 @@ namespace ZombieGame.Game
         /// </summary>
         public static List<SimpleEnemy> Enemies;
         /// <summary>
-        /// Lista de todos os itens disponíveis no jogo
+        /// Lista de todos os cenários disponíveis no jogo
         /// </summary>
-        //public static List<Item> Items;
+        public static List<Scene> Scenes;
+
+        public static void Setup()
+        {
+            Weapons = Weapons.LoadFrom(IO.GlobalPaths.DB + "weapons.db");
+            Projectiles = Projectiles.LoadFrom(IO.GlobalPaths.DB + "projectiles.db");
+            Scenes = new List<Scene>();
+
+            string[] files = Directory.GetFiles(IO.GlobalPaths.Scenes);
+            foreach (var f in files)
+                Scenes.Add(new Scene().LoadFrom(f));
+        }
     }
 }

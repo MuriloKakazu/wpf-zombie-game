@@ -2,12 +2,8 @@
 
 namespace ZombieGame.Game.Interfaces
 {
-    public interface ISerializableWeapon
+    public interface ISerializableWeapon : ISerializableEntity
     {
-        /// <summary>
-        /// Nome da arma
-        /// </summary>
-        string Name { get; set; }
         /// <summary>
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>

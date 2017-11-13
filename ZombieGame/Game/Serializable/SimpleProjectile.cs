@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml.Serialization;
+using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Interfaces;
 using ZombieGame.Physics;

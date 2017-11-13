@@ -57,16 +57,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Game\AnimatedEntity.cs" />
+    <Compile Include="Game\Entities\AnimatedEntity.cs" />
+    <Compile Include="Game\Serializable\Background.cs" />
     <Compile Include="Game\Database.cs" />
     <Compile Include="Game\EnemySpawner.cs" />
     <Compile Include="Game\Enums\Difficulties.cs" />
     <Compile Include="Game\Enums\ItemType.cs" />
     <Compile Include="Game\Enums\GameplayStates.cs" />
     <Compile Include="Game\Enums\ProjectileTypes.cs" />
+    <Compile Include="Game\Enums\TileTypes.cs" />
     <Compile Include="Game\Enums\WallTypes.cs" />
     <Compile Include="Game\Interfaces\ISerializableEnemy.cs" />
+    <Compile Include="Game\Interfaces\ISerializableEntity.cs" />
     <Compile Include="Game\Interfaces\ISerializableProjectile.cs" />
+    <Compile Include="Game\Interfaces\ISerializableTile.cs" />
     <Compile Include="Game\Interfaces\ISerializableWeapon.cs" />
     <Compile Include="Game\Item.cs" />
     <Compile Include="Game\Prefabs\Entities\Boss.cs" />
@@ -74,14 +78,16 @@
     <Compile Include="Game\Prefabs\Entities\Zombie.cs" />
     <Compile Include="Game\Prefabs\Entities\Camera.cs" />
     <Compile Include="Game\Prefabs\Entities\Wall.cs" />
-    <Compile Include="Game\Projectile.cs" />
-    <Compile Include="Game\Scene.cs" />
+    <Compile Include="Game\Entities\Projectile.cs" />
+    <Compile Include="Game\Serializable\Scene.cs" />
     <Compile Include="Game\Serializable\SimpleEnemy.cs" />
     <Compile Include="Game\Serializable\SimpleProjectile.cs" />
+    <Compile Include="Game\Serializable\SimpleTile.cs" />
     <Compile Include="Game\Serializable\SimpleWeapon.cs" />
     <Compile Include="Game\Sprite.cs" />
     <Compile Include="Game\Spritesheet.cs" />
     <Compile Include="Game\Store.cs" />
+    <Compile Include="Game\Entities\Tile.cs" />
     <Compile Include="IO\GlobalPaths.cs" />
     <Compile Include="IO\Serialization\Xml.cs" />
     <Page Include="Debug\DebugMonitor.xaml">
@@ -103,11 +109,11 @@
     <Compile Include="Debug\DebugMonitor.xaml.cs">
       <DependentUpon>DebugMonitor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\Character.cs" />
+    <Compile Include="Game\Entities\Character.cs" />
     <Compile Include="Game\Controls\VisualControl.xaml.cs">
       <DependentUpon>VisualControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\Entity.cs" />
+    <Compile Include="Game\Entities\Entity.cs" />
     <Compile Include="Game\Enums\AxisTypes.cs" />
     <Compile Include="Game\Enums\Tags.cs" />
     <Compile Include="Game\Enums\WeaponTypes.cs" />
@@ -115,7 +121,7 @@
     <Compile Include="Game\GameMaster.cs" />
     <Compile Include="Game\Input.cs" />
     <Compile Include="Game\Player.cs" />
-    <Compile Include="Game\Enemy.cs" />
+    <Compile Include="Game\Entities\Enemy.cs" />
     <Compile Include="Physics\Enums\RectPositions.cs" />
     <Compile Include="Physics\Extensions\MathExtension.cs" />
     <Compile Include="Physics\Extensions\RectExtensions.cs" />

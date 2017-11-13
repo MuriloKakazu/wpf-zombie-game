@@ -28,41 +28,21 @@ namespace ZombieGame
     /// </summary>
     public partial class MainWindow : Window
     {
-        Wall BottomWall { get; set; }
-        Wall TopWall { get; set; }
-        Wall LeftWall { get; set; }
-        Wall RightWall { get; set; }
+        Physics.Vector CameraLocation = new Physics.Vector();
 
         public MainWindow()
         {
             InitializeComponent();
             GameMaster.Setup();
             Time.InternalTimer.Elapsed += UpdateTimer_Elapsed;
-
-            BottomWall = new Wall(WallTypes.BottomWall);
-            BottomWall.RigidBody.SetPosition(new Physics.Vector(0, -Camera.Height + 10));
-            BottomWall.RigidBody.Resize(new Physics.Vector(Camera.Width, 100));
-            BottomWall.RigidBody.Freeze();
-            TopWall = new Wall(WallTypes.TopWall);
-            TopWall.RigidBody.SetPosition(new Physics.Vector(0, 99));
-            TopWall.RigidBody.Resize(new Physics.Vector(Camera.Width, 100));
-            TopWall.RigidBody.Freeze();
-            LeftWall = new Wall(WallTypes.LeftWall);
-            LeftWall.RigidBody.SetPosition(new Physics.Vector(-100, 0));
-            LeftWall.RigidBody.Resize(new Physics.Vector(100, Camera.Height));
-            LeftWall.RigidBody.Freeze();
-            RightWall = new Wall(WallTypes.RightWall);
-            RightWall.RigidBody.SetPosition(new Physics.Vector(Camera.Width - 10, 0));
-            RightWall.RigidBody.Resize(new Physics.Vector(100, Camera.Height));
-            RightWall.RigidBody.Freeze();
         }
 
-        public void AddVisualComponent(VisualControl v)
+        public void AddVisualComponent(UIElement v)
         {
             Camera.Children.Add(v);
         }
 
-        public void RemoveVisualComponent(VisualControl v)
+        public void RemoveVisualComponent(UIElement v)
         {
             Camera.Children.Remove(v);
         }
@@ -72,90 +52,44 @@ namespace ZombieGame
             Camera.Opacity = value;
         }
 
+        public Physics.Vector GetCanvasSize()
+        {
+            return new Physics.Vector(Camera.Width, Camera.Height);
+        }
 
-        /// <summary>
-        /// Move os retângulos de acordo com a posição dos jogadores
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            //try
-            //{
-            //    Dispatcher.Invoke(new Action(() =>
-            //    {
-            //        Camera.Children.Clear();
+            App.Current.Dispatcher.Invoke(delegate
+            {
+                TranslateTransform tt = new TranslateTransform();
+                var p1Pos = GameMaster.GetPlayer(0).Character.RigidBody.CenterPoint;
+                var p2Pos = GameMaster.GetPlayer(1).Character.RigidBody.CenterPoint;
+                var newX = -(p1Pos.X + p2Pos.X) / 2 + Width / 2;
+                var newY = (p1Pos.Y + p2Pos.Y) / 2 + Height / 2;
 
-                    //Line l0 = new Line
-                    //{
-                    //    StrokeThickness = 1,
-                    //    Stroke = Brushes.Red,
-                    //    X1 = GameMaster.Player1.Character.RigidBody.CenterPoint.X,
-                    //    Y1 = -GameMaster.Player1.Character.RigidBody.CenterPoint.Y,
-                    //    X2 = (GameMaster.Player1.Character.RigidBody.CenterPoint - GameMaster.Player1.Character.RigidBody.Front * -1000).X,
-                    //    Y2 = -(GameMaster.Player1.Character.RigidBody.CenterPoint - GameMaster.Player1.Character.RigidBody.Front * -1000).Y,
-                    //};
-                    //Ellipse el = new Ellipse
-                    //{
-                    //    StrokeThickness = 10,
-                    //    Fill = Brushes.Red,
-                    //    Width = 200,
-                    //    Height = 200,
-                    //    Stretch = Stretch.Uniform,
-                    //};
-                    //Canvas.SetLeft(el, GameMaster.Player2.Character.RigidBody.CenterPoint.X);
-                    //Canvas.SetTop(el, -GameMaster.Player2.Character.RigidBody.CenterPoint.Y);
-                    //Camera.Children.Add(el);
-                    //Camera.Children.Add(l0);
+                if (-newX > -1274 && -newX < 1274)
+                    tt.X = newX;
+                else
+                    tt.X = CameraLocation.X;
 
-                    //Camera.Children.Add(new Image { Source = new BitmapImage(new Uri(@"C:\Users\yurik\source\repos\clones\zombiegame\ZombieGame\bin\Debug\resources\scenes\defaultScene\bg.png")) });
+                if (-newY > -691 && -newY < 1382)
+                    tt.Y = newY;
+                else
+                    tt.Y = CameraLocation.Y;
 
-                    //foreach (var p in Projectile.GetAllActiveProjectiles())
-                    //{
-                    //    Camera.Children.Add(p.VisualControl);
-                    //}
-        //            foreach (var ee in Enemy.Enemies.ToArray())
-        //            {
-        //                Line healthBar = new Line
-        //                {
-        //                    StrokeThickness = 2,
-        //                    Stroke = Brushes.Red,
-        //                    X1 = ee.RigidBody.Position.X,
-        //                    Y1 = -ee.RigidBody.Position.Y - 10,
-        //                    X2 = ee.RigidBody.Position.X + ee.Health,
-        //                    Y2 = -ee.RigidBody.Position.Y - 10,
-        //                };
-        //                Camera.Children.Add(ee.VisualControl);
-        //                Camera.Children.Add(healthBar);
-        //            }
-        //            Line healthBar1 = new Line
-        //            {
-        //                StrokeThickness = 2,
-        //                Stroke = Brushes.Red,
-        //                X1 = GameMaster.Player2.Character.RigidBody.Position.X,
-        //                Y1 = -GameMaster.Player2.Character.RigidBody.Position.Y - 20,
-        //                X2 = GameMaster.Player2.Character.RigidBody.Position.X + GameMaster.Player2.Character.Health,
-        //                Y2 = -GameMaster.Player2.Character.RigidBody.Position.Y - 20,
-        //            };
-        //            Line healthBar2 = new Line
-        //            {
-        //                StrokeThickness = 2,
-        //                Stroke = Brushes.Red,
-        //                X1 = GameMaster.Player2.Character.RigidBody.Position.X,
-        //                Y1 = -GameMaster.Player2.Character.RigidBody.Position.Y - 20,
-        //                X2 = GameMaster.Player2.Character.RigidBody.Position.X + GameMaster.Player2.Character.Health,
-        //                Y2 = -GameMaster.Player2.Character.RigidBody.Position.Y - 20,
-        //            };
-        //            Camera.Children.Add(GameMaster.Player2.Character.VisualControl);
-        //            Camera.Children.Add(GameMaster.Player1.Character.VisualControl);
-        //            Camera.Children.Add(healthBar1);
-        //            Camera.Children.Add(healthBar2);
-        //        }));
-        //    }
-        //    catch
-        //    {
+                CameraLocation = new Physics.Vector(tt.X, tt.Y);
+                Camera.RenderTransform = tt;
+            });
+        }
 
-        //    }
+        private void Camera_MouseMove(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void Camera_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            
         }
     }
 }

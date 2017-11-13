@@ -1,10 +1,14 @@
-﻿using ZombieGame.Game.Enums;
+﻿using System;
+using ZombieGame.Game.Entities;
+using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game.Prefabs.Entities
 {
     public class Explosion : AnimatedEntity
     {
+        private static Random Random = new Random();
+
         /// <summary>
         /// ctor
         /// </summary>
@@ -13,11 +17,14 @@ namespace ZombieGame.Game.Prefabs.Entities
         public Explosion(Vector pos, Vector size, float duration) : base("Explosion", Tags.VisualFX)
         {
             Spritesheet.LoadFrom(IO.GlobalPaths.AnimatedSprites + "explosion/");
-            Duration = duration;
+            AnimationDuration = duration;
             DestroyOnAnimationEnd = true;
             RigidBody.IgnoreCollisions = true;
             RigidBody.SetPosition(pos);
             RigidBody.Resize(size);
+            RigidBody.SetRotation(Random.Next(0, 360));
+            UpdateVisualControl();
+            SetZIndex(6);
             SetTimer();
         }
     }

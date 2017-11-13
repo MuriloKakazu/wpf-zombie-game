@@ -6,9 +6,9 @@
         xmlns:local="clr-namespace:ZombieGame"
         xmlns:controls="clr-namespace:ZombieGame.Game.Controls"
         mc:Ignorable="d"
-        Title="ZombieGame Client" Height="720" Width="1280" ResizeMode="CanMinimize" MinWidth="1280" MinHeight="720">
+        Title="ZombieGame Client" Height="720" Width="1280" MinWidth="1280" MinHeight="720" ResizeMode="CanMinimize">
     <Grid Background="#FF323232">
-        <Canvas x:Name="Camera" x:FieldModifier="public" DockPanel.Dock="Top" Width="1274" Height="691" Opacity="0.5" Background="#FFDADADA">
+        <Canvas x:Name="Camera" x:FieldModifier="public" DockPanel.Dock="Top" Opacity="0.5" Background="#FFDADADA" MouseMove="Camera_MouseMove" SizeChanged="Camera_SizeChanged" Cursor="Arrow">
             <controls:VisualControl x:Name="Scene">
                 <controls:VisualControl.Background>
                     <ImageBrush Stretch="Fill"/>

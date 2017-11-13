@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
 
-namespace ZombieGame.Game
+namespace ZombieGame.Game.Entities
 {
     public class Character : Entity
     {
@@ -64,7 +64,7 @@ namespace ZombieGame.Game
         /// Retorna todos os personagens ativos
         /// </summary>
         /// <returns>Character(Array)</returns>
-        public static Character[] GetAllActiveCharacters()
+        public new static Character[] GetAllActive()
         {
             return Characters.ToArray();
         }
@@ -111,6 +111,10 @@ namespace ZombieGame.Game
             Level = 1;
             Weapon = Database.Weapons[3].Mount();
             Weapon.SetProjectile(Database.Projectiles[5].Mount());
+            if (tag == Tags.Player)
+                SetZIndex(4);
+            else
+                SetZIndex(3);
             Characters.Add(this);
             Show();
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
 
 namespace ZombieGame.Game

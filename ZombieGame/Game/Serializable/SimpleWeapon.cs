@@ -1,6 +1,7 @@
 ﻿using System;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Interfaces;
+using ZombieGame.Physics;
 
 namespace ZombieGame.Game.Serializable
 {
@@ -31,6 +32,9 @@ namespace ZombieGame.Game.Serializable
         /// Tipos de projéteis aceitos pela arma
         /// </summary>
         public ProjectileTypes[] AcceptedProjectileTypes { get; set; }
+        public float Mass { get; set; }
+        public Vector Size { get; set; }
+        public string SpriteFileName { get; set; }
 
         /// <summary>
         /// ctor

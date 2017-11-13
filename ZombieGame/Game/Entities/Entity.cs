@@ -8,11 +8,12 @@ using System.Windows.Media;
 using System.Xml.Serialization;
 using ZombieGame.Game.Controls;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Interfaces;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 using ZombieGame.Physics.Extensions;
 
-namespace ZombieGame.Game
+namespace ZombieGame.Game.Entities
 {
     public abstract class Entity
     {
@@ -73,7 +74,8 @@ namespace ZombieGame.Game
         /// <summary>
         /// Retorna se a entidade tem um componente visual instanciado
         /// </summary>
-        public bool HasVisualControl { get { return VisualControl != null; } }
+        public virtual bool HasVisualControl { get { return VisualControl != null; } }
+        protected virtual int ZIndex { get; private set; }
         #endregion
 
         #region Methods
@@ -81,9 +83,16 @@ namespace ZombieGame.Game
         /// Retorna todas as entidades ativas
         /// </summary>
         /// <returns></returns>
-        public static Entity[] GetAllActiveEntities()
+        public static Entity[] GetAllActive()
         {
             return Entities.ToArray();
+        }
+
+        public static void RemoveAllOfType(Tags type)
+        {
+            foreach (var v in Entities)
+                if (v.Tag == type)
+                    v.Destroy();
         }
 
         protected Entity() { }
@@ -103,7 +112,7 @@ namespace ZombieGame.Game
             Collisions = new List<Entity>();
             Entities.Add(this);
             CreateVisualControl();
-            UpdateZIndex();
+            SetZIndex(1);
             Time.InternalTimer.Elapsed += UpdateTimer_Elapsed;
             CollisionEnter += OnCollisionEnter;
             CollisionStay += OnCollisionStay;
@@ -115,6 +124,15 @@ namespace ZombieGame.Game
             App.Current.Dispatcher.Invoke(delegate
             {
                 VisualControl = new VisualControl();
+            });
+        }
+
+        protected virtual void SetZIndex(int value)
+        {
+            App.Current.Dispatcher.Invoke(delegate
+            {
+                ZIndex = value;
+                Canvas.SetZIndex(VisualControl, value);
             });
         }
 
@@ -184,24 +202,6 @@ namespace ZombieGame.Game
                 }
                 catch { }
             }
-        }
-
-        /// <summary>
-        /// Altera a ordem de renderização do compoente visual da entidade
-        /// </summary>
-        protected virtual void UpdateZIndex()
-        {
-            App.Current.Dispatcher.Invoke(delegate
-            {
-                if (Tag == Tags.Projectile)
-                    Canvas.SetZIndex(VisualControl, 0);
-                else if (Tag == Tags.Enemy)
-                    Canvas.SetZIndex(VisualControl, 1);
-                else if (Tag == Tags.Player)
-                    Canvas.SetZIndex(VisualControl, 2);
-                else if (Tag == Tags.VisualFX)
-                    Canvas.SetZIndex(VisualControl, 3);
-            });
         }
 
         /// <summary>

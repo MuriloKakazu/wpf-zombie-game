@@ -5,7 +5,7 @@ using ZombieGame.Game.Interfaces;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 
-namespace ZombieGame.Game
+namespace ZombieGame.Game.Entities
 {
     public class Enemy : Character
     {
@@ -31,7 +31,7 @@ namespace ZombieGame.Game
         /// Retorna todos os inimigos ativos
         /// </summary>
         /// <returns></returns>
-        public static Enemy[] GetAllActiveEnemies()
+        public new static Enemy[] GetAllActive()
         {
             return Enemies.ToArray();
         }

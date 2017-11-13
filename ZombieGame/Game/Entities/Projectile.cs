@@ -6,7 +6,7 @@ using ZombieGame.Game.Interfaces;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 
-namespace ZombieGame.Game
+namespace ZombieGame.Game.Entities
 {
     public class Projectile : Entity
     {
@@ -72,7 +72,7 @@ namespace ZombieGame.Game
         /// Retorna todos os projéteis ativos
         /// </summary>
         /// <returns></returns>
-        public static Projectile[] GetAllActiveProjectiles()
+        public new static Projectile[] GetAllActive()
         {
             return Projectiles.ToArray();
         }
@@ -131,6 +131,7 @@ namespace ZombieGame.Game
         /// <param name="type">Tipo de projétil</param>
         public Projectile(ProjectileTypes type) : base(type.ToString() + "Projectile", Tags.Projectile)
         {
+            SetZIndex(2);
             Projectiles.Add(this);
         }
 

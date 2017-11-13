@@ -3,6 +3,7 @@
     public enum Tags
     {
         Undefined,
+        Tile,
         Camera,
         Player,
         Enemy,

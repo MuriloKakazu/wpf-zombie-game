@@ -3,6 +3,7 @@ using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using ZombieGame.Game;
+using ZombieGame.Game.Entities;
 
 namespace ZombieGame.Debug
 {
@@ -34,7 +35,7 @@ namespace ZombieGame.Debug
             Dispatcher.Invoke(new Action(() =>
             {
                 List.Items.Clear();
-                foreach (var v in Character.GetAllActiveCharacters())
+                foreach (var v in Character.GetAllActive())
                 {
                     if (v.IsCamera || v.Tag == Game.Enums.Tags.Wall || v.IsEnemy)
                     { }

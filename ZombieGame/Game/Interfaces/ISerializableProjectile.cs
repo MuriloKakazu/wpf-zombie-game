@@ -1,14 +1,11 @@
-﻿using ZombieGame.Game.Enums;
+﻿using ZombieGame.Game.Entities;
+using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game.Interfaces
 {
-    public interface ISerializableProjectile
+    public interface ISerializableProjectile : ISerializableEntity
     {
-        /// <summary>
-        /// Nome do projétil
-        /// </summary>
-        string Name { get; set; }
         /// <summary>
         /// Retorna se o projétil atordoa com o impacto
         /// </summary>
@@ -37,18 +34,6 @@ namespace ZombieGame.Game.Interfaces
         /// Tempo em milisegundos que o projétil atordoa seu alvo
         /// </summary>
         float StunTimeMs { get; set; }
-        /// <summary>
-        /// Nome do arquivo de sprite do projétil
-        /// </summary>
-        string SpriteFileName { get; set; }
-        /// <summary>
-        /// Massa do projétil
-        /// </summary>
-        float Mass { get; set; }
-        /// <summary>
-        /// Tamanho do projétil
-        /// </summary>
-        Vector Size { get; set; }
 
         /// <summary>
         /// Monta uma instância de projétil

@@ -1,4 +1,5 @@
-﻿using ZombieGame.Game.Enums;
+﻿using ZombieGame.Game.Entities;
+using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Enums;
 using ZombieGame.Physics.Events;
@@ -13,8 +14,22 @@ namespace ZombieGame.Game.Prefabs.Entities
         public Wall(WallTypes type) : base("Wall", Tags.Wall)
         {
             Type = type;
-            Sprite.Uri = IO.GlobalPaths.Sprites + "transparent.png";
+            Sprite.Uri = Sprite.TransparentSprite;
             Show();
+        }
+
+        protected override void Update()
+        {
+            if (Type == WallTypes.BottomWall)
+                RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X, GameMaster.Camera.RigidBody.Position.Y + -GameMaster.Camera.RigidBody.Size.Y));
+            else if (Type == WallTypes.TopWall)
+                RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X, GameMaster.Camera.RigidBody.Position.Y + RigidBody.Size.Y));
+            else if (Type == WallTypes.LeftWall)
+                RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X - RigidBody.Size.X, GameMaster.Camera.RigidBody.Position.Y));
+            else if (Type == WallTypes.RightWall)
+                RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X + GameMaster.Camera.RigidBody.Size.X, GameMaster.Camera.RigidBody.Position.Y));
+
+            base.Update();
         }
 
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)
