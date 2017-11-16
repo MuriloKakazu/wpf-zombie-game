@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="ZombieGame.UI.StoreUC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZombieGame.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" MaxWidth="1274" MaxHeight="688" MinHeight="345.5" MinWidth="637">
+    <Grid Loaded="Grid_Loaded" MaxWidth="1274" MaxHeight="696">
+        <Label Content="Loja/Inventário" HorizontalAlignment="Center" Margin="240,22,209,0" VerticalAlignment="Top" FontWeight="Bold" Background="#00000000" Foreground="White" FontSize="24"/>
+        <DockPanel LastChildFill="False" Margin="14,83,5,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="120">
+            <Label DockPanel.Dock="Top" Height="30" Foreground="White" Content="Armas:" FontWeight="Bold"></Label>
+            <Button x:Name="btnWeaponsLeft" Height="90" VerticalAlignment="Top" Width="75" Click="btnWeaponsLeft_Click">
+                <Image Height="50" Source="/ZombieGame;component/arrow.png" Stretch="Fill" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Button>
+            <Button x:Name="btnWeaponsRight" Height="90" VerticalAlignment="Top" Width="75" DockPanel.Dock="Right" Click="btnWeaponsRight_Click">
+                <Image Height="50" Source="/ZombieGame;component/arrow.png" Stretch="Fill" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+            </Button>
+            <DockPanel Height="90" LastChildFill="False" VerticalAlignment="Top" Width="116.75">
+                <Button x:Name="btnWeapon1" Content="Comprar" VerticalAlignment="Top" DockPanel.Dock="Bottom" Background="#FF1F801F" Foreground="White" FontWeight="Bold"/>
+                <Image x:Name="imgWeapon1" Height="70" VerticalAlignment="Top" Width="116.75" DockPanel.Dock="Top"/>
+            </DockPanel>
+            <DockPanel Height="90" LastChildFill="False" VerticalAlignment="Top" Width="116.75">
+                <Button x:Name="btnWeapon2" Content="Comprar" VerticalAlignment="Top" DockPanel.Dock="Bottom" Background="#FF6E6E6E" Foreground="White" FontWeight="Bold"/>
+                <Image x:Name="imgWeapon2" Height="70" VerticalAlignment="Top" Width="116.75" DockPanel.Dock="Top"/>
+            </DockPanel>
+            <DockPanel Height="90" LastChildFill="False" VerticalAlignment="Top" Width="116.75" HorizontalAlignment="Center">
+                <Button x:Name="btnWeapon3" Content="Comprar" VerticalAlignment="Top" DockPanel.Dock="Bottom" Background="#FF1F801F" Foreground="White" FontWeight="Bold"/>
+                <Image x:Name="imgWeapon3" Height="70" VerticalAlignment="Top" Width="116.75" DockPanel.Dock="Top"/>
+            </DockPanel>
+            <DockPanel Height="90" LastChildFill="False" VerticalAlignment="Top" Width="116.75">
+                <Button x:Name="btnWeapon4" Content="Comprar" VerticalAlignment="Top" DockPanel.Dock="Bottom" Background="#FF1F801F" Foreground="White" FontWeight="Bold"/>
+                <Image x:Name="imgWeapon4" Height="70" VerticalAlignment="Top" Width="116.75" DockPanel.Dock="Top"/>
+            </DockPanel>
+        </DockPanel>
+        <DockPanel LastChildFill="False" Margin="14,203,5,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="120">
+            <Label DockPanel.Dock="Top" Height="30" Foreground="White" Content="Projéteis:" FontWeight="Bold"></Label>
+            <Button x:Name="btnProjectilesLeft" Height="90" VerticalAlignment="Bottom" Width="75" Click="btnProjectilesLeft_Click">
+                <Image Height="50" Source="/ZombieGame;component/arrow.png" Stretch="Fill" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Button>
+            <Button x:Name="btnProjectilesRight" Height="90" VerticalAlignment="Top" Width="75" DockPanel.Dock="Right" Click="btnProjectilesRight_Click">
+                <Image Height="50" Source="/ZombieGame;component/arrow.png" Stretch="Fill" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="180"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+            </Button>
+            <DockPanel Height="90" LastChildFill="False" VerticalAlignment="Top" Width="116.75">
+                <Button x:Name="btnProjectile1" Content="Comprar" VerticalAlignment="Top" DockPanel.Dock="Bottom" Background="#FF1F801F" Foreground="White" FontWeight="Bold"/>
+                <Image x:Name="imgProjectile1" Height="70" VerticalAlignment="Top" Width="116.75" DockPanel.Dock="Top"/>
+            </DockPanel>
+            <DockPanel Height="90" LastChildFill="False" VerticalAlignment="Top" Width="116.75" HorizontalAlignment="Center">
+                <Button x:Name="btnProjectile2" Content="Comprar" VerticalAlignment="Top" DockPanel.Dock="Bottom" Background="#FF1F801F" Foreground="White" FontWeight="Bold"/>
+                <Image x:Name="imgProjectile2" Height="70" VerticalAlignment="Top" Width="116.75" DockPanel.Dock="Top"/>
+            </DockPanel>
+            <DockPanel Height="90" LastChildFill="False" VerticalAlignment="Top" Width="116.75">
+                <Button x:Name="btnProjectile3" Content="Comprar" VerticalAlignment="Top" DockPanel.Dock="Bottom" Background="#FF1F801F" Foreground="White" FontWeight="Bold"/>
+                <Image x:Name="imgProjectile3" Height="70" VerticalAlignment="Top" Width="116.75" DockPanel.Dock="Top"/>
+            </DockPanel>
+            <DockPanel Height="90" LastChildFill="False" VerticalAlignment="Top" Width="116.75">
+                <Button x:Name="btnProjectile4" Content="Comprar" VerticalAlignment="Top" DockPanel.Dock="Bottom" Background="#FF1F801F" Foreground="White" FontWeight="Bold"/>
+                <Image x:Name="imgProjectile4" Height="70" VerticalAlignment="Top" Width="116.75" DockPanel.Dock="Top"/>
+            </DockPanel>
+        </DockPanel>
+
+    </Grid>
+</UserControl>
