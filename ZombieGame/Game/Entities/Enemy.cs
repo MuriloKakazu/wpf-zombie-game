@@ -34,9 +34,9 @@ namespace ZombieGame.Game.Entities
         /// Retorna todos os inimigos ativos
         /// </summary>
         /// <returns></returns>
-        public new static Enemy[] GetAllActive()
+        public new static Enemy[] AllInstances
         {
-            return Enemies.ToArray();
+            get { return Enemies.ToArray(); }
         }
 
         public static Enemy Mount(ISerializableEnemy source)
@@ -74,7 +74,7 @@ namespace ZombieGame.Game.Entities
             Type = type;
             RigidBody.UseRotation = true;
             Enemies.Add(this);
-            Time.LowPriorityTimer.Elapsed += LowPriorityTimer_Elapsed;
+            Time.LowFrequencyTimer.Elapsed += LowPriorityTimer_Elapsed;
         }
 
         private void LowPriorityTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)

@@ -18,9 +18,9 @@ namespace ZombieGame.Game.Entities
         public bool LoopAnimation { get; set; }
         protected int SpriteIndex { get; set; }
 
-        public new static AnimatedEntity[] GetAllActive()
+        public new static AnimatedEntity[] AllInstances
         {
-            return AnimatedEntities.ToArray();
+            get { return AnimatedEntities.ToArray(); }
         }
 
         public AnimatedEntity(string name, Tags tag) : base(name, tag)
@@ -52,6 +52,9 @@ namespace ZombieGame.Game.Entities
 
         protected override void UpdateVisualControl()
         {
+            if (!IsActive)
+                return;
+
             App.Current.Dispatcher.Invoke(delegate
             {
                 VisualControl.Image.Source = Sprite.Image;
@@ -80,8 +83,8 @@ namespace ZombieGame.Game.Entities
                 SpriteIndex++;
                 UpdateVisualControl();
             }
-            else if (DestroyOnAnimationEnd && IsActive)
-                Destroy();
+            else if (DestroyOnAnimationEnd)
+                MarkAsNoLongerNeeded();
             else if (LoopAnimation)
             {
                 SpriteIndex = 0;
@@ -90,12 +93,23 @@ namespace ZombieGame.Game.Entities
             }
         }
 
+        public override void MarkAsNoLongerNeeded()
+        {
+            UnsubscribeFromEvents();
+            base.MarkAsNoLongerNeeded();
+        }
+
+        protected override void UnsubscribeFromEvents()
+        {
+            AnimationTimer.Elapsed -= AnimationTimer_Elapsed;
+            base.UnsubscribeFromEvents();
+        }
+
         public override void Destroy()
         {
-            base.Destroy();
-            AnimationTimer.Elapsed -= AnimationTimer_Elapsed;
             AnimationTimer.Dispose();
             AnimatedEntities.Remove(this);
+            base.Destroy();
         }
     }
 }

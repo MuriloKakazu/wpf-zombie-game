@@ -39,7 +39,7 @@ namespace ZombieGame.Game
             Character = new Character(name, Tags.Player);
             Character.SetHealth(100);
             Character.LoadSprite(GlobalPaths.CharacterSprites + "player" + playerNumber + ".png");
-            Time.HighPriorityTimer.Elapsed += UpdateTimer_Elapsed;
+            Time.HighFrequencyTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
         /// <summary>

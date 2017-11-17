@@ -61,9 +61,9 @@ namespace ZombieGame.Game.Entities
         /// Retorna todos os personagens ativos
         /// </summary>
         /// <returns>Character(Array)</returns>
-        public new static Character[] GetAllActive()
+        public new static Character[] AllInstances
         {
-            return Characters.ToArray();
+            get { return Characters.ToArray(); }
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace ZombieGame.Game.Entities
             //Health = 50;
             //Level = 1;
             Weapon = Database.Weapons[1].Mount();
-            Weapon.SetProjectile(Database.Projectiles[4].Mount());
+            Weapon.SetProjectile(Database.Projectiles[7].Mount());
             if (tag == Tags.Player)
                 SetZIndex(ZIndexes.Player);
             else
@@ -200,7 +200,7 @@ namespace ZombieGame.Game.Entities
         {
             Health = 0;
             if (!IsPlayer)
-                Destroy();
+                MarkAsNoLongerNeeded();
         }
 
         /// <summary>

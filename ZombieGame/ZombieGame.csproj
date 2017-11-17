@@ -69,6 +69,7 @@
     <Compile Include="Extensions\IEnumerableExtension.cs" />
     <Compile Include="Game\Entities\AnimatedEntity.cs" />
     <Compile Include="Game\Enums\ZIndexes.cs" />
+    <Compile Include="Game\GarbageCollector.cs" />
     <Compile Include="Game\Interfaces\IDestroyable.cs" />
     <Compile Include="Game\Serializable\Background.cs" />
     <Compile Include="Game\Database.cs" />

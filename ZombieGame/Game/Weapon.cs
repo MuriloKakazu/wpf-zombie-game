@@ -110,7 +110,7 @@ namespace ZombieGame.Game
         /// </summary>
         public void StartCoolDown()
         {
-            Time.HighPriorityTimer.Elapsed += UpdateTimer_Elapsed;
+            Time.HighFrequencyTimer.Elapsed += UpdateTimer_Elapsed;
             IsCoolingDown = true;
         }
 
@@ -127,7 +127,7 @@ namespace ZombieGame.Game
             {
                 IsCoolingDown = false;
                 DeltaT = 0;
-                Time.HighPriorityTimer.Elapsed -= UpdateTimer_Elapsed;
+                Time.HighFrequencyTimer.Elapsed -= UpdateTimer_Elapsed;
             }
         }
 
@@ -136,8 +136,8 @@ namespace ZombieGame.Game
         /// </summary>
         public void Destroy()
         {
-            Time.HighPriorityTimer.Elapsed -= UpdateTimer_Elapsed;
-            Projectile.Destroy();
+            Time.HighFrequencyTimer.Elapsed -= UpdateTimer_Elapsed;
+            Projectile.MarkAsNoLongerNeeded();
         }
 
         /// <summary>

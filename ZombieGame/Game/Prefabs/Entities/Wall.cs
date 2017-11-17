@@ -14,7 +14,7 @@ namespace ZombieGame.Game.Prefabs.Entities
         public Wall(WallTypes type) : base("Wall", Tags.Wall)
         {
             Type = type;
-            Sprite.Uri = Sprite.DebugSprite;
+            Sprite.Uri = Sprite.TransparentSprite;
             Show();
         }
 

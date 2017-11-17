@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Timers;
+using ZombieGame.Game;
 
 namespace ZombieGame.Physics
 {
     public static class Time
     {
         #region Properties
-        public static Timer LowPriorityTimer { get; private set; }
+        public static Timer LowFrequencyTimer { get; private set; }
         /// <summary>
         /// Timer interno
         /// </summary>
-        public static Timer HighPriorityTimer { get; private set; }
+        public static Timer HighFrequencyTimer { get; private set; }
         /// <summary>
         /// Retorna a diferença de tempo em segundos desde a última decorrência do timer de atualização
         /// </summary>
@@ -27,11 +28,11 @@ namespace ZombieGame.Physics
         /// </summary>
         public static void Setup()
         {
-            HighPriorityTimer = new Timer();
-            HighPriorityTimer.Elapsed += OnHighPriorityTimerElapsed;
-            HighPriorityTimer.Interval = 1;
-            LowPriorityTimer = new Timer();
-            LowPriorityTimer.Interval = 50;
+            HighFrequencyTimer = new Timer();
+            HighFrequencyTimer.Elapsed += OnHighPriorityTimerElapsed;
+            HighFrequencyTimer.Interval = 1;
+            LowFrequencyTimer = new Timer();
+            LowFrequencyTimer.Interval = 50;
         }
 
         /// <summary>
@@ -39,8 +40,8 @@ namespace ZombieGame.Physics
         /// </summary>
         public static void Pause()
         {
-            HighPriorityTimer.Stop();
-            LowPriorityTimer.Stop();
+            HighFrequencyTimer.Stop();
+            LowFrequencyTimer.Stop();
         }
 
         /// <summary>
@@ -49,8 +50,8 @@ namespace ZombieGame.Physics
         public static void Resume()
         {
             LastUpdate = DateTime.Now;
-            HighPriorityTimer.Start();
-            LowPriorityTimer.Start();
+            HighFrequencyTimer.Start();
+            LowFrequencyTimer.Start();
         }
 
         /// <summary>

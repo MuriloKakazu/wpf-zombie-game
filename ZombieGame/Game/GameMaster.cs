@@ -81,6 +81,7 @@ namespace ZombieGame.Game
         public static void Setup()
         {
             Time.Setup();
+            GarbageCollector.Setup();
             SetupDatabase();
             SetupGameEntities();
             SetupInternalTimer();
@@ -264,7 +265,7 @@ namespace ZombieGame.Game
         public static void Pause()
         {
             Time.Pause();
-            foreach (var e in AnimatedEntity.GetAllActive())
+            foreach (var e in AnimatedEntity.AllInstances)
                 e.PauseAnimation();
             GameplayState = GameplayStates.Paused;
             App.Current.Windows.OfType<MainWindow>().FirstOrDefault().SetCameraOpacity(0.5f);
@@ -277,7 +278,7 @@ namespace ZombieGame.Game
         public static void Resume()
         {
             Time.Resume();
-            foreach (var e in AnimatedEntity.GetAllActive())
+            foreach (var e in AnimatedEntity.AllInstances)
                 e.ResumeAnimation();
             GameplayState = GameplayStates.Running;
             App.Current.Windows.OfType<MainWindow>().FirstOrDefault().SetCameraOpacity(1f);

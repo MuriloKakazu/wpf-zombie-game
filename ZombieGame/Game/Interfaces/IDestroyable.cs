@@ -4,6 +4,7 @@
     {
         bool IsActive { get; }
 
+        void MarkAsNoLongerNeeded();
         void Destroy();
     }
 }

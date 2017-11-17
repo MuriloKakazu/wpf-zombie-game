@@ -33,7 +33,7 @@ namespace ZombieGame
         {
             InitializeComponent();
             GameMaster.Setup();
-            Time.HighPriorityTimer.Elapsed += UpdateTimer_Elapsed;
+            Time.HighFrequencyTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
         public void AddVisualComponent(UIElement v)

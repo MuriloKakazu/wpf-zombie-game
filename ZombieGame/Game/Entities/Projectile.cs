@@ -78,9 +78,9 @@ namespace ZombieGame.Game.Entities
         /// Retorna todos os projéteis ativos
         /// </summary>
         /// <returns></returns>
-        public new static Projectile[] GetAllActive()
+        public new static Projectile[] AllInstances
         {
-            return Projectiles.ToArray();
+            get { return Projectiles.ToArray(); }
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace ZombieGame.Game.Entities
                         p.Explode();
             }
 
-            Destroy();
+            MarkAsNoLongerNeeded();
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace ZombieGame.Game.Entities
                 if (IsExplosive && !IsExploding)
                     Explode();
                 else
-                    Destroy();
+                    MarkAsNoLongerNeeded();
             }
         }
 
@@ -340,7 +340,7 @@ namespace ZombieGame.Game.Entities
 
                     SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(ImpactSFXKey));
 
-                    Destroy();
+                    MarkAsNoLongerNeeded();
                 }
                 else if (e.Collider.Tag == Tags.Projectile)
                 {
@@ -354,8 +354,8 @@ namespace ZombieGame.Game.Entities
 
                         SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(ImpactSFXKey));
 
-                        p.Destroy();
-                        Destroy();
+                        p.MarkAsNoLongerNeeded();
+                        MarkAsNoLongerNeeded();
                     }
                 }
                 else
@@ -365,7 +365,7 @@ namespace ZombieGame.Game.Entities
 
                     SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(ImpactSFXKey));
 
-                    Destroy();
+                    MarkAsNoLongerNeeded();
                 }
             }
             else
