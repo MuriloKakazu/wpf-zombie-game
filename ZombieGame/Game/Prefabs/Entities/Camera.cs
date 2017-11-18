@@ -24,13 +24,6 @@ namespace ZombieGame.Game.Prefabs.Entities
 
         protected override void OnCollisionLeave(object sender, CollisionEventArgs e)
         {
-            //if (e.Collider.Tag != Tags.Wall && !e.Collider.IsPlayer)
-            //{
-            //    Console.ForegroundColor = ConsoleColor.Yellow;
-            //    Console.WriteLine("Destroying object: {0}", e.Collider.Name);
-            //    Console.ResetColor();
-            //    e.Collider.Destroy();
-            //}
             if (e.Collider.IsPlayer)
             {
                 Console.WriteLine("Respawning {0}", e.Collider.Name);
@@ -42,17 +35,18 @@ namespace ZombieGame.Game.Prefabs.Entities
 
         protected override void FixedUpdate()
         {
-            if (GameMaster.GetPlayer(0) != null)
+            var player1 = GameMaster.GetPlayer(0);
+            var player2 = GameMaster.GetPlayer(1);
+            if (player1 != null)
             {
-                if (GameMaster.Players.Length == 2)
+
+                var scene = GameMaster.CurrentScene;
+                var newPos = new Vector();
+                var p1Pos = player1.Character.RigidBody.CenterPoint;
+
+                if (player2.IsPlaying && player2.Character != null && player2.Character.IsActive)
                 {
-                    //RigidBody.SetPosition(new Vector(
-                    //    (GameMaster.GetPlayer(0).Character.RigidBody.CenterPoint.X + GameMaster.GetPlayer(1).Character.RigidBody.CenterPoint.X) / 2 - Vector.WindowSize.X / 2,
-                    //    (GameMaster.GetPlayer(0).Character.RigidBody.CenterPoint.Y + GameMaster.GetPlayer(1).Character.RigidBody.CenterPoint.Y) / 2 + Vector.WindowSize.Y / 2));
-                    var scene = GameMaster.CurrentScene;
-                    var newPos = new Vector();
-                    var p1Pos = GameMaster.GetPlayer(0).Character.RigidBody.CenterPoint;
-                    var p2Pos = GameMaster.GetPlayer(1).Character.RigidBody.CenterPoint;
+                    var p2Pos = player2.Character.RigidBody.CenterPoint;
                     var newX = (p1Pos.X + p2Pos.X) / 2 - Vector.WindowSize.X / 2;
                     var newY = (p1Pos.Y + p2Pos.Y) / 2 + Vector.WindowSize.Y / 2;
 
@@ -65,14 +59,9 @@ namespace ZombieGame.Game.Prefabs.Entities
                         newPos.Y = newY;
                     else
                         newPos.Y = RigidBody.Position.Y;
-
-                    RigidBody.SetPosition(newPos);
                 }
-                else if (GameMaster.Players.Length == 1)
+                else
                 {
-                    var scene = GameMaster.CurrentScene;
-                    var newPos = new Vector();
-                    var p1Pos = GameMaster.GetPlayer(0).Character.RigidBody.CenterPoint;
                     var newX = p1Pos.X - RigidBody.Size.X / 2;
                     var newY = p1Pos.Y + RigidBody.Size.Y / 2;
 
@@ -85,9 +74,9 @@ namespace ZombieGame.Game.Prefabs.Entities
                         newPos.Y = newY;
                     else
                         newPos.Y = RigidBody.Position.Y;
-
-                    RigidBody.SetPosition(newPos);
                 }
+
+                RigidBody.SetPosition(newPos);
             }
             base.FixedUpdate();
         }

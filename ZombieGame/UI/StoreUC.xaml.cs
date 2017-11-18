@@ -13,8 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ZombieGame.Game;
-using ZombieGame.Game.Enums;
 using ZombieGame.Game.Serializable;
+using ZombieGame.Game.Enums;
 
 namespace ZombieGame.UI
 {
@@ -23,48 +23,15 @@ namespace ZombieGame.UI
     /// </summary>
     public partial class StoreUC : UserControl
     {
+        #region Properties
         public int MaxWIndex, MaxPIndex;
         public int CurWIndex = 0, CurPIndex = 0;
         public SimpleWeapon w1, w2, w3, w4;
         public SimpleProjectile p1, p2, p3, p4;
         public bool IsOpen = false;
+        #endregion
 
-        private void btnWeaponsRight_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurWIndex < MaxWIndex)
-            {
-                CurWIndex++;
-                SetSellingWeapons();
-            }
-            if (CurWIndex == MaxWIndex)
-                btnWeaponsRight.IsEnabled = false;
-            btnWeaponsLeft.IsEnabled = true;
-        }
-
-        private void btnProjectilesRight_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurPIndex < MaxPIndex)
-            {
-                CurPIndex++;
-                SetSellingProjectiles();
-            }
-            if (CurPIndex == MaxPIndex)
-                btnProjectilesRight.IsEnabled = false;
-            btnProjectilesLeft.IsEnabled = true;
-        }
-
-        private void btnProjectilesLeft_Click(object sender, RoutedEventArgs e)
-        {
-            if (CurPIndex > 0)
-            {
-                CurPIndex--;
-                SetSellingProjectiles();
-            }
-
-            if (CurPIndex == 0)
-                btnProjectilesLeft.IsEnabled = false;
-            btnProjectilesRight.IsEnabled = true;
-        }
+        #region Methods
 
         private void btnWeaponsLeft_Click(object sender, RoutedEventArgs e)
         {
@@ -78,13 +45,247 @@ namespace ZombieGame.UI
                 btnWeaponsLeft.IsEnabled = false;
             btnWeaponsRight.IsEnabled = true;
         }
+        private void btnWeaponsRight_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurWIndex < MaxWIndex)
+            {
+                CurWIndex++;
+                SetSellingWeapons();
+            }
+            if (CurWIndex == MaxWIndex)
+                btnWeaponsRight.IsEnabled = false;
+            btnWeaponsLeft.IsEnabled = true;
+        }
+        private void btnProjectilesRight_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurPIndex < MaxPIndex)
+            {
+                CurPIndex++;
+                SetSellingProjectiles();
+            }
+            if (CurPIndex == MaxPIndex)
+                btnProjectilesRight.IsEnabled = false;
+            btnProjectilesLeft.IsEnabled = true;
+        }
+        private void btnProjectilesLeft_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurPIndex > 0)
+            {
+                CurPIndex--;
+                SetSellingProjectiles();
+            }
+
+            if (CurPIndex == 0)
+                btnProjectilesLeft.IsEnabled = false;
+            btnProjectilesRight.IsEnabled = true;
+        }
+
+        private void btnWeapon1_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnWeapon1.Content.Equals("Comprar"))
+            {
+                Store.BuyWeapon(w1.ItemID);
+                btnWeapon1.IsEnabled = false;
+                SetSellingItens();
+            }
+            else if (btnWeapon1.Content.Equals("Equipar"))
+            {
+                if (GameMaster.Players[1].IsPlaying)
+                {
+                    //Abrir outra janela perguntando para qual dos players
+                }
+                else
+                {
+                    GameMaster.Players[0].Character.SetWeapon(w1.Mount());
+                }
+            }
+            else
+            {
+                btnWeapon1.IsEnabled = false;
+                Console.WriteLine("O botão weapon1 não deveria ser clicável!");
+            }
+        }
+        private void btnWeapon2_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnWeapon2.Content.Equals("Comprar"))
+            {
+                Store.BuyWeapon(w2.ItemID);
+                btnWeapon2.IsEnabled = false;
+                SetSellingItens();
+            }
+            else if (btnWeapon2.Content.Equals("Equipar"))
+            {
+                if (GameMaster.Players[1].IsPlaying)
+                {
+                    //Abrir outra janela perguntando para qual dos players
+                }
+                else
+                {
+                    GameMaster.Players[0].Character.SetWeapon(w2.Mount());
+                }
+            }
+            else
+            {
+                btnWeapon2.IsEnabled = false;
+                Console.WriteLine("O botão Weapon2 não deveria ser clicável!");
+            }
+        }
+        private void btnWeapon3_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnWeapon3.Content.Equals("Comprar"))
+            {
+                Store.BuyWeapon(w3.ItemID);
+                btnWeapon3.IsEnabled = false;
+                SetSellingItens();
+            }
+            else if (btnWeapon3.Content.Equals("Equipar"))
+            {
+                if (GameMaster.Players[1].IsPlaying)
+                {
+                    //Abrir outra janela perguntando para qual dos players
+                }
+                else
+                {
+                    GameMaster.Players[0].Character.SetWeapon(w3.Mount());
+                }
+            }
+            else
+            {
+                btnWeapon3.IsEnabled = false;
+                Console.WriteLine("O botão Weapon3 não deveria ser clicável!");
+            }
+        }
+        private void btnWeapon4_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnWeapon4.Content.Equals("Comprar"))
+            {
+                Store.BuyWeapon(w4.ItemID);
+                btnWeapon4.IsEnabled = false;
+                SetSellingItens();
+            }
+            else if (btnWeapon4.Content.Equals("Equipar"))
+            {
+                if (GameMaster.Players[1].IsPlaying)
+                {
+                    //Abrir outra janela perguntando para qual dos players
+                }
+                else
+                {
+                    GameMaster.Players[0].Character.SetWeapon(w4.Mount());
+                }
+            }
+            else
+            {
+                btnWeapon4.IsEnabled = false;
+                Console.WriteLine("O botão Weapon4 não deveria ser clicável!");
+            }
+        }
+        private void btnProjectile1_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnProjectile1.Content.Equals("Comprar"))
+            {
+                Store.BuyProjectile(p1.ItemID);
+                btnProjectile1.IsEnabled = false;
+                SetSellingProjectiles();
+            }
+            else if (btnProjectile1.Content.Equals("Equipar"))
+            {
+                if (GameMaster.Players[1].IsPlaying)
+                {
+                    //Abrir outra janela perguntando para qual dos players
+                }
+                else
+                {
+                    GameMaster.Players[0].Character.Weapon.SetProjectile(p1.Mount());
+                }
+            }
+            else
+            {
+                btnProjectile1.IsEnabled = false;
+                Console.WriteLine("O botão Projectile1 não deveria ser clicável!");
+            }
+        }
+        private void btnProjectile2_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnProjectile2.Content.Equals("Comprar"))
+            {
+                Store.BuyProjectile(p2.ItemID);
+                btnProjectile2.IsEnabled = false;
+                SetSellingProjectiles();
+            }
+            else if (btnProjectile2.Content.Equals("Equipar"))
+            {
+                if (GameMaster.Players[1].IsPlaying)
+                {
+                    //Abrir outra janela perguntando para qual dos players
+                }
+                else
+                {
+                    GameMaster.Players[0].Character.Weapon.SetProjectile(p2.Mount());
+                }
+            }
+            else
+            {
+                btnProjectile2.IsEnabled = false;
+                Console.WriteLine("O botão Projectile2 não deveria ser clicável!");
+            }
+        }
+        private void btnProjectile3_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnProjectile3.Content.Equals("Comprar"))
+            {
+                Store.BuyProjectile(p3.ItemID);
+                btnProjectile3.IsEnabled = false;
+                SetSellingProjectiles();
+            }
+            else if (btnProjectile3.Content.Equals("Equipar"))
+            {
+                if (GameMaster.Players[1].IsPlaying)
+                {
+                    //Abrir outra janela perguntando para qual dos players
+                }
+                else
+                {
+                    GameMaster.Players[0].Character.Weapon.SetProjectile(p3.Mount());
+                }
+            }
+            else
+            {
+                btnProjectile3.IsEnabled = false;
+                Console.WriteLine("O botão Projectile3 não deveria ser clicável!");
+            }
+        }
+        private void btnProjectile4_Click(object sender, RoutedEventArgs e)
+        {
+            if (btnProjectile4.Content.Equals("Comprar"))
+            {
+                Store.BuyProjectile(p4.ItemID);
+                btnProjectile4.IsEnabled = false;
+                SetSellingProjectiles();
+            }
+            else if (btnProjectile4.Content.Equals("Equipar"))
+            {
+                if (GameMaster.Players[1].IsPlaying)
+                {
+                    //Abrir outra janela perguntando para qual dos players
+                }
+                else
+                {
+                    GameMaster.Players[0].Character.Weapon.SetProjectile(p4.Mount());
+                }
+            }
+            else
+            {
+                btnProjectile4.IsEnabled = false;
+                Console.WriteLine("O botão Projectile4 não deveria ser clicável!");
+            }
+        }
 
         public StoreUC()
         {
             InitializeComponent();
             Canvas.SetZIndex(this, Convert.ToInt32(ZIndexes.UserInterface));
         }
-
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             CurWIndex = 0;
@@ -94,15 +295,13 @@ namespace ZombieGame.UI
             Width = Physics.Vector.WindowSize.X;
             Height = Physics.Vector.WindowSize.Y;
             Refresh();
+            lblDinheiro.Content = "Dinheiro: " + GameMaster.Money;
         }
-
         public void Refresh()
         {
-            TranslateTransform tt = new TranslateTransform
-            {
-                X = GameMaster.Camera.RigidBody.Position.X,
-                Y = -GameMaster.Camera.RigidBody.Position.Y
-            };
+            TranslateTransform tt = new TranslateTransform();
+            tt.X = GameMaster.Camera.RigidBody.Position.X;
+            tt.Y = -GameMaster.Camera.RigidBody.Position.Y;
             RenderTransform = tt;
         }
 
@@ -115,13 +314,11 @@ namespace ZombieGame.UI
             if (MaxPIndex < 0)
                 MaxPIndex = 0;
         }
-
         public void SetSellingItens()
         {
             SetSellingWeapons();
             SetSellingProjectiles();
         }
-
         public void SetSellingWeapons()
         {
             //Weapon1
@@ -131,6 +328,7 @@ namespace ZombieGame.UI
                 imgWeapon1.Source =
                     new BitmapImage(
                         new Uri(IO.GlobalPaths.WeaponSprites + w1.SpriteFileName));
+                lblWeapon1.Content = w1.Name;
                 if (!w1.Sold)
                 {
                     if (GameMaster.Money >= w1.Price)
@@ -167,6 +365,7 @@ namespace ZombieGame.UI
                 imgWeapon2.Source =
                     new BitmapImage(
                         new Uri(IO.GlobalPaths.WeaponSprites + w2.SpriteFileName));
+                lblWeapon2.Content = w2.Name;
                 if (!w2.Sold)
                 {
                     if (GameMaster.Money >= w2.Price)
@@ -203,6 +402,7 @@ namespace ZombieGame.UI
                 imgWeapon3.Source =
                     new BitmapImage(
                         new Uri(IO.GlobalPaths.WeaponSprites + w3.SpriteFileName));
+                lblWeapon3.Content = w3.Name;
                 if (!w3.Sold)
                 {
                     if (GameMaster.Money >= w3.Price)
@@ -239,6 +439,7 @@ namespace ZombieGame.UI
                 imgWeapon4.Source =
                     new BitmapImage(
                         new Uri(IO.GlobalPaths.WeaponSprites + w4.SpriteFileName));
+                lblWeapon4.Content = w4.Name;
                 if (!w4.Sold)
                 {
                     if (GameMaster.Money >= w4.Price)
@@ -269,7 +470,6 @@ namespace ZombieGame.UI
                 btnWeapon4.IsEnabled = false;
             }
         }
-
         public void SetSellingProjectiles()
         {
             //Projectile1
@@ -279,6 +479,7 @@ namespace ZombieGame.UI
                 imgProjectile1.Source =
                     new BitmapImage(
                         new Uri(IO.GlobalPaths.ProjectileSprites + p1.SpriteFileName));
+                lblProjectile1.Content = p1.Name;
                 if (!p1.Sold)
                 {
                     if (GameMaster.Money >= p1.Price)
@@ -294,11 +495,18 @@ namespace ZombieGame.UI
                         btnProjectile1.IsEnabled = false;
                     }
                 }
-                else
+                else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p1.Type) ||
+                    GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p1.Type))
                 {
                     btnProjectile1.Background = new SolidColorBrush(Color.FromRgb(200, 215, 70));
                     btnProjectile1.Content = "Equipar";
                     btnProjectile1.IsEnabled = true;
+                }
+                else
+                {
+                    btnProjectile1.Background = new SolidColorBrush(Color.FromRgb(110, 110, 110));
+                    btnProjectile1.Content = "Não compatível";
+                    btnProjectile1.IsEnabled = false;
                 }
             }
             else
@@ -315,6 +523,7 @@ namespace ZombieGame.UI
                 imgProjectile2.Source =
                     new BitmapImage(
                         new Uri(IO.GlobalPaths.ProjectileSprites + p2.SpriteFileName));
+                lblProjectile2.Content = p2.Name;
                 if (!p2.Sold)
                 {
                     if (GameMaster.Money >= p2.Price)
@@ -351,6 +560,7 @@ namespace ZombieGame.UI
                 imgProjectile3.Source =
                     new BitmapImage(
                         new Uri(IO.GlobalPaths.ProjectileSprites + p3.SpriteFileName));
+                lblProjectile3.Content = p3.Name;
                 if (!p3.Sold)
                 {
                     if (GameMaster.Money >= p3.Price)
@@ -384,6 +594,7 @@ namespace ZombieGame.UI
             if (Store.SellingProjectiles.Count > CurPIndex + 3)
             {
                 p4 = Store.SellingProjectiles[CurPIndex + 3];
+                lblProjectile4.Content = p4.Name;
                 imgProjectile4.Source =
                     new BitmapImage(
                         new Uri(IO.GlobalPaths.ProjectileSprites + p4.SpriteFileName));
@@ -417,5 +628,6 @@ namespace ZombieGame.UI
                 btnProjectile4.IsEnabled = false;
             }
         }
+        #endregion
     }
 }

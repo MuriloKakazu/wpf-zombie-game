@@ -256,9 +256,12 @@ namespace ZombieGame.Game.Entities
 
                 foreach (var player in GameMaster.Players)
                 {
-                    var distance = player.Character.RigidBody.CenterPoint.DistanceBetween(RigidBody.CenterPoint);
-                    if (!candidates.TryGetValue(distance, out Entity e))
-                        candidates.Add(distance, player.Character);
+                    if (player.IsPlaying && player.Character.IsActive)
+                    {
+                        var distance = player.Character.RigidBody.CenterPoint.DistanceBetween(RigidBody.CenterPoint);
+                        if (!candidates.TryGetValue(distance, out Entity e))
+                            candidates.Add(distance, player.Character);
+                    }
                 }
 
                 Entity returnValue;

@@ -9,6 +9,7 @@ using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Game.Serializable;
+using ZombieGame.IO;
 using ZombieGame.IO.Serialization;
 using ZombieGame.Physics;
 using ZombieGame.UI;
@@ -64,7 +65,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Estado do jogo
         /// </summary>
-        public static GameplayStates GameplayState { get; private set; }
+        public static ExecutionStates GameplayState { get; private set; }
         public static Wall BottomWall { get; set; }
         public static Wall TopWall { get; set; }
         public static Wall LeftWall { get; set; }
@@ -79,7 +80,7 @@ namespace ZombieGame.Game
         {
             Time.Setup();
             GarbageCollector.Setup();
-            SetupDatabase();
+            Database.Setup();
             SetupGameEntities();
             SetupInternalTimer();
             Resume();
@@ -87,6 +88,7 @@ namespace ZombieGame.Game
             EnemySpawner.Setup();
             Store.SetSellingItems();
             SetupScene(Database.Scenes[0]);
+            Money = 99999;
             UserControls.Setup();
             Pause();
         }
@@ -104,18 +106,10 @@ namespace ZombieGame.Game
             CurrentScene = s;
             CurrentScene.Show();
 
-            if (GameMaster.Players.Length > 0)
+            if (GameMaster.GetPlayer(0).IsPlaying)
                 GetPlayer(0).Character.RigidBody.SetPosition(s.Player1Spawn);
-            if (GameMaster.Players.Length > 1)
+            if (GameMaster.GetPlayer(1).IsPlaying)
                 GetPlayer(1).Character.RigidBody.SetPosition(s.Player2Spawn);
-        }
-
-        /// <summary>
-        /// Define as configurações do banco de dados
-        /// </summary>
-        private static void SetupDatabase()
-        {
-            Database.Setup();
         }
 
         /// <summary>
@@ -125,16 +119,19 @@ namespace ZombieGame.Game
         {
             Camera = new Camera();
             var Player1 = new Player(1, "Player1");
-            //var Player2 = new Player(2, "Player2");
+            var Player2 = new Player(2, "Player2");
             Player1.Character.RigidBody.UseRotation = true;
-            //Player2.Character.RigidBody.UseRotation = true;
+            Player2.Character.RigidBody.UseRotation = true;
             Player1.Character.RigidBody.SetPosition(new Physics.Vector(100, 0));
-            //Player2.Character.RigidBody.SetPosition(new Physics.Vector(500, 0));
+            Player2.Character.RigidBody.SetPosition(new Physics.Vector(500, 0));
             Player1.Character.RigidBody.Resize(new Physics.Vector(50, 50));
-            //Player2.Character.RigidBody.Resize(new Physics.Vector(50, 50));
-            Players = new Player[1];
+            Player2.Character.RigidBody.Resize(new Physics.Vector(50, 50));
+            Players = new Player[2];
             Players[0] = Player1;
-            //Players[1] = Player2;
+            Players[1] = Player2;
+            Players[0].IsPlaying = true;
+            Players[1].IsPlaying = false;
+            Players[1].Character.MarkAsNoLongerNeeded();
 
             BottomWall = new Wall(WallTypes.BottomWall);
             BottomWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y - Camera.RigidBody.Size.Y));
@@ -196,12 +193,12 @@ namespace ZombieGame.Game
                 {
                     if (Keyboard.IsKeyDown(Key.Escape))
                     {
-                        if (GameplayState == GameplayStates.Paused)
+                        if (GameplayState == ExecutionStates.Paused)
                         {
                             Resume();
                             HideCursor();
                         }
-                        else if (GameplayState == GameplayStates.Running)
+                        else if (GameplayState == ExecutionStates.Running)
                         {
                             Pause();
                             ShowCursor();
@@ -217,10 +214,22 @@ namespace ZombieGame.Game
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
                     }
+                    else if (Keyboard.IsKeyDown(Key.Enter))
+                    {
+                        if (GameplayState == ExecutionStates.Running && !GetPlayer(1).IsPlaying)
+                        {
+                            GetPlayer(1).IsPlaying = true;
+                            GetPlayer(1).Character = new Character("Player2", Tags.Player);
+                            GetPlayer(1).Character.MaxHealth = 100;
+                            GetPlayer(1).Character.SetHealth(100);
+                            GetPlayer(1).Character.LoadSprite(GlobalPaths.CharacterSprites + "player2.png");
+                            GetPlayer(1).Character.RigidBody.SetPosition(GetPlayer(0).Character.RigidBody.Position);
+                            GetPlayer(1).Character.RigidBody.Resize(new Physics.Vector(50, 50));
+                            GetPlayer(1).Character.RigidBody.UseRotation = true;
+                        }
+                    }
                     else if (Keyboard.IsKeyDown(Key.F1))
                     {
-
-
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
                     }
@@ -270,7 +279,7 @@ namespace ZombieGame.Game
             Time.Pause();
             foreach (var e in AnimatedEntity.Instances)
                 e.PauseAnimation();
-            GameplayState = GameplayStates.Paused;
+            GameplayState = ExecutionStates.Paused;
             App.Current.Windows.OfType<MainWindow>().FirstOrDefault().SetCameraOpacity(0.5f);
             Console.WriteLine("Game paused");
         }
@@ -283,7 +292,7 @@ namespace ZombieGame.Game
             Time.Resume();
             foreach (var e in AnimatedEntity.Instances)
                 e.ResumeAnimation();
-            GameplayState = GameplayStates.Running;
+            GameplayState = ExecutionStates.Running;
             App.Current.Windows.OfType<MainWindow>().FirstOrDefault().SetCameraOpacity(1f);
 
             Console.WriteLine("Game resumed");

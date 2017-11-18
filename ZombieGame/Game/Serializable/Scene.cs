@@ -47,25 +47,6 @@ namespace ZombieGame.Game.Serializable
             foreach (var e in Tiles)
                 e.Mount().Show();
         }
-
-        /// <summary>
-        /// Cria uma explosão no cenário
-        /// </summary>
-        /// <param name="pos">Posição da explosão</param>
-        /// <param name="radius">Raio da explosão</param>
-        /// <param name="applyPhysics">Retorna se será necessário aplicar Física à explosão</param>
-        public void SpawnExplosionAt(Vector pos, float radius, bool applyPhysics)
-        {
-            var explosion = new Explosion(new Vector(pos.X - radius / 2, pos.Y + radius / 2), new Vector(radius, radius), 750);
-            if (applyPhysics)
-            {
-                var targets = Character.GetNearbyCharacters(pos, radius, 4);
-                if (targets != null)
-                    foreach (var t in targets)
-                        t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(pos).Normalized * (radius * 5));
-            }
-            explosion.Show();
-        }
         #endregion
     }
 }

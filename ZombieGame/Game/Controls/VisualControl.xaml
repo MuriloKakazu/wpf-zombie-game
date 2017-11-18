@@ -8,6 +8,9 @@
              d:DesignHeight="500" d:DesignWidth="500" HorizontalAlignment="Center" VerticalAlignment="Center">
     <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
         <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+            <DockPanel.Effect>
+                <DropShadowEffect Opacity="0.25" ShadowDepth="6"/>
+            </DockPanel.Effect>
             <Image x:Name="Image" RenderTransformOrigin="0.5,0.5" RenderOptions.BitmapScalingMode="HighQuality" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Image.RenderTransform>
                     <TransformGroup>

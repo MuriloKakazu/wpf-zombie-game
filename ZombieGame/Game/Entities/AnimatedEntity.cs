@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Timers;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Prefabs.Sprites;
+using ZombieGame.Physics;
 
 namespace ZombieGame.Game.Entities
 {
@@ -12,9 +13,11 @@ namespace ZombieGame.Game.Entities
     {
         private static List<AnimatedEntity> AnimatedEntities = new List<AnimatedEntity>();
 
-        protected Timer AnimationTimer { get; set; }
         public Spritesheet Spritesheet { get; protected set; }
         public float AnimationDuration { get; protected set; }
+        protected float DeltaT { get; set; }
+        protected float TargetInterval { get; set; }
+        protected ExecutionStates ExecutionState { get; set; }
         public bool DestroyOnAnimationEnd { get; set; }
         public bool LoopAnimation { get; set; }
         protected int SpriteIndex { get; set; }
@@ -28,14 +31,12 @@ namespace ZombieGame.Game.Entities
         {
             Sprite = new TransparentSprite();
             Spritesheet = new Spritesheet();
-            AnimationTimer = new Timer();
             AnimatedEntities.Add(this);
         }
 
         public void SetTimer()
         {
-            AnimationTimer.Interval = AnimationDuration / Spritesheet.Sprites.Length;
-            AnimationTimer.Elapsed += AnimationTimer_Elapsed;
+            TargetInterval = AnimationDuration / Spritesheet.Sprites.Length;
         }
 
         public override void Show()
@@ -44,7 +45,7 @@ namespace ZombieGame.Game.Entities
             {
                 Visible = true;
                 App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualControl);
-                AnimationTimer.Start();
+                ExecutionState = ExecutionStates.Running;
             }
         }
 
@@ -59,58 +60,52 @@ namespace ZombieGame.Game.Entities
 
         public void PauseAnimation()
         {
-            AnimationTimer.Stop();
+            ExecutionState = ExecutionStates.Paused;
         }
 
         public void ResumeAnimation()
         {
-            AnimationTimer.Start();
+            ExecutionState = ExecutionStates.Running;
         }
 
-        private void AnimationTimer_Elapsed(object sender, ElapsedEventArgs e)
+        protected override void FixedUpdate()
         {
-            App.Current.Dispatcher.Invoke(delegate
-            {
-                Animate();
-            });
+            Animate();
+            base.FixedUpdate();
         }
 
         public void Animate()
         {
-            if (!IsActive)
-                return;
-
-            if (SpriteIndex < Spritesheet.Sprites.Length)
+            if (ExecutionState == ExecutionStates.Running)
             {
-                Sprite = Spritesheet.Sprites[SpriteIndex];
-                SpriteIndex++;
-                UpdateVisualControl();
-            }
-            else if (DestroyOnAnimationEnd)
-                MarkAsNoLongerNeeded();
-            else if (LoopAnimation)
-            {
-                SpriteIndex = 0;
-                Sprite = Spritesheet.Sprites[SpriteIndex];
-                UpdateVisualControl();
-            }
-        }
+                DeltaT += Time.Delta * 1000;
 
-        public override void MarkAsNoLongerNeeded()
-        {
-            UnsubscribeFromEvents();
-            base.MarkAsNoLongerNeeded();
-        }
+                if (DeltaT >= TargetInterval)
+                {
+                    DeltaT = 0;
+                    if (!IsActive)
+                        return;
 
-        protected override void UnsubscribeFromEvents()
-        {
-            AnimationTimer.Elapsed -= AnimationTimer_Elapsed;
-            base.UnsubscribeFromEvents();
+                    if (SpriteIndex < Spritesheet.Sprites.Length)
+                    {
+                        Sprite = Spritesheet.Sprites[SpriteIndex];
+                        SpriteIndex++;
+                        UpdateVisualControl();
+                    }
+                    else if (DestroyOnAnimationEnd)
+                        MarkAsNoLongerNeeded();
+                    else if (LoopAnimation)
+                    {
+                        SpriteIndex = 0;
+                        Sprite = Spritesheet.Sprites[SpriteIndex];
+                        UpdateVisualControl();
+                    }
+                }
+            }
         }
 
         public override void Destroy()
         {
-            AnimationTimer.Dispose();
             AnimatedEntities.Remove(this);
             base.Destroy();
         }

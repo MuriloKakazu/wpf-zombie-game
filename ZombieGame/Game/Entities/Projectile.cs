@@ -4,6 +4,7 @@ using System.Linq;
 using ZombieGame.Audio;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Interfaces;
+using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 
@@ -28,6 +29,8 @@ namespace ZombieGame.Game.Entities
         protected virtual bool IsExploding { get; set; }
         protected virtual float TravelDistance { get; set; }
         public virtual float ExplosionRadius { get; protected set; }
+        protected virtual float TimeAlive { get; set; }
+        protected const float MaxTimeAlive = 5000;
         /// <summary>
         /// Dano de impacto do projétil
         /// </summary>
@@ -164,45 +167,49 @@ namespace ZombieGame.Game.Entities
         /// Explode o projétil
         /// </summary>
         /// <param name="pos">Posição da explosão</param>
-        protected virtual void Explode()
+        protected virtual void Explode(bool preventCascadeEffect = false)
         {
-            SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(ExplosionSFXKey));
+            if (!preventCascadeEffect)
+                SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(ExplosionSFXKey));
 
             var pos = RigidBody.CenterPoint;
             IsExploding = true;
 
-            var targets = Character.GetNearbyCharacters(pos, ExplosionRadius, 4);
-            var nearbyProjectiles = GetNearbyProjectiles(ExplosionRadius / 2);
-            GameMaster.CurrentScene.SpawnExplosionAt(pos, ExplosionRadius * 2, applyPhysics: false); // We will override the physics
+            Explosion.Create(pos, ExplosionRadius * 2);
 
-            if (targets != null)
+            if (!preventCascadeEffect)
             {
-                foreach (var t in targets)
+                var targets = Character.GetNearbyCharacters(pos, ExplosionRadius, 5);
+                if (targets != null)
                 {
-                    if (!t.IsPlayer)
+                    foreach (var t in targets)
                     {
-                        t.Stun(StunTimeMs);
-                        t.Damage(damager: this.Owner, quantity: HitDamage);
-                    }
-                    else
-                    {
-                        t.Stun(StunTimeMs / 3);
-                        t.Damage(damager: this.Owner, quantity: HitDamage / 10);
-                    }
+                        if (!t.IsPlayer)
+                        {
+                            t.Stun(StunTimeMs);
+                            t.Damage(damager: this.Owner, quantity: HitDamage);
+                        }
+                        else
+                        {
+                            t.Stun(StunTimeMs / 3);
+                            t.Damage(damager: this.Owner, quantity: HitDamage / 10);
+                        }
 
-                    t.RigidBody.PointAt(pos - t.RigidBody.CenterPoint);
-                    t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * (ExplosionRadius * 5));
+                        t.RigidBody.PointAt(pos - t.RigidBody.CenterPoint);
+                        t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * (ExplosionRadius * 5));
 
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("{0} exploded on {1}", Name, t.Name);
-                    Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("{0} exploded on {1}", Name, t.Name);
+                        Console.ResetColor();
+                    }
                 }
-            }
-            if (nearbyProjectiles != null)
-            {
-                foreach (var p in nearbyProjectiles)
-                    if (p.IsExplosive && !p.IsExploding)
-                        p.Explode();
+                var nearbyProjectiles = GetNearbyProjectiles(ExplosionRadius / 2, 3);
+                if (nearbyProjectiles != null)
+                {
+                    foreach (var p in nearbyProjectiles)
+                        if (p.IsExplosive && !p.IsExploding)
+                            p.Explode(preventCascadeEffect: true);
+                }
             }
 
             MarkAsNoLongerNeeded();
@@ -256,9 +263,23 @@ namespace ZombieGame.Game.Entities
 
         protected override void Update()
         {
+            CheckTimeAlive();
             CheckTravelDistance();
             base.Update();
         }
+
+        protected override void FixedUpdate()
+        {
+            this.TimeAlive += Time.Delta * 100;
+            base.FixedUpdate();
+        }
+
+        private void CheckTimeAlive()
+        {
+            if (TimeAlive >= MaxTimeAlive)
+                MarkAsNoLongerNeeded();
+        }
+
 
         protected virtual void CheckTravelDistance()
         {
@@ -284,14 +305,18 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         /// <param name="radius">Raio de procura</param>
         /// <returns>Entity(Array)</returns>
-        public virtual Projectile[] GetNearbyProjectiles(float radius)
+        public virtual Projectile[] GetNearbyProjectiles(float radius, float threshold)
         {
             try
             {
                 List<Projectile> projectiles = new List<Projectile>();
                 foreach (var e in Projectiles.ToArray())
-                    if ((e.RigidBody.CenterPoint - RigidBody.CenterPoint).Magnitude <= radius && e.Hash != Hash)
+                    if ((e.RigidBody.CenterPoint - RigidBody.CenterPoint).Magnitude <= radius && e.Hash != Hash && projectiles.Count < threshold)
+                    {
                         projectiles.Add(e);
+                        if (projectiles.Count >= threshold)
+                            return projectiles.ToArray();
+                    }
                 return projectiles.ToArray();
             }
             catch { }

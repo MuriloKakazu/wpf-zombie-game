@@ -56,7 +56,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Diferença de tempo desde o último disparo, em segundos
         /// </summary>
-        public float DeltaT { get; protected set; }
+        protected float DeltaT { get; set; }
         /// <summary>
         /// Tipo da arma
         /// </summary>
@@ -127,17 +127,12 @@ namespace ZombieGame.Game
                         p.Launch(new Vector(direction.X - r.NextDouble() * 0.5, direction.Y - r.NextDouble() * 0.5));
                     else
                         p.Launch(new Vector(direction.X + r.NextDouble() * 0.5, direction.Y + r.NextDouble() * 0.5));
-                    Ammo--;
-
-                    if (Ammo <= 0)
-                        break;
                 }
             }
             else
-            {
-                Ammo--;
                 p.Launch(direction);
-            }
+
+            Ammo--;
         }
 
         public void Reload()
@@ -151,6 +146,7 @@ namespace ZombieGame.Game
         /// <param name="p">Novo projétil</param>
         public void SetProjectile(Projectile p)
         {
+            Projectile.MarkAsNoLongerNeeded();
             Projectile = p;
         }
 

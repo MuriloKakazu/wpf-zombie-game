@@ -81,7 +81,7 @@
     <Compile Include="Game\EnemySpawner.cs" />
     <Compile Include="Game\Enums\Difficulties.cs" />
     <Compile Include="Game\Enums\ItemType.cs" />
-    <Compile Include="Game\Enums\GameplayStates.cs" />
+    <Compile Include="Game\Enums\ExecutionStates.cs" />
     <Compile Include="Game\Enums\ProjectileTypes.cs" />
     <Compile Include="Game\Enums\TileTypes.cs" />
     <Compile Include="Game\Enums\WallTypes.cs" />
@@ -108,6 +108,12 @@
     <Compile Include="Game\Entities\Tile.cs" />
     <Compile Include="IO\GlobalPaths.cs" />
     <Compile Include="IO\Serialization\Xml.cs" />
+    <Compile Include="UI\ProgressBar.xaml.cs">
+      <DependentUpon>ProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\PlayerStats.xaml.cs">
+      <DependentUpon>PlayerStats.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\StoreUC.xaml.cs">
       <DependentUpon>StoreUC.xaml</DependentUpon>
     </Compile>
@@ -146,6 +152,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\ProgressBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PlayerStats.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\StoreUC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

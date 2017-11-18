@@ -33,6 +33,10 @@ namespace ZombieGame
         {
             InitializeComponent();
             GameMaster.Setup();
+            P1Stats.AssociatedPlayer = GameMaster.GetPlayer(0);
+            P2Stats.AssociatedPlayer = GameMaster.GetPlayer(1);
+            P1Stats.Name.Content = "Player 1";
+            P2Stats.Name.Content = "Player 2";
             Time.HighFrequencyTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
@@ -70,12 +74,15 @@ namespace ZombieGame
         {
             App.Current.Dispatcher.Invoke(delegate
             {
-                if (GameMaster.Players.Length == 2)
+                var player1 = GameMaster.GetPlayer(0);
+                var player2 = GameMaster.GetPlayer(1);
+                var scene = GameMaster.CurrentScene;
+                TranslateTransform tt = new TranslateTransform();
+                var p1Pos = player1.Character.RigidBody.CenterPoint;
+
+                if (player2.IsPlaying && player2.Character != null && player2.Character.IsActive)
                 {
-                    var scene = GameMaster.CurrentScene;
-                    TranslateTransform tt = new TranslateTransform();
-                    var p1Pos = GameMaster.GetPlayer(0).Character.RigidBody.CenterPoint;
-                    var p2Pos = GameMaster.GetPlayer(1).Character.RigidBody.CenterPoint;
+                    var p2Pos = player2.Character.RigidBody.CenterPoint;
                     var newX = -(p1Pos.X + p2Pos.X) / 2 + Width / 2;
                     var newY = (p1Pos.Y + p2Pos.Y) / 2 + Height / 2;
 
@@ -88,15 +95,9 @@ namespace ZombieGame
                         tt.Y = newY;
                     else
                         tt.Y = CameraLocation.Y;
-                    CameraLocation = new Physics.Vector(tt.X, tt.Y);
-                    Camera.RenderTransform = tt;
-                    UI.RenderTransform = tt;
                 }
-                else if (GameMaster.Players.Length == 1)
+                else
                 {
-                    var scene = GameMaster.CurrentScene;
-                    TranslateTransform tt = new TranslateTransform();
-                    var p1Pos = GameMaster.GetPlayer(0).Character.RigidBody.CenterPoint;
                     var newX = -p1Pos.X + Width / 2;
                     var newY = p1Pos.Y + Height / 2;
 
@@ -109,11 +110,22 @@ namespace ZombieGame
                         tt.Y = newY;
                     else
                         tt.Y = CameraLocation.Y;
-                    CameraLocation = new Physics.Vector(tt.X, tt.Y);
-                    Camera.RenderTransform = tt;
-                    UI.RenderTransform = tt;
                 }
+
+                CameraLocation = new Physics.Vector(tt.X, tt.Y);
+                Camera.RenderTransform = tt;
+                UI.RenderTransform = tt;
+                P1Stats.RenderTransform = new TranslateTransform(-tt.X, -tt.Y);
+                P2Stats.RenderTransform = new TranslateTransform(-tt.X, -tt.Y);
+                UpdateUI();
             });
+        }
+
+        public void UpdateUI()
+        {
+            P1Stats.UpdateStats();
+            if (GameMaster.Players.Length > 1)
+                P2Stats.UpdateStats();
         }
 
         private void Camera_MouseMove(object sender, MouseEventArgs e)

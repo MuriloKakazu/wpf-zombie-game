@@ -23,14 +23,28 @@ namespace ZombieGame.Game
         /// <summary>
         /// Personagem do jogador
         /// </summary>
-        public Character Character { get; protected set; }
+        public Character Character { get; set; }
         /// <summary>
         /// Retorna se o jogador está ativo
         /// </summary>
-        public bool IsPlaying { get; protected set; }
+        public bool IsPlaying { get; set; }
         #endregion
 
         #region Methods
+
+        public static Player GetByCharacterHashcode(Guid hashcode)
+        {
+            foreach (var p in GameMaster.Players)
+                if (p.Character != null && p.Character.Hash == hashcode)
+                    return p;
+            return null;
+        }
+
+        public Player()
+        {
+            
+        }
+
         /// <summary>
         /// ctor
         /// </summary>
@@ -39,6 +53,7 @@ namespace ZombieGame.Game
         {
             PlayerNumber = playerNumber;
             Character = new Character(name, Tags.Player);
+            Character.MaxHealth = 100;
             Character.SetHealth(100);
             Character.LoadSprite(GlobalPaths.CharacterSprites + "player" + playerNumber + ".png");
             Time.HighFrequencyTimer.Elapsed += UpdateTimer_Elapsed;
@@ -59,7 +74,7 @@ namespace ZombieGame.Game
         /// </summary>
         public void Update()
         {
-            if (!Character.IsStunned)
+            if (!Character.IsStunned && IsPlaying)
             {
                 Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisTypes.Sprint, PlayerNumber));
                 Character.IsFiring = Convert.ToBoolean(Input.GetAxis(AxisTypes.Fire, PlayerNumber));

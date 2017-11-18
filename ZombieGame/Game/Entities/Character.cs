@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using ZombieGame.Audio;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game.Entities
@@ -38,6 +39,7 @@ namespace ZombieGame.Game.Entities
         /// Retorna a saúde do personagem
         /// </summary>
         public virtual float Health { get; protected set; }
+        public virtual float MaxHealth { get; set; }
         /// <summary>
         /// Retorna a experiência adquirida pelo personagem
         /// </summary>
@@ -72,14 +74,18 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         /// <param name="radius">Raio de procura</param>
         /// <returns>Character(Array)</returns>
-        public static Character[] GetNearbyCharacters(Vector pos, float radius, int maxValue)
+        public static Character[] GetNearbyCharacters(Vector pos, float radius, int threshold)
         {
             try
             {
                 List<Character> characters = new List<Character>();
                 foreach (var c in Characters.ToArray())
-                    if ((c.RigidBody.CenterPoint - pos).Magnitude <= radius && characters.Count < maxValue)
+                    if ((c.RigidBody.CenterPoint - pos).Magnitude <= radius && characters.Count < threshold)
+                    {
                         characters.Add(c);
+                        if (characters.Count >= threshold)
+                            return characters.ToArray();
+                    }
                 return characters.ToArray();
             }
             catch { return null; }
@@ -105,13 +111,11 @@ namespace ZombieGame.Game.Entities
         /// <param name="tag">Tag do personagem</param>
         public Character(string name, Tags tag) : base(name, tag)
         {
-            //Health = 50;
-            //Level = 1;
             if (tag == Tags.Player)
             {
-                Weapon = Database.Weapons[3].Mount();
+                Weapon = Database.Weapons[5].Mount();
                 Weapon.Owner = this;
-                Weapon.SetProjectile(Database.Projectiles[6].Mount());
+                Weapon.SetProjectile(Database.Projectiles[7].Mount());
                 SetZIndex(ZIndexes.Player);
             }
             else
@@ -132,6 +136,14 @@ namespace ZombieGame.Game.Entities
                 Kill(killer: damager);
         }
 
+        public virtual void SetWeapon(Weapon wep, Projectile proj = null)
+        {
+            Weapon.Destroy();
+            Weapon = wep;
+            if (proj != null)
+                Weapon.SetProjectile(proj);
+        }
+
         /// <summary>
         /// Define a vida do personagem
         /// </summary>
@@ -139,6 +151,8 @@ namespace ZombieGame.Game.Entities
         public virtual void SetHealth(float quantity)
         {
             Health = quantity;
+            if (Health > MaxHealth)
+                Health = MaxHealth;
             if (!IsAlive)
                 Kill();
         }
@@ -150,6 +164,8 @@ namespace ZombieGame.Game.Entities
         public virtual void AddHealth(float quantity)
         {
             Health += quantity;
+            if (Health > MaxHealth)
+                Health = MaxHealth;
             if (!IsAlive)
                 Kill();
         }
@@ -160,8 +176,7 @@ namespace ZombieGame.Game.Entities
         /// <param name="killer">Personagem que matou</param>
         public virtual void Kill(Entity killer)
         {
-            if (!this.IsPlayer)
-                Console.WriteLine("{0} was killed by {1}", this.Name, killer.Name);
+           Console.WriteLine("{0} was killed by {1}", this.Name, killer.Name);
 
             Kill();
         }
@@ -172,8 +187,7 @@ namespace ZombieGame.Game.Entities
         protected virtual void Kill()
         {
             Health = 0;
-            if (!IsPlayer)
-                MarkAsNoLongerNeeded();
+            MarkAsNoLongerNeeded();
         }
 
         /// <summary>
@@ -208,14 +222,18 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         /// <param name="radius">Raio de procura</param>
         /// <returns>Character(Array)</returns>
-        public virtual Character[] GetNearbyCharacters(float radius)
+        public virtual Character[] GetNearbyCharacters(float radius, int threshold)
         {
             try
             {
                 List<Character> characters = new List<Character>();
                 foreach (var c in Characters.ToArray())
-                    if ((c.RigidBody.CenterPoint + RigidBody.CenterPoint).Magnitude <= radius)
+                    if ((c.RigidBody.CenterPoint + RigidBody.CenterPoint).Magnitude <= radius && characters.Count < threshold)
+                    {
                         characters.Add(c);
+                        if (characters.Count >= threshold)
+                            return characters.ToArray();
+                    }
                 return characters.ToArray();
             }
             catch { }

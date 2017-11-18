@@ -1,4 +1,4 @@
-﻿<Window x:Class="ZombieGame.MainWindow"
+﻿<Window xmlns:UI="clr-namespace:ZombieGame.UI"  x:Class="ZombieGame.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -8,8 +8,13 @@
         mc:Ignorable="d"
         Title="ZombieGame Client" Height="720" Width="1280" MinWidth="1280" MinHeight="720" ResizeMode="CanMinimize">
     <Grid Background="#FF323232">
-        <Canvas x:Name="UI" Panel.ZIndex="2" />
+        <Canvas x:Name="UI" Panel.ZIndex="2">
+        </Canvas>
         <Canvas x:Name="Camera" x:FieldModifier="public" DockPanel.Dock="Top" Opacity="0.5" Background="#FFDADADA" MouseMove="Camera_MouseMove" SizeChanged="Camera_SizeChanged" Cursor="Arrow" Panel.ZIndex="1">
+            <DockPanel Width="1274" Height="691" Panel.ZIndex="10">
+                <UI:PlayerStats x:Name="P1Stats" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300" Margin="0,0,0,10"/>
+                <UI:PlayerStats x:Name="P2Stats" HorizontalAlignment="Right" Width="300" DockPanel.Dock="Right" Margin="0,0,10,10" VerticalAlignment="Bottom"/>
+            </DockPanel>
             <controls:VisualControl x:Name="Scene">
                 <controls:VisualControl.Background>
                     <ImageBrush Stretch="Fill"/>
