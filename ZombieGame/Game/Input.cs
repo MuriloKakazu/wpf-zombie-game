@@ -44,6 +44,11 @@ namespace ZombieGame.Game
                         if (Keyboard.IsKeyDown(Key.LeftShift))
                             output = 1;
                     }
+                    else if (type == AxisTypes.Reload)
+                    {
+                        if (Keyboard.IsKeyDown(Key.R))
+                            output = 1;
+                    }
                 }
                 else if (player == 2)
                 {
@@ -69,6 +74,11 @@ namespace ZombieGame.Game
                     else if (type == AxisTypes.Sprint)
                     {
                         if (Keyboard.IsKeyDown(Key.Enter))
+                            output = 1;
+                    }
+                    else if (type == AxisTypes.Reload)
+                    {
+                        if (Keyboard.IsKeyDown(Key.Back))
                             output = 1;
                     }
                 }
