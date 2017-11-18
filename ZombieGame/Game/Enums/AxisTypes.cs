@@ -5,6 +5,7 @@
         Horizontal,
         Vertical,
         Sprint,
-        Fire
+        Fire,
+        Reload,
     }
 }

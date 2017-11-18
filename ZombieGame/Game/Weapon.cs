@@ -1,8 +1,10 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Xml.Serialization;
 using ZombieGame.Audio;
 using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Interfaces;
+using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Game.Serializable;
 using ZombieGame.Physics;
 
@@ -26,6 +28,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>
+        public int MagSize { get; protected set; }
         public int Ammo { get; protected set; }
         /// <summary>
         /// O tempo para recarregar a arma em ms
@@ -49,6 +52,7 @@ namespace ZombieGame.Game
         /// Retorna se a arma está em tempo de espera entre os disparos
         /// </summary>
         public bool IsCoolingDown { get; protected set; }
+        public bool IsReloading { get; protected set; }
         /// <summary>
         /// Diferença de tempo desde o último disparo, em segundos
         /// </summary>
@@ -65,6 +69,7 @@ namespace ZombieGame.Game
         /// Projétil atual da arma
         /// </summary>
         public Projectile Projectile { get; protected set; }
+        public Character Owner { get; set; }
         public string SoundFXKey { get; protected set; }
         public bool HasProjectile { get { return Projectile != null; } }
         #endregion
@@ -79,7 +84,8 @@ namespace ZombieGame.Game
             Weapon w = new Weapon()
             {
                 AcceptedProjectileTypes = source.AcceptedProjectileTypes,
-                Ammo = source.Ammo,
+                MagSize = source.MagSize,
+                Ammo = source.MagSize,
                 Name = source.Name,
                 ReloadTime = source.ReloadTime,
                 FireRate = source.FireRate,
@@ -94,7 +100,49 @@ namespace ZombieGame.Game
         /// </summary>
         public Weapon()
         {
-            //Projectile = new SimpleProjectile();
+            Projectile = new NoProjectile();
+            Time.HighFrequencyTimer.Elapsed += HighFrequencyTimer_Elapsed;
+        }
+
+        /// <summary>
+        /// Atira em uma direção
+        /// </summary>
+        /// <param name="direction">Direção</param>
+        public virtual void ShootAt(Vector direction)
+        {
+            StartCoolDown();
+            SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(SoundFXKey));
+            var db = Database.Weapons;
+            Projectile p = Projectile.Clone();
+            p.Owner = Owner;
+
+            if (Type == WeaponTypes.Shotgun)
+            {
+                Random r = new Random();
+                for (int i = -5; i < 5; i++)
+                {
+                    p = Projectile.Clone();
+                    p.Owner = Owner;
+                    if (i <= 0)
+                        p.Launch(new Vector(direction.X - r.NextDouble() * 0.5, direction.Y - r.NextDouble() * 0.5));
+                    else
+                        p.Launch(new Vector(direction.X + r.NextDouble() * 0.5, direction.Y + r.NextDouble() * 0.5));
+                    Ammo--;
+
+                    if (Ammo <= 0)
+                        break;
+                }
+            }
+            else
+            {
+                Ammo--;
+                p.Launch(direction);
+            }
+        }
+
+        public void Reload()
+        {
+            IsReloading = true;
         }
 
         /// <summary>
@@ -111,7 +159,6 @@ namespace ZombieGame.Game
         /// </summary>
         public void StartCoolDown()
         {
-            Time.HighFrequencyTimer.Elapsed += UpdateTimer_Elapsed;
             IsCoolingDown = true;
         }
 
@@ -120,15 +167,28 @@ namespace ZombieGame.Game
         /// </summary>
         /// <param name="sender">Objeto que invocou o evento</param>
         /// <param name="e">Informações a respeito do evento</param>
-        protected virtual void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        protected virtual void HighFrequencyTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            DeltaT += Time.Delta;
-
-            if (DeltaT >= CoolDownTime)
+            if (IsCoolingDown)
             {
-                IsCoolingDown = false;
-                DeltaT = 0;
-                Time.HighFrequencyTimer.Elapsed -= UpdateTimer_Elapsed;
+                DeltaT += Time.Delta;
+
+                if (DeltaT >= CoolDownTime)
+                {
+                    IsCoolingDown = false;
+                    DeltaT = 0;
+                }
+            }
+            else if (IsReloading)
+            {
+                DeltaT += Time.Delta;
+
+                if (DeltaT >= ReloadTime / 1000)
+                {
+                    IsReloading = false;
+                    Ammo = MagSize;
+                    DeltaT = 0;
+                }
             }
         }
 
@@ -137,7 +197,7 @@ namespace ZombieGame.Game
         /// </summary>
         public void Destroy()
         {
-            Time.HighFrequencyTimer.Elapsed -= UpdateTimer_Elapsed;
+            Time.HighFrequencyTimer.Elapsed -= HighFrequencyTimer_Elapsed;
             if (HasProjectile)
                 Projectile.MarkAsNoLongerNeeded();
         }

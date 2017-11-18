@@ -109,45 +109,15 @@ namespace ZombieGame.Game.Entities
             //Level = 1;
             if (tag == Tags.Player)
             {
-                Weapon = Database.Weapons[0].Mount();
-                Weapon.SetProjectile(Database.Projectiles[7].Mount());
+                Weapon = Database.Weapons[3].Mount();
+                Weapon.Owner = this;
+                Weapon.SetProjectile(Database.Projectiles[6].Mount());
                 SetZIndex(ZIndexes.Player);
             }
             else
                 SetZIndex(ZIndexes.Enemy);
             Characters.Add(this);
             Show();
-        }
-
-        /// <summary>
-        /// Atira em uma direção
-        /// </summary>
-        /// <param name="direction">Direção</param>
-        public virtual void ShootAt(Vector direction)
-        {
-            Weapon.StartCoolDown();
-            SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(Weapon.SoundFXKey));
-            var db = Database.Weapons;
-
-            if (Weapon.Type == WeaponTypes.Shotgun)
-            {
-                Random r = new Random();
-                for (int i = -5; i < 5; i++)
-                {
-                    Projectile p = Weapon.Projectile.Clone();
-                    p.Owner = this;
-                    if (i <= 0)
-                        p.Launch(new Vector(direction.X - r.NextDouble() * 0.5, direction.Y - r.NextDouble() * 0.5));
-                    else
-                        p.Launch(new Vector(direction.X + r.NextDouble() * 0.5, direction.Y + r.NextDouble() * 0.5));
-                }
-            }
-            else
-            {
-                Projectile p = Weapon.Projectile.Clone();
-                p.Owner = this;
-                p.Launch(direction);
-            }
         }
 
         /// <summary>

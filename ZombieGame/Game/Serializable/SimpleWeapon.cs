@@ -19,7 +19,7 @@ namespace ZombieGame.Game.Serializable
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>
-        public int Ammo { get; set; }
+        public int MagSize { get; set; }
         /// <summary>
         /// O tempo para recarregar a arma
         /// </summary>

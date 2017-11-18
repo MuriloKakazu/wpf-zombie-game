@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Xml.Serialization;
+using ZombieGame.Audio;
 using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Prefabs.Audio;
 using ZombieGame.IO;
 using ZombieGame.Physics;
 
@@ -61,6 +63,7 @@ namespace ZombieGame.Game
             {
                 Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisTypes.Sprint, PlayerNumber));
                 Character.IsFiring = Convert.ToBoolean(Input.GetAxis(AxisTypes.Fire, PlayerNumber));
+                bool weaponReloadRequest = Convert.ToBoolean(Input.GetAxis(AxisTypes.Reload, PlayerNumber));
                 var x = Input.GetAxis(AxisTypes.Horizontal, PlayerNumber);
                 var y = Input.GetAxis(AxisTypes.Vertical, PlayerNumber);
                 var r = new Vector(x, y);
@@ -83,12 +86,23 @@ namespace ZombieGame.Game
                     Character.RigidBody.PointAt(r);
                 }
 
-                if (Character.IsFiring && !Character.Weapon.IsCoolingDown)
+                if (Character.IsFiring && !Character.Weapon.IsCoolingDown && !Character.Weapon.IsReloading)
                 {
-                    Character.ShootAt(Character.RigidBody.Front);
+                    if (Character.Weapon.Ammo > 0)
+                    {
+                        Character.Weapon.ShootAt(Character.RigidBody.Front);
 
-                    if (Character.Weapon.Type == WeaponTypes.Shotgun || Character.Weapon.Type == WeaponTypes.RocketLauncher)
-                        Character.Stun(250);
+                        if (Character.Weapon.Type == WeaponTypes.Shotgun || Character.Weapon.Type == WeaponTypes.RocketLauncher)
+                            Character.Stun(250);
+                    }
+                    else
+                        SoundPlayer.Instance.Play(new NoAmmo());
+                }
+
+                if (weaponReloadRequest && !Character.Weapon.IsReloading)
+                {
+                    Character.Weapon.Reload();
+                    SoundPlayer.Instance.Play(new WeaponReload());
                 }
             }
             else

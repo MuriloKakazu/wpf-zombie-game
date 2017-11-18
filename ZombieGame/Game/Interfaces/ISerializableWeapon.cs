@@ -11,7 +11,7 @@ namespace ZombieGame.Game.Interfaces
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>
-        int Ammo { get; set; }
+        int MagSize { get; set; }
         /// <summary>
         /// O tempo para recarregar a arma
         /// </summary>
