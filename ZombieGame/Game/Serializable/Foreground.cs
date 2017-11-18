@@ -21,7 +21,7 @@ namespace ZombieGame.Game.Serializable
                 Visible = true;
                 SetPosition(Position);
                 VisualComponent.Image.Source = new BitmapImage(new Uri(IO.GlobalPaths.ForegroundSprites + SpriteFileName));
-                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddVisualComponent(VisualComponent);
+                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualComponent);
             }
         }
     }

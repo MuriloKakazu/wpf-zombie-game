@@ -78,7 +78,7 @@ namespace ZombieGame.Game.Entities
         /// Retorna todos os projéteis ativos
         /// </summary>
         /// <returns></returns>
-        public new static Projectile[] AllInstances
+        public new static Projectile[] Instances
         {
             get { return Projectiles.ToArray(); }
         }
@@ -153,7 +153,7 @@ namespace ZombieGame.Game.Entities
         public virtual void Launch(Vector dir)
         {
             RigidBody.SetPosition(new Vector(Owner.RigidBody.CenterPoint.X - RigidBody.Size.X / 2, Owner.RigidBody.CenterPoint.Y + RigidBody.Size.Y / 2));
-            LaunchPosition = RigidBody.Position;
+             LaunchPosition = RigidBody.Position;
             RigidBody.UseRotation = true;
             RigidBody.PointAt(dir);
             RigidBody.SetVelocity(dir.Normalized * SpeedMagnitude);
@@ -248,7 +248,7 @@ namespace ZombieGame.Game.Entities
             copy.RigidBody.Resize(RigidBody.Size);
             if (copy.Visible)
             {
-                System.Windows.Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddVisualComponent(VisualControl);
+                System.Windows.Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(copy.VisualControl);
                 UpdateVisualControl();
             }
             return copy;

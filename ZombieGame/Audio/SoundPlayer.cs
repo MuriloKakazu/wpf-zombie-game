@@ -1,6 +1,7 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using System;
+using ZombieGame.Game;
 
 namespace ZombieGame.Audio
 {
@@ -20,6 +21,7 @@ namespace ZombieGame.Audio
             Device = new WaveOutEvent();
             Mixer = new MixingSampleProvider(WaveFormat.CreateIeeeFloatWaveFormat(sampleRate, channelCount));
             Mixer.ReadFully = true;
+            Volume = GameMaster.Settings.Volume;
             Device.Init(Mixer);
             Device.Play();
         }
@@ -48,6 +50,8 @@ namespace ZombieGame.Audio
                 return;
 
             var input = new AudioFileReader(fileName);
+            Volume = GameMaster.Settings.Volume;
+            input.Volume = Volume;
             AddMixerInput(new AutoDisposableStream(input));
         }
 
@@ -56,6 +60,7 @@ namespace ZombieGame.Audio
             if (track == null)
                 return;
 
+            Volume = GameMaster.Settings.Volume;
             AddMixerInput(new SoundTrackSampleProvider(track));
         }
 

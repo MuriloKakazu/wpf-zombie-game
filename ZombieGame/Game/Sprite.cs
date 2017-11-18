@@ -2,15 +2,12 @@
 using System.IO;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
+using ZombieGame.Game.Prefabs.Sprites;
 
 namespace ZombieGame.Game
 {
     public class Sprite
     {
-        public static string UnavailableSprite { get { return IO.GlobalPaths.Sprites + "unavailable.png"; } }
-        public static string TransparentSprite { get { return IO.GlobalPaths.Sprites + "transparent.png"; } }
-        public static string DebugSprite { get { return IO.GlobalPaths.Sprites + "debug.png"; } }
-
         /// <summary>
         /// Caminho do arquivo
         /// </summary>
@@ -19,14 +16,21 @@ namespace ZombieGame.Game
         /// <summary>
         /// Componente visual cuja imagem tem como fonte o caminho do arquivo
         /// </summary>
-        public BitmapSource Image
+        public virtual BitmapSource Image
         {
             get
             {
-                if (File.Exists(Uri))
-                    return new BitmapImage(new Uri(Uri));
-                else
-                    return new BitmapImage(new Uri(UnavailableSprite));
+                try
+                {
+                    if (File.Exists(Uri))
+                        return new BitmapImage(new Uri(Uri));
+                    else
+                        return new UnavailableSprite().Image;
+                }
+                catch // File is not an image?
+                {
+                    return new UnavailableSprite().Image;
+                }
             }
         }
 

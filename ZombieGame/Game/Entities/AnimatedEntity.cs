@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Timers;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Prefabs.Sprites;
 
 namespace ZombieGame.Game.Entities
 {
@@ -18,14 +19,14 @@ namespace ZombieGame.Game.Entities
         public bool LoopAnimation { get; set; }
         protected int SpriteIndex { get; set; }
 
-        public new static AnimatedEntity[] AllInstances
+        public new static AnimatedEntity[] Instances
         {
             get { return AnimatedEntities.ToArray(); }
         }
 
         public AnimatedEntity(string name, Tags tag) : base(name, tag)
         {
-            Sprite.Uri = IO.GlobalPaths.Sprites + "transparent.png";
+            Sprite = new TransparentSprite();
             Spritesheet = new Spritesheet();
             AnimationTimer = new Timer();
             AnimatedEntities.Add(this);
@@ -39,15 +40,12 @@ namespace ZombieGame.Game.Entities
 
         public override void Show()
         {
-            App.Current.Dispatcher.Invoke(delegate
+            if (!Visible)
             {
-                if (!Visible)
-                {
-                    Visible = true;
-                    App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddVisualComponent(VisualControl);
-                    AnimationTimer.Start();
-                }
-            });
+                Visible = true;
+                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualControl);
+                AnimationTimer.Start();
+            }
         }
 
         protected override void UpdateVisualControl()
@@ -55,11 +53,8 @@ namespace ZombieGame.Game.Entities
             if (!IsActive)
                 return;
 
-            App.Current.Dispatcher.Invoke(delegate
-            {
-                VisualControl.Image.Source = Sprite.Image;
-                base.UpdateVisualControl();
-            });
+            VisualControl.Image.Source = Sprite.Image;
+            base.UpdateVisualControl();
         }
 
         public void PauseAnimation()
@@ -73,6 +68,14 @@ namespace ZombieGame.Game.Entities
         }
 
         private void AnimationTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            App.Current.Dispatcher.Invoke(delegate
+            {
+                Animate();
+            });
+        }
+
+        public void Animate()
         {
             if (!IsActive)
                 return;

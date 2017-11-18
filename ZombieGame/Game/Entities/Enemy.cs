@@ -34,7 +34,7 @@ namespace ZombieGame.Game.Entities
         /// Retorna todos os inimigos ativos
         /// </summary>
         /// <returns></returns>
-        public new static Enemy[] AllInstances
+        public new static Enemy[] Instances
         {
             get { return Enemies.ToArray(); }
         }
@@ -53,7 +53,7 @@ namespace ZombieGame.Game.Entities
                 HitSFXKey = source.HitSFXKey
             };
             e.RigidBody.SetMass(source.Mass);
-            e.RigidBody.SpeedMultiplier = source.SpeedMultiplier + 0.15f * GameMaster.DifficultyBonus;
+            e.RigidBody.SpeedMultiplier = source.SpeedMultiplier + 0.25f * GameMaster.DifficultyBonus;
             e.RigidBody.Resize(source.Size);
             e.Sprite.Uri = IO.GlobalPaths.EnemySprites + source.SpriteFileName;
             e.LoadSprite(e.Sprite.Uri);
@@ -113,66 +113,6 @@ namespace ZombieGame.Game.Entities
             base.Kill();
         }
 
-        ///// <summary>
-        ///// Define quanto de dinheiro o inimigo dará ao morrer.
-        ///// <para>Se trata de um valor definido entre um range</para>
-        ///// </summary>
-        //protected virtual void SetMoney()
-        //{
-        //    int maxMoney = default(int), minMoney = default(int), avgLvls = 0;
-
-        //    foreach (var p in GameMaster.Players)
-        //        avgLvls += p.Character.Level;
-
-        //    avgLvls /= GameMaster.Players.Length;
-
-        //    switch (Type)
-        //    {
-        //        case EnemyTypes.Walker:
-        //            maxMoney = 20 * avgLvls + 10 * Level;
-        //            minMoney = 5 * avgLvls + 10 * Level;
-        //            break;
-        //        case EnemyTypes.Boss:
-        //            maxMoney = 1000 * avgLvls + 300 * Level;
-        //            minMoney = 400 * avgLvls + 200 * Level;
-        //            break;
-        //    }
-
-        //    Money = new Random().Next(minMoney, maxMoney);
-        //}
-
-        ///// <summary>
-        ///// Define a vida do inimigo.
-        ///// </summary>
-        //protected virtual void SetHealth()
-        //{
-        //    switch (Type)
-        //    {
-        //        case EnemyTypes.Walker:
-        //            Health = 50 * Level;
-        //            break;
-        //        case EnemyTypes.Boss:
-        //            Health = 400 * Level + 200;
-        //            break;
-        //    }
-        //}
-
-        ///// <summary>
-        ///// Define a experiência que o inimigo dará ao morrer.
-        ///// </summary>
-        //protected virtual void SetExperience()
-        //{
-        //    switch (Type)
-        //    {
-        //        case EnemyTypes.Walker:
-        //            Experience = 25 * Level;
-        //            break;
-        //        case EnemyTypes.Boss:
-        //            Experience = 20 * Level + 10 * Level * Level;
-        //            break;
-        //    }
-        //}
-
         /// <summary>
         /// Destrói o objeto, liberando memória
         /// </summary>
@@ -204,7 +144,6 @@ namespace ZombieGame.Game.Entities
         /// <param name="e">Informações a respeito da colisão</param>
         protected override void OnCollisionStay(object sender, CollisionEventArgs e)
         {
-            //base.OnCollisionStay(sender, e);
             if (e.Collider.IsCamera)
                 return;
 
@@ -213,9 +152,6 @@ namespace ZombieGame.Game.Entities
                 var colliderChar = Character.FromHashCode(e.Collider.Hash);
                 if (colliderChar != null && colliderChar.IsPlayer)
                     colliderChar.Damage(damager: this, quantity: 1);
-
-                //RigidBody.SetVelocity(e.CollisionDirection.Normalized * e.Collider.RigidBody.Velocity.Magnitude);
-                //RigidBody.AddForce(e.CollisionDirection.Normalized * 5);
             }
             if (e.Collider.IsEnemy)
             {
@@ -230,8 +166,7 @@ namespace ZombieGame.Game.Entities
         /// <param name="e">Informações a respeito da colisão</param>
         protected override void OnCollisionLeave(object sender, CollisionEventArgs e)
         {
-            //if (e.Collider.IsEnemy)
-            //    RigidBody.SetForce(Vector.Zero);
+
         }
         #endregion
     }

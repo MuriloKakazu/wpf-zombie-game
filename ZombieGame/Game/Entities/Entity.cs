@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Xml.Serialization;
+using System.Windows.Media.Animation;
 using ZombieGame.Game.Controls;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Interfaces;
@@ -51,6 +52,7 @@ namespace ZombieGame.Game.Entities
         /// <summary>
         /// Retorna o componente visual da entidade
         public virtual VisualControl VisualControl { get; protected set; }
+        private BitmapCache CachedBitmap { get; set; }
         /// <summary>
         /// Retorna a sprite da entidade
         /// </summary>
@@ -67,6 +69,7 @@ namespace ZombieGame.Game.Entities
         /// Retorna se a entidade é uma câmera
         /// </summary>
         public virtual bool IsCamera { get { return Tag == Tags.Camera; } }
+        public virtual bool IsVisualFX { get { return Tag == Tags.VisualFX; } }
         public virtual bool IsWall { get { return Tag == Tags.Wall; } }
         /// <summary>
         /// Retorna se a entidade é visível
@@ -85,7 +88,7 @@ namespace ZombieGame.Game.Entities
         /// Retorna todas as entidades ativas
         /// </summary>
         /// <returns></returns>
-        public static Entity[] AllInstances
+        public static Entity[] Instances
         {
             get { return Entities.ToArray(); }
         }
@@ -116,25 +119,27 @@ namespace ZombieGame.Game.Entities
             Entities.Add(this);
             CreateVisualControl();
             SetZIndex(ZIndexes.BackTile);
-            Time.HighFrequencyTimer.Elapsed += UpdateTimer_Elapsed;
+            Time.HighFrequencyTimer.Elapsed += HighFrequencyTimer_Elapsed;
+            Time.LowFrequencyTimer.Elapsed += LowFrequencyTimer_Elapsed;
             CollisionEnter += OnCollisionEnter;
             CollisionStay += OnCollisionStay;
             CollisionLeave += OnCollisionLeave;
+
+            CachedBitmap = new BitmapCache();
+            CachedBitmap.RenderAtScale = 2;
+            VisualControl.CacheMode = CachedBitmap;
         }
 
         public virtual void CreateVisualControl()
         {
-            App.Current.Dispatcher.Invoke(delegate
-            {
-                VisualControl = new VisualControl();
-            });
+            VisualControl = new VisualControl();
         }
 
-        protected virtual void SetZIndex(ZIndexes index) => App.Current.Dispatcher.Invoke(delegate
+        protected virtual void SetZIndex(ZIndexes index)
         {
             ZIndex = (int)index;
             Canvas.SetZIndex(VisualControl, (int)index);
-        });
+        }
 
         /// <summary>
         /// Carrega a sprite para a entidade atual
@@ -151,16 +156,13 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         public virtual void Show()
         {
-            App.Current.Dispatcher.Invoke(delegate
+            if (!Visible)
             {
-                if (!Visible)
-                {
-                    Visible = true;
-                    VisualControl.Image.Source = Sprite.Image;
-                    Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddVisualComponent(VisualControl);
-                    UpdateVisualControl();
-                }
-            });
+                Visible = true;
+                VisualControl.Image.Source = Sprite.Image;
+                Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualControl);
+                UpdateVisualControl();
+            }
         }
 
         /// <summary>
@@ -168,15 +170,12 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         public virtual void Hide()
         {
-            App.Current.Dispatcher.Invoke(delegate
+            if (Visible)
             {
-                if (Visible)
-                {
-                    Visible = false;
-                    Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().RemoveVisualComponent(VisualControl);
-                    UpdateVisualControl();
-                }
-            });
+                Visible = false;
+                Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().RemoveFromCamera(VisualControl);
+                UpdateVisualControl();
+            }
         }
 
         public virtual void MarkAsNoLongerNeeded()
@@ -187,33 +186,21 @@ namespace ZombieGame.Game.Entities
         }
 
         /// <summary>
-        /// Método que aciona funções que precisam ser disparadas constantemente
-        /// </summary>
-        protected virtual void Update()
-        {
-            UpdateVisualControl();
-            CheckCollision();
-        }
-
-        /// <summary>
         /// Atualiza o componente visual associado a essa entidade
         /// </summary>
+        protected virtual void FixedUpdateVisualControl()
+        {
+            if (IsActive)
+                VisualControl.RenderTransform = new TranslateTransform(RigidBody.Position.X, -RigidBody.Position.Y);
+        }
+
         protected virtual void UpdateVisualControl()
         {
             if (Visible)
             {
-                try
-                {
-                    VisualControl.Dispatcher.Invoke(new Action(() =>
-                    {
-                        Canvas.SetLeft(VisualControl, RigidBody.Position.X);
-                        Canvas.SetTop(VisualControl, -RigidBody.Position.Y);
-                        VisualControl.Width = RigidBody.Size.X;
-                        VisualControl.Height = RigidBody.Size.Y;
-                        VisualControl.Image.RenderTransform = new RotateTransform(RigidBody.Rotation + 45);
-                    }));
-                }
-                catch { }
+                VisualControl.Width = RigidBody.Size.X;
+                VisualControl.Height = RigidBody.Size.Y;
+                VisualControl.Image.RenderTransform = new RotateTransform(RigidBody.Rotation + 45);
             }
         }
 
@@ -227,7 +214,7 @@ namespace ZombieGame.Game.Entities
                 List<Entity> currentCollisions = new List<Entity>();
                 foreach (var e in Entities.ToArray())
                 {
-                    if (e != null && !RigidBody.IgnoreCollisions && !e.RigidBody.IgnoreCollisions && RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()) && e.Hash != Hash && e.Visible && this.Visible)
+                    if (e != null && e.Hash != Hash && e.IsActive && this.IsActive && !RigidBody.IgnoreCollisions && !e.RigidBody.IgnoreCollisions && RigidBody.Bounds.RelativeToWindow().IntersectsWith(e.RigidBody.Bounds.RelativeToWindow()))
                     {
                         currentCollisions.Add(e);
                         if (!Collisions.ToArray().Contains(e))
@@ -240,7 +227,7 @@ namespace ZombieGame.Game.Entities
 
                 foreach (var e in Collisions.ToArray())
                 {
-                    if (e != null && !RigidBody.IgnoreCollisions && !e.RigidBody.IgnoreCollisions && e.Visible && this.Visible)
+                    if (e != null && e.IsActive && this.IsActive && !RigidBody.IgnoreCollisions && !e.RigidBody.IgnoreCollisions)
                     {
                         if (!currentCollisions.Contains(e))
                             CollisionLeave?.Invoke(this, new CollisionEventArgs(e, RigidBody.CenterPoint.PointedAt(e.RigidBody.CenterPoint).Normalized));
@@ -310,7 +297,7 @@ namespace ZombieGame.Game.Entities
         public virtual void Destroy()
         {
             IsActive = false;
-            App.Current.Dispatcher.Invoke(delegate { Hide(); });
+            Hide();
             VisualControl = null;
             Entities.Remove(this);
             Collisions.Clear();
@@ -318,7 +305,8 @@ namespace ZombieGame.Game.Entities
 
         protected virtual void UnsubscribeFromEvents()
         {
-            Time.HighFrequencyTimer.Elapsed -= UpdateTimer_Elapsed;
+            Time.HighFrequencyTimer.Elapsed -= HighFrequencyTimer_Elapsed;
+            Time.LowFrequencyTimer.Elapsed -= LowFrequencyTimer_Elapsed;
             CollisionEnter -= OnCollisionEnter;
             CollisionStay -= OnCollisionStay;
             CollisionLeave -= OnCollisionLeave;
@@ -363,10 +351,40 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         /// <param name="sender">Objeto que invocou o evento</param>
         /// <param name="e">Informações a respeito do evento</param>
-        protected virtual void UpdateTimer_Elapsed(object sender, ElapsedEventArgs e)
+        protected virtual void HighFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            Update();
-            RigidBody.Update();
+            App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
+            //App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
+        }
+
+        protected virtual void LowFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            App.Current.Dispatcher.Invoke(delegate { Update(); });
+            //App.Current.Dispatcher.Invoke(delegate { Update(); });
+        }
+
+        /// <summary>
+        /// Método que aciona funções que precisam ser disparadas constantemente
+        /// </summary>
+        protected virtual void FixedUpdate()
+        {
+            RigidBody.FixedUpdate();
+            FixedUpdateVisualControl();
+            CheckCollision();
+        }
+
+        protected virtual void Update()
+        {
+            UpdateVisualControl();
+            Test();
+        }
+
+        private void Test()
+        {
+            if (!Collisions.Contains(GameMaster.Camera) && Visible && IsActive && !this.IsVisualFX)
+                Hide();
+            else if (Collisions.Contains(GameMaster.Camera) && !Visible && IsActive && !this.IsVisualFX)
+                Show();
         }
         #endregion
     }

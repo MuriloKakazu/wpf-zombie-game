@@ -1,6 +1,7 @@
 ﻿using System;
 using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Prefabs.Sprites;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 
@@ -16,7 +17,7 @@ namespace ZombieGame.Game.Prefabs.Entities
             RigidBody.UseRotation = true;
             RigidBody.SetRotation(45);
             RigidBody.IgnoreCollisions = false;
-            Sprite.Uri = Sprite.TransparentSprite;
+            Sprite = new TransparentSprite();
             Show();
             SetZIndex(ZIndexes.Camera);
         }
@@ -39,7 +40,7 @@ namespace ZombieGame.Game.Prefabs.Entities
             }
         }
 
-        protected override void Update()
+        protected override void FixedUpdate()
         {
             if (GameMaster.GetPlayer(0) != null)
             {
@@ -88,7 +89,7 @@ namespace ZombieGame.Game.Prefabs.Entities
                     RigidBody.SetPosition(newPos);
                 }
             }
-            base.Update();
+            base.FixedUpdate();
         }
 
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)

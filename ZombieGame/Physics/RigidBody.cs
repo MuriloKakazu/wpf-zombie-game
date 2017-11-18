@@ -44,7 +44,7 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Vetor aceleração aplicado ao corpo (pixels/s^2 * 10)
         /// </summary>
-        public Vector Acceleration { get; private set; }
+        public Vector Acceleration { get { return Force / Mass; } }
         /// <summary>
         /// Rotação do corpo (graus)
         /// </summary>
@@ -85,7 +85,6 @@ namespace ZombieGame.Physics
             Position = Vector.OffScreen;
             Front = Vector.Right;
             Size = Vector.Zero;
-            Acceleration = Vector.Zero;
             Velocity = Vector.Zero;
             Force = Vector.Zero;
             Rotation = 0;
@@ -225,14 +224,13 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Método que aciona funções que precisam ser disparadas constantemente
         /// </summary>
-        public void Update()
+        public void FixedUpdate()
         {
             if (Velocity.Magnitude > 0 && UseRotation)
                 RotateToFront();
 
             if (!Frozen)
             {
-                Acceleration = Force / Mass;
                 Velocity += Acceleration * Time.Delta * SpeedMultiplier;
                 Position += Velocity * Time.Delta * 10;
             }

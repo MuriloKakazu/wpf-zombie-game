@@ -71,6 +71,8 @@
     <Compile Include="Game\Enums\ZIndexes.cs" />
     <Compile Include="Game\GarbageCollector.cs" />
     <Compile Include="Game\Interfaces\IDestroyable.cs" />
+    <Compile Include="Game\Prefabs\Sprites\TransparentSprite.cs" />
+    <Compile Include="Game\Prefabs\Sprites\UnavailableSprite.cs" />
     <Compile Include="Game\Serializable\Background.cs" />
     <Compile Include="Game\Database.cs" />
     <Compile Include="Game\EnemySpawner.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Game\Serializable\SimpleProjectile.cs" />
     <Compile Include="Game\Serializable\SimpleTile.cs" />
     <Compile Include="Game\Serializable\SimpleWeapon.cs" />
+    <Compile Include="Game\Settings.cs" />
     <Compile Include="Game\Sprite.cs" />
     <Compile Include="Game\Spritesheet.cs" />
     <Compile Include="Game\Store.cs" />

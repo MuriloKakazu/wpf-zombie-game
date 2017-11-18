@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using ZombieGame.Game.Controls;
 using ZombieGame.Game.Enums;
@@ -21,6 +22,13 @@ namespace ZombieGame.Game.Serializable
         {
             VisualComponent = new VisualControl();
             Canvas.SetZIndex(VisualComponent, (int)ZIndexes.Background);
+
+            var CachedBitmap = new BitmapCache();
+            CachedBitmap.RenderAtScale = 0.65;
+            CachedBitmap.EnableClearType = false;
+            CachedBitmap.SnapsToDevicePixels = true;
+            VisualComponent.CacheMode = CachedBitmap;
+            RenderOptions.SetBitmapScalingMode(VisualComponent, BitmapScalingMode.LowQuality);
         }
 
         public void SetPosition(Vector v)
@@ -40,7 +48,7 @@ namespace ZombieGame.Game.Serializable
                 Visible = true;
                 SetPosition(Position);
                 VisualComponent.Image.Source = new BitmapImage(new Uri(IO.GlobalPaths.BackgroundSprites + SpriteFileName));
-                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddVisualComponent(VisualComponent);
+                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualComponent);
             }
         }
 
@@ -49,7 +57,7 @@ namespace ZombieGame.Game.Serializable
             if (Visible)
             {
                 Visible = false;
-                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().RemoveVisualComponent(VisualComponent);
+                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().RemoveFromCamera(VisualComponent);
             }
         }
 

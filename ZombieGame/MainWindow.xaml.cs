@@ -36,14 +36,24 @@ namespace ZombieGame
             Time.HighFrequencyTimer.Elapsed += UpdateTimer_Elapsed;
         }
 
-        public void AddVisualComponent(UIElement v)
+        public void AddToCamera(UIElement v)
         {
             Camera.Children.Add(v);
         }
 
-        public void RemoveVisualComponent(UIElement v)
+        public void RemoveFromCamera(UIElement v)
         {
             Camera.Children.Remove(v);
+        }
+
+        public void AddToUI(UIElement v)
+        {
+            UI.Children.Add(v);
+        }
+
+        public void RemoveFromUI(UIElement v)
+        {
+            UI.Children.Remove(v);
         }
 
         public void SetCameraOpacity(float value)
@@ -80,6 +90,7 @@ namespace ZombieGame
                         tt.Y = CameraLocation.Y;
                     CameraLocation = new Physics.Vector(tt.X, tt.Y);
                     Camera.RenderTransform = tt;
+                    UI.RenderTransform = tt;
                 }
                 else if (GameMaster.Players.Length == 1)
                 {
@@ -100,6 +111,7 @@ namespace ZombieGame
                         tt.Y = CameraLocation.Y;
                     CameraLocation = new Physics.Vector(tt.X, tt.Y);
                     Camera.RenderTransform = tt;
+                    UI.RenderTransform = tt;
                 }
             });
         }

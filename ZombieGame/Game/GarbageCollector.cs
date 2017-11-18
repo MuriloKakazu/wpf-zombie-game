@@ -5,43 +5,53 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using ZombieGame.Game.Entities;
+using ZombieGame.Physics;
 
 namespace ZombieGame.Game
 {
     public static class GarbageCollector
     {
-        public static Timer InternalTimer { get; private set; }
+        private static float DeltaT { get; set; }
+        private static float ThresholdTimeMs { get; set; }
 
         public static void Setup()
         {
-            InternalTimer = new Timer();
-            InternalTimer.Elapsed += InternalTimer_Elapsed;
-            InternalTimer.Interval = 1000;
-            InternalTimer.Start();
+            DeltaT = 0;
+            ThresholdTimeMs = 1000;
+            Time.HighFrequencyTimer.Elapsed += Timer_Elapsed;
         }
 
-        private static void InternalTimer_Elapsed(object sender, ElapsedEventArgs e)
+        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-           DestroyAllInactiveEntities();
+            App.Current.Dispatcher.Invoke(delegate
+            {
+                DeltaT += Time.Delta * 1000;
+
+                if (DeltaT >= ThresholdTimeMs)
+                {
+                    DeltaT = 0;
+                    DestroyAllInactiveEntities();
+                }
+            });
         }
 
         public static async void DestroyAllInactiveEntities()
         {
             await Task.Run(delegate
             {
-                foreach (var e in AnimatedEntity.AllInstances)
+                foreach (var e in AnimatedEntity.Instances)
                     if (!e.IsActive) e.Destroy();
 
-                foreach (var e in Enemy.AllInstances)
+                foreach (var e in Enemy.Instances)
                     if (!e.IsActive) e.Destroy();
 
-                foreach (var e in Character.AllInstances)
+                foreach (var e in Character.Instances)
                     if (!e.IsActive) e.Destroy();
 
-                foreach (var e in Projectile.AllInstances)
+                foreach (var e in Projectile.Instances)
                     if (!e.IsActive) e.Destroy();
 
-                foreach (var e in Entity.AllInstances)
+                foreach (var e in Entity.Instances)
                     if (!e.IsActive) e.Destroy();
             });
         }

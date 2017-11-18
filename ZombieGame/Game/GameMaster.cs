@@ -43,8 +43,8 @@ namespace ZombieGame.Game
         {
             get
             {
-                if (Difficulty == Difficulties.Easy) return 1;
-                else if (Difficulty == Difficulties.Medium) return 1.25f;
+                if (Settings.Difficulty == Difficulties.Easy) return 1;
+                else if (Settings.Difficulty == Difficulties.Medium) return 1.25f;
                 else return 1.5f;
             }
         }
@@ -60,14 +60,11 @@ namespace ZombieGame.Game
         /// Retorna o cenário atual do jogo
         /// </summary>
         public static Scene CurrentScene { get; private set; }
+        public static Settings Settings { get; private set; }
         /// <summary>
         /// Estado do jogo
         /// </summary>
         public static GameplayStates GameplayState { get; private set; }
-        /// <summary>
-        /// Dificuldade do jogo
-        /// </summary>
-        public static Difficulties Difficulty { get; private set; }
         public static Wall BottomWall { get; set; }
         public static Wall TopWall { get; set; }
         public static Wall LeftWall { get; set; }
@@ -86,11 +83,17 @@ namespace ZombieGame.Game
             SetupGameEntities();
             SetupInternalTimer();
             Resume();
+            LoadSettings();
+            EnemySpawner.Setup();
             Store.SetSellingItems();
             SetupScene(Database.Scenes[0]);
-            Difficulty = Difficulties.Easy;
             UserControls.Setup();
             Pause();
+        }
+
+        private static void LoadSettings()
+        {
+            Settings = Settings.LoadFrom("settings.config");
         }
 
         private static void SetupScene(Scene s)
@@ -207,7 +210,7 @@ namespace ZombieGame.Game
                         if (UserControls.StoreControl.IsOpen)
                         {
                             Application.Current.Windows.OfType<MainWindow>().
-                           FirstOrDefault().RemoveVisualComponent(UserControls.StoreControl);
+                            FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
                             UserControls.StoreControl.IsOpen = false;
                         }
 
@@ -233,7 +236,7 @@ namespace ZombieGame.Game
                         if (!UserControls.StoreControl.IsOpen)
                         {
                             Application.Current.Windows.OfType<MainWindow>().
-                           FirstOrDefault().AddVisualComponent(UserControls.StoreControl);
+                            FirstOrDefault().AddToUI(UserControls.StoreControl);
                             UserControls.StoreControl.IsOpen = true;
                             UserControls.StoreControl.Refresh();
                         }
@@ -265,7 +268,7 @@ namespace ZombieGame.Game
         public static void Pause()
         {
             Time.Pause();
-            foreach (var e in AnimatedEntity.AllInstances)
+            foreach (var e in AnimatedEntity.Instances)
                 e.PauseAnimation();
             GameplayState = GameplayStates.Paused;
             App.Current.Windows.OfType<MainWindow>().FirstOrDefault().SetCameraOpacity(0.5f);
@@ -278,7 +281,7 @@ namespace ZombieGame.Game
         public static void Resume()
         {
             Time.Resume();
-            foreach (var e in AnimatedEntity.AllInstances)
+            foreach (var e in AnimatedEntity.Instances)
                 e.ResumeAnimation();
             GameplayState = GameplayStates.Running;
             App.Current.Windows.OfType<MainWindow>().FirstOrDefault().SetCameraOpacity(1f);

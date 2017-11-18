@@ -49,7 +49,7 @@ namespace ZombieGame.Game
         /// <param name="e">Informações do evento</param>
         private void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            Update();
+            App.Current.Dispatcher.Invoke(delegate { Update(); });
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace ZombieGame.Game
                 var r = new Vector(x, y);
                 var speedMult = 20f;
                 if (Character.IsSprinting)
-                    speedMult += 10;
+                    speedMult += 8;
                 if (x != 0 && y != 0)
                 {
                     var mag = r.Magnitude;
@@ -84,10 +84,12 @@ namespace ZombieGame.Game
                 }
 
                 if (Character.IsFiring && !Character.Weapon.IsCoolingDown)
-                    System.Windows.Application.Current.Dispatcher.Invoke(delegate
-                    {
-                        Character.ShootAt(Character.RigidBody.Front);
-                    });
+                {
+                    Character.ShootAt(Character.RigidBody.Front);
+
+                    if (Character.Weapon.Type == WeaponTypes.Shotgun || Character.Weapon.Type == WeaponTypes.RocketLauncher)
+                        Character.Stun(250);
+                }
             }
             else
             {

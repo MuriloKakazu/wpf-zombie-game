@@ -1,5 +1,6 @@
 ﻿using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
+using ZombieGame.Game.Prefabs.Sprites;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Enums;
 using ZombieGame.Physics.Events;
@@ -14,11 +15,11 @@ namespace ZombieGame.Game.Prefabs.Entities
         public Wall(WallTypes type) : base("Wall", Tags.Wall)
         {
             Type = type;
-            Sprite.Uri = Sprite.TransparentSprite;
+            Sprite = new TransparentSprite();
             Show();
         }
 
-        protected override void Update()
+        protected override void FixedUpdate()
         {
             if (Type == WallTypes.BottomWall)
                 RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X, GameMaster.Camera.RigidBody.Position.Y + -GameMaster.Camera.RigidBody.Size.Y));
@@ -29,7 +30,7 @@ namespace ZombieGame.Game.Prefabs.Entities
             else if (Type == WallTypes.RightWall)
                 RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X + GameMaster.Camera.RigidBody.Size.X, GameMaster.Camera.RigidBody.Position.Y));
 
-            base.Update();
+            base.FixedUpdate();
         }
 
         protected override void OnCollisionEnter(object sender, CollisionEventArgs e)

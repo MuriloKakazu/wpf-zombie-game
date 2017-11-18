@@ -54,6 +54,7 @@ namespace ZombieGame.Game.Entities
         /// Tempo que o atordoamento deve durar em ms
         /// </summary>
         protected virtual float TargetStunTime { get; set; }
+        protected virtual bool HasWeapon { get { return Weapon != null; } }
         #endregion
 
         #region Methods
@@ -61,7 +62,7 @@ namespace ZombieGame.Game.Entities
         /// Retorna todos os personagens ativos
         /// </summary>
         /// <returns>Character(Array)</returns>
-        public new static Character[] AllInstances
+        public new static Character[] Instances
         {
             get { return Characters.ToArray(); }
         }
@@ -106,10 +107,12 @@ namespace ZombieGame.Game.Entities
         {
             //Health = 50;
             //Level = 1;
-            Weapon = Database.Weapons[1].Mount();
-            Weapon.SetProjectile(Database.Projectiles[7].Mount());
             if (tag == Tags.Player)
+            {
+                Weapon = Database.Weapons[0].Mount();
+                Weapon.SetProjectile(Database.Projectiles[7].Mount());
                 SetZIndex(ZIndexes.Player);
+            }
             else
                 SetZIndex(ZIndexes.Enemy);
             Characters.Add(this);
@@ -217,9 +220,9 @@ namespace ZombieGame.Game.Entities
         /// <summary>
         /// Método que aciona funções que precisam ser disparadas constantemente
         /// </summary>
-        protected override void Update()
+        protected override void FixedUpdate()
         {
-            base.Update();
+            base.FixedUpdate();
             if (IsStunned)
             {
                 TimeStunned += Time.Delta * 1000;
@@ -256,7 +259,8 @@ namespace ZombieGame.Game.Entities
         {
             if (IsAlive)
                 Kill();
-            Weapon.Destroy();
+            if (HasWeapon)
+                Weapon.Destroy();
             Characters.Remove(this);
             base.Destroy();
         }

@@ -2,7 +2,6 @@
 using System.Windows;
 using ZombieGame.Extensions;
 using ZombieGame.Game.Entities;
-using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
@@ -14,12 +13,22 @@ namespace ZombieGame.Game
         /// </summary>
         static Random R = new Random();
 
+        public static void Setup()
+        {
+            Time.LowFrequencyTimer.Elapsed += LowFrequencyTimer_Elapsed;
+        }
+
+        private static void LowFrequencyTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {
+            App.Current.Dispatcher.Invoke(delegate { SpawnRandomEnemy(); });
+        }
+
         /// <summary>
         /// Gera um novo inimigo do tipo normal
         /// </summary>
         public static void SpawnRandomEnemy()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 10 && Entity.Instances.Length < 50; i++)
             {
                 Enemy e = Database.Enemies.PickAny().Mount();
                 e.RigidBody.SetPosition(GetRandomPositionOffCamera(e));

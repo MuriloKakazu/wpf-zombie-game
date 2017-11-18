@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Timers;
-using ZombieGame.Game;
 
 namespace ZombieGame.Physics
 {
@@ -20,6 +20,7 @@ namespace ZombieGame.Physics
         /// Retorna o momento da última decorrência do timer de atualização
         /// </summary>
         private static DateTime LastUpdate { get; set; }
+        private static Stopwatch Stopwatch { get; set; }
         #endregion
 
         #region Methods
@@ -28,6 +29,7 @@ namespace ZombieGame.Physics
         /// </summary>
         public static void Setup()
         {
+            Stopwatch = new Stopwatch();
             HighFrequencyTimer = new Timer();
             HighFrequencyTimer.Elapsed += OnHighPriorityTimerElapsed;
             HighFrequencyTimer.Interval = 1;
@@ -49,7 +51,8 @@ namespace ZombieGame.Physics
         /// </summary>
         public static void Resume()
         {
-            LastUpdate = DateTime.Now;
+            Stopwatch.Reset();
+            Stopwatch.Start();
             HighFrequencyTimer.Start();
             LowFrequencyTimer.Start();
         }
@@ -61,10 +64,11 @@ namespace ZombieGame.Physics
         /// <param name="e">Informações a respeito do evento</param>
         private static void OnHighPriorityTimerElapsed(object sender, ElapsedEventArgs e)
         {
-            float d = DateTime.Now.Millisecond - LastUpdate.Millisecond;
-            if (d > 0)
-                Delta = d / 1000;
-            LastUpdate = DateTime.Now;
+            Stopwatch.Stop();
+            Delta = Stopwatch.ElapsedMilliseconds / 1000f;
+            //Console.WriteLine(Delta);
+            Stopwatch.Reset();
+            Stopwatch.Start();
         }
         #endregion
     }

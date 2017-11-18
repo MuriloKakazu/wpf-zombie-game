@@ -66,6 +66,7 @@ namespace ZombieGame.Game
         /// </summary>
         public Projectile Projectile { get; protected set; }
         public string SoundFXKey { get; protected set; }
+        public bool HasProjectile { get { return Projectile != null; } }
         #endregion
 
         #region Methods
@@ -137,7 +138,8 @@ namespace ZombieGame.Game
         public void Destroy()
         {
             Time.HighFrequencyTimer.Elapsed -= UpdateTimer_Elapsed;
-            Projectile.MarkAsNoLongerNeeded();
+            if (HasProjectile)
+                Projectile.MarkAsNoLongerNeeded();
         }
 
         /// <summary>
