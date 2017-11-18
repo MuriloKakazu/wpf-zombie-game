@@ -10,6 +10,16 @@ namespace ZombieGame.Game.Prefabs.Entities
         private static Random Random = new Random();
 
         /// <summary>
+        /// Cria uma explosão no cenário
+        /// </summary>
+        /// <param name="pos">Posição da explosão</param>
+        /// <param name="radius">Raio da explosão</param>
+        public static void Create(Vector pos, float radius)
+        {
+            new Explosion(new Vector(pos.X - radius / 2, pos.Y + radius / 2), new Vector(radius, radius), 750).Show();
+        }
+
+        /// <summary>
         /// ctor
         /// </summary>
         /// <param name="pos">Posição</param>

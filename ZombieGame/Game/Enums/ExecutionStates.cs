@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum GameplayStates
+    public enum ExecutionStates
     {
         Paused,
         Running,

@@ -44,6 +44,7 @@ namespace ZombieGame.Game.Entities
             Enemy e = new Enemy()
             {
                 Name = source.Name,
+                MaxHealth = source.Health * GameMaster.DifficultyBonus,
                 Health = source.Health * GameMaster.DifficultyBonus,
                 DeathPoints = source.DeathPoints,
                 Hash = Guid.NewGuid(),
@@ -74,15 +75,15 @@ namespace ZombieGame.Game.Entities
             Type = type;
             RigidBody.UseRotation = true;
             Enemies.Add(this);
-            Time.LowFrequencyTimer.Elapsed += LowPriorityTimer_Elapsed;
         }
 
-        private void LowPriorityTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        protected override void Update()
         {
             if (!IsStunned)
                 Chase(GetNearestPlayer(), 10 * RigidBody.SpeedMultiplier);
             else
                 RigidBody.SetVelocity(Vector.Zero);
+            base.Update();
         }
 
         /// <summary>
