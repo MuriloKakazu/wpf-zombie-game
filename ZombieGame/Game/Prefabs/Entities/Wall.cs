@@ -67,7 +67,7 @@ namespace ZombieGame.Game.Prefabs.Entities
                     e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X > RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X)
                     e.Collider.RigidBody.SetPosition(new Vector(RigidBody.Position.X + RigidBody.Size.X, e.Collider.RigidBody.Position.Y));
             }
-            if (e.Collider.RigidBody.Force.Magnitude > 0)
+            if (e.Collider.RigidBody.Force.Magnitude > 10000)
                 e.Collider.RigidBody.SetForce(Vector.Zero);
         }
 

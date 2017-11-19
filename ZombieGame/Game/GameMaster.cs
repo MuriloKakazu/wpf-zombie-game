@@ -66,10 +66,6 @@ namespace ZombieGame.Game
         /// Estado do jogo
         /// </summary>
         public static ExecutionStates GameplayState { get; private set; }
-        public static Wall BottomWall { get; set; }
-        public static Wall TopWall { get; set; }
-        public static Wall LeftWall { get; set; }
-        public static Wall RightWall { get; set; }
         #endregion
 
         #region Methods
@@ -85,7 +81,7 @@ namespace ZombieGame.Game
             SetupInternalTimer();
             Resume();
             LoadSettings();
-            EnemySpawner.Setup();
+            //EnemySpawner.Setup();
             Store.SetSellingItems();
             SetupScene(Database.Scenes[0]);
             Money = 99999;
@@ -132,23 +128,6 @@ namespace ZombieGame.Game
             Players[0].IsPlaying = true;
             Players[1].IsPlaying = false;
             Players[1].Character.MarkAsNoLongerNeeded();
-
-            BottomWall = new Wall(WallTypes.BottomWall);
-            BottomWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y - Camera.RigidBody.Size.Y));
-            BottomWall.RigidBody.Resize(new Physics.Vector(Camera.RigidBody.Size.X, 100));
-            BottomWall.RigidBody.Freeze();
-            TopWall = new Wall(WallTypes.TopWall);
-            TopWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y));
-            TopWall.RigidBody.Resize(new Physics.Vector(Camera.RigidBody.Size.X, 100));
-            TopWall.RigidBody.Freeze();
-            LeftWall = new Wall(WallTypes.LeftWall);
-            LeftWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y));
-            LeftWall.RigidBody.Resize(new Physics.Vector(100, Camera.RigidBody.Size.Y));
-            LeftWall.RigidBody.Freeze();
-            RightWall = new Wall(WallTypes.RightWall);
-            RightWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Size.X, 0));
-            RightWall.RigidBody.Resize(new Physics.Vector(100, Camera.RigidBody.Size.Y));
-            RightWall.RigidBody.Freeze();
         }
 
         /// <summary>
@@ -168,9 +147,7 @@ namespace ZombieGame.Game
         /// <param name="e">Informações do evento</param>
         private static void InternalTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            CheckForUserInput();
-            //ManageBackground();
-        }
+            App.Current.Dispatcher.Invoke(delegate { CheckForUserInput(); });        }
 
         public static void HideCursor()
         {
@@ -189,8 +166,6 @@ namespace ZombieGame.Game
         {
             if (!IgnoreKeyPress)
             {
-                App.Current.Dispatcher.Invoke(delegate
-                {
                     if (Keyboard.IsKeyDown(Key.Escape))
                     {
                         if (GameplayState == ExecutionStates.Paused)
@@ -252,7 +227,6 @@ namespace ZombieGame.Game
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
                     }
-                });
             }
             else
             {

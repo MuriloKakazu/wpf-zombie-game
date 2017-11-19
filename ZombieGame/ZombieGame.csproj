@@ -71,9 +71,9 @@
     <Compile Include="Game\Enums\ZIndexes.cs" />
     <Compile Include="Game\GarbageCollector.cs" />
     <Compile Include="Game\Interfaces\IDestroyable.cs" />
-    <Compile Include="Game\Prefabs\Audio\NoAmmo.cs" />
-    <Compile Include="Game\Prefabs\Audio\WeaponReload.cs" />
-    <Compile Include="Game\Prefabs\Entities\NoProjectile.cs" />
+    <Compile Include="Game\Prefabs\Audio\NoAmmoSFX.cs" />
+    <Compile Include="Game\Prefabs\Audio\WeaponReloadSFX.cs" />
+    <Compile Include="Game\Prefabs\Sprites\KeyboardLayoutSprite.cs" />
     <Compile Include="Game\Prefabs\Sprites\TransparentSprite.cs" />
     <Compile Include="Game\Prefabs\Sprites\UnavailableSprite.cs" />
     <Compile Include="Game\Serializable\Background.cs" />

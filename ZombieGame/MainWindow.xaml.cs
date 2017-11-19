@@ -27,8 +27,6 @@ namespace ZombieGame
     /// </summary>
     public partial class MainWindow : Window
     {
-        Physics.Vector CameraLocation = new Physics.Vector();
-
         public MainWindow()
         {
             InitializeComponent();
@@ -74,49 +72,12 @@ namespace ZombieGame
         {
             App.Current.Dispatcher.Invoke(delegate
             {
-                var player1 = GameMaster.GetPlayer(0);
-                var player2 = GameMaster.GetPlayer(1);
-                var scene = GameMaster.CurrentScene;
-                TranslateTransform tt = new TranslateTransform();
-                var p1Pos = player1.Character.RigidBody.CenterPoint;
+                Physics.Vector v = Game.Prefabs.Entities.Camera.GetTopLeftFocusPoint();
 
-                if (player2.IsPlaying && player2.Character != null && player2.Character.IsActive)
-                {
-                    var p2Pos = player2.Character.RigidBody.CenterPoint;
-                    var newX = -(p1Pos.X + p2Pos.X) / 2 + Width / 2;
-                    var newY = (p1Pos.Y + p2Pos.Y) / 2 + Height / 2;
-
-                    if (-newX > scene.RenderPosition.X && -newX < scene.Size.X + scene.RenderPosition.X * 2)
-                        tt.X = newX;
-                    else
-                        tt.X = CameraLocation.X;
-
-                    if (-newY > -scene.RenderPosition.Y && -newY < scene.Size.Y - scene.RenderPosition.Y * 2)
-                        tt.Y = newY;
-                    else
-                        tt.Y = CameraLocation.Y;
-                }
-                else
-                {
-                    var newX = -p1Pos.X + Width / 2;
-                    var newY = p1Pos.Y + Height / 2;
-
-                    if (-newX > scene.RenderPosition.X && -newX < scene.Size.X + scene.RenderPosition.X * 2)
-                        tt.X = newX;
-                    else
-                        tt.X = CameraLocation.X;
-
-                    if (-newY > -scene.RenderPosition.Y && -newY < scene.Size.Y - scene.RenderPosition.Y * 2)
-                        tt.Y = newY;
-                    else
-                        tt.Y = CameraLocation.Y;
-                }
-
-                CameraLocation = new Physics.Vector(tt.X, tt.Y);
-                Camera.RenderTransform = tt;
-                UI.RenderTransform = tt;
-                P1Stats.RenderTransform = new TranslateTransform(-tt.X, -tt.Y);
-                P2Stats.RenderTransform = new TranslateTransform(-tt.X, -tt.Y);
+                Camera.RenderTransform = new TranslateTransform(-v.X, v.Y);
+                UI.RenderTransform = new TranslateTransform(-v.X, v.Y);
+                P1Stats.RenderTransform = new TranslateTransform(v.X, -v.Y);
+                P2Stats.RenderTransform = new TranslateTransform(v.X, -v.Y);
                 UpdateUI();
             });
         }
