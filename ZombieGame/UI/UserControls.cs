@@ -8,11 +8,13 @@ namespace ZombieGame.UI
 {
     public static class UserControls
     {
+        public static WeaponInfoUI WeaponInfo;
         public static StoreUC StoreControl;
 
         public static void Setup()
         {
             StoreControl = new StoreUC();
+            WeaponInfo = new WeaponInfoUI();
         }
     }
 }

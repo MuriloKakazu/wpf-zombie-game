@@ -138,10 +138,14 @@ namespace ZombieGame.Game.Entities
 
         public virtual void SetWeapon(Weapon wep, Projectile proj = null)
         {
+            wep.Owner = this;
             Weapon.Destroy();
             Weapon = wep;
             if (proj != null)
+            {
                 Weapon.SetProjectile(proj);
+                proj.Owner = this;
+            }
         }
 
         /// <summary>

@@ -44,9 +44,9 @@ namespace ZombieGame.Game
             if (p.Price > GameMaster.Money)
                 throw new Exception("Os jogadores não possuem dinheiro para comprar esta arma.\nEla não deveria estar disponível!");
             if (p.Sold)
-                throw new Exception("Esta arma já foi vendida.\nEla não deveria estar à venda!");
+                throw new Exception("Este projétil já foi vendido.\nEle não deveria estar à venda!");
 
-            FindWeapon(itemID).Sold = true;
+            FindProjectile(itemID).Sold = true;
             GameMaster.Money -= p.Price;
         }
 

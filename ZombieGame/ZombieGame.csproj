@@ -114,10 +114,16 @@
     <Compile Include="UI\PlayerStats.xaml.cs">
       <DependentUpon>PlayerStats.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\StoreUC.xaml.cs">
-      <DependentUpon>StoreUC.xaml</DependentUpon>
+    <Compile Include="UI\StoreItemUI.xaml.cs">
+      <DependentUpon>StoreItemUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\StoreUI.xaml.cs">
+      <DependentUpon>StoreUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\UserControls.cs" />
+    <Compile Include="UI\WeaponInfoUI.xaml.cs">
+      <DependentUpon>WeaponInfoUI.xaml</DependentUpon>
+    </Compile>
     <Page Include="Game\Controls\VisualControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -160,7 +166,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\StoreUC.xaml">
+    <Page Include="UI\StoreItemUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\StoreUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\WeaponInfoUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

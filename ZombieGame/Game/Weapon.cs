@@ -4,6 +4,7 @@ using ZombieGame.Audio;
 using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Interfaces;
+using ZombieGame.Game.Prefabs.Audio;
 using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Game.Serializable;
 using ZombieGame.Physics;
@@ -100,7 +101,6 @@ namespace ZombieGame.Game
         /// </summary>
         public Weapon()
         {
-            Projectile = new NoProjectile();
             Time.HighFrequencyTimer.Elapsed += HighFrequencyTimer_Elapsed;
         }
 
@@ -110,6 +110,13 @@ namespace ZombieGame.Game
         /// <param name="direction">Direção</param>
         public virtual void ShootAt(Vector direction)
         {
+            if (Projectile == null)
+            {
+                SoundPlayer.Instance.Play(new NoAmmo());
+                Ammo = 0;
+                return;
+            }
+
             StartCoolDown();
             SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(SoundFXKey));
             var db = Database.Weapons;
@@ -146,7 +153,9 @@ namespace ZombieGame.Game
         /// <param name="p">Novo projétil</param>
         public void SetProjectile(Projectile p)
         {
-            Projectile.MarkAsNoLongerNeeded();
+            if (Projectile != null)
+                Projectile.MarkAsNoLongerNeeded();
+            
             Projectile = p;
         }
 
