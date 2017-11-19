@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="ZombieGame.UI.ProjectileInfoUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZombieGame.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Width="1274" Height="691">
+    <Grid Width="400" Height="300" Background="#33000000">
+        <StackPanel Background="#0C000000" Margin="5">
+            <Button x:Name="btnClose" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="20" Background="Red" FontWeight="Bold" Click="btnClose_Click"/>
+            <Label x:Name="lblName" Content="Nome do Projétil" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" FontSize="24" FontWeight="Bold"/>
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Label x:Name="lblDamage" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                    <Label x:Name="lblType" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                    <Label x:Name="lblSpeed" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                    <Label x:Name="lblDistance" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                    <Label x:Name="lblKnockback" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                    <Label x:Name="lblExplosive" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                    <Label x:Name="lblStunner" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                </StackPanel>
+                <Image x:Name="imgWeapon" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top" Height="130" Width="132"/>
+            </DockPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

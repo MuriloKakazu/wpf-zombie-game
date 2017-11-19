@@ -61,7 +61,6 @@ namespace ZombieGame.UI
             img.Source = null;
             SetBtnStatus();
         }
-
         public void SetBtnStatus()
         {
             if (IsSellingWeapon)
@@ -141,7 +140,13 @@ namespace ZombieGame.UI
                 {
                     if (GameMaster.Players[1].IsPlaying)
                     {
-                        //Abrir outra janela perguntando para qual dos players
+                        UserControls.ChoosePlayer.SetItem(w);
+                        UserControls.ChoosePlayer.Refresh();
+                        Application.Current.Windows.OfType<MainWindow>().
+                            FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
+                        Application.Current.Windows.OfType<MainWindow>().
+                            FirstOrDefault().AddToUI(UserControls.ChoosePlayer);
+                        SoundPlayer.Instance.Play(new NoAmmo());
                     }
                     else
                     {
@@ -165,7 +170,25 @@ namespace ZombieGame.UI
                 {
                     if (GameMaster.Players[1].IsPlaying)
                     {
-                        //Abrir outra janela perguntando para qual dos players
+                        if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type) &&
+                            GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
+                        {
+                            UserControls.ChoosePlayer.SetItem(p);
+                            UserControls.ChoosePlayer.Refresh();
+                            Application.Current.Windows.OfType<MainWindow>().
+                                FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
+                            Application.Current.Windows.OfType<MainWindow>().
+                                FirstOrDefault().AddToUI(UserControls.ChoosePlayer);
+                            SoundPlayer.Instance.Play(new NoAmmo());
+                        } else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
+                        {
+                            GameMaster.Players[0].Character.Weapon.SetProjectile(p.Mount());
+                            SoundPlayer.Instance.Play(new WeaponReload());
+                        } else if (GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
+                        {
+                            GameMaster.Players[1].Character.Weapon.SetProjectile(p.Mount());
+                            SoundPlayer.Instance.Play(new WeaponReload());
+                        }
                     }
                     else
                     {
@@ -179,9 +202,8 @@ namespace ZombieGame.UI
                 }
             }
             SetBtnStatus();
-            UserControls.StoreControl.SetSellingItems();
+            UserControls.StoreControl.Update();
         }
-
         private void btnInfo_Click(object sender, RoutedEventArgs e)
         {
             if (IsSellingWeapon)
@@ -192,6 +214,15 @@ namespace ZombieGame.UI
                     FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
                 Application.Current.Windows.OfType<MainWindow>().
                    FirstOrDefault().AddToUI(UserControls.WeaponInfo);
+            }
+            else if (IsSellingProjectile)
+            {
+                UserControls.ProjectileInfo.SetProjectile(p);
+                UserControls.ProjectileInfo.Refresh();
+                Application.Current.Windows.OfType<MainWindow>().
+                    FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
+                Application.Current.Windows.OfType<MainWindow>().
+                   FirstOrDefault().AddToUI(UserControls.ProjectileInfo);
             }
         }
     }

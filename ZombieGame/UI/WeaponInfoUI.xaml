@@ -18,7 +18,6 @@
                     <Label x:Name="lblPrice" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
                     <Label x:Name="lblAcceptedPrectiles" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
                 </StackPanel>
-                <Image x:Name="imgWeapon" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top" Height="130" Width="132"/>
             </DockPanel>
         </StackPanel>
     </Grid>

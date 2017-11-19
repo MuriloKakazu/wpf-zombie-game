@@ -50,10 +50,17 @@ namespace ZombieGame.UI
             ammoBar.FillPercentage = ammoPerc;
             ammoBar.ProgressText = string.Format("{0} / {1}", AssociatedPlayer.Character.Weapon.Ammo, AssociatedPlayer.Character.Weapon.MagSize);
 
-            if (ammoPerc <= 25)
-                Tip.Content = "Low ammo!";
+            Tip.Foreground = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+
+            if (AssociatedPlayer.Character.Weapon.Projectile == null)
+            {
+                Tip.Content = "Equipe um projétil para poder atirar!";
+                Tip.Foreground = new SolidColorBrush(Color.FromRgb(255, 129, 129));
+            }
+            else if (ammoPerc <= 25)
+                Tip.Content = "Pouca munição!";
             else if (AssociatedPlayer.PlayerNumber == 2 && !AssociatedPlayer.IsPlaying)
-                Tip.Content = "Press ENTER to play!";
+                Tip.Content = "Clique ENTER para jogar!";
             else
                 Tip.Content = "";
         }

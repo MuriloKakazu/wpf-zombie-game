@@ -77,7 +77,7 @@ namespace ZombieGame.UI
             Width = Physics.Vector.WindowSize.X;
             Height = Physics.Vector.WindowSize.Y;
             Refresh();
-            lblDinheiro.Content = "Dinheiro: " + GameMaster.Money;
+            Update();
         }
         public void Refresh()
         {
@@ -85,8 +85,7 @@ namespace ZombieGame.UI
             tt.X = GameMaster.Camera.RigidBody.Position.X;
             tt.Y = -GameMaster.Camera.RigidBody.Position.Y;
             RenderTransform = tt;
-            SetSellingItems();
-            UpdateArrowButtons();
+            Update();
         }
 
         public void SetMaxIndex()
@@ -138,6 +137,12 @@ namespace ZombieGame.UI
             siProjectile2.SetSellingItem(SellingProjectiles[1]);
             siProjectile3.SetSellingItem(SellingProjectiles[2]);
             siProjectile4.SetSellingItem(SellingProjectiles[3]);
+        }
+        public void Update()
+        {
+            SetSellingItems();
+            UpdateArrowButtons();
+            lblDinheiro.Content = "Dinheiro: " + GameMaster.Money;
         }
         #endregion
     }

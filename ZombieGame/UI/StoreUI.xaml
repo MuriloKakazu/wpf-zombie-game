@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZombieGame.UI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" MaxWidth="1274" MaxHeight="688" MinHeight="345.5" MinWidth="637" Height="691" Width="1274">
+             d:DesignHeight="300" d:DesignWidth="300" MaxWidth="1274" MaxHeight="691" MinHeight="345.5" MinWidth="637" Height="691" Width="1274">
     <Grid Loaded="Grid_Loaded" MaxWidth="1274" MaxHeight="696" Width="954" Height="516.75">
         <Label HorizontalAlignment="Center" Margin="392,10,380,0" VerticalAlignment="Top" FontWeight="Bold" Background="#00000000" Foreground="White" FontSize="24" Content="Loja/Inventário" RenderTransformOrigin="0.517,0.524"/>
         <DockPanel LastChildFill="False" Margin="14,52,5,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="226.875" Width="927">

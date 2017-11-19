@@ -108,11 +108,17 @@
     <Compile Include="Game\Entities\Tile.cs" />
     <Compile Include="IO\GlobalPaths.cs" />
     <Compile Include="IO\Serialization\Xml.cs" />
+    <Compile Include="UI\ChoosePlayerUI.xaml.cs">
+      <DependentUpon>ChoosePlayerUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ProgressBar.xaml.cs">
       <DependentUpon>ProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\PlayerStats.xaml.cs">
       <DependentUpon>PlayerStats.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\ProjectileInfoUI.xaml.cs">
+      <DependentUpon>ProjectileInfoUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\StoreItemUI.xaml.cs">
       <DependentUpon>StoreItemUI.xaml</DependentUpon>
@@ -158,11 +164,19 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\ChoosePlayerUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\ProgressBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\PlayerStats.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProjectileInfoUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
