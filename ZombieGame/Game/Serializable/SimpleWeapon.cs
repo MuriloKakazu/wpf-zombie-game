@@ -16,6 +16,7 @@ namespace ZombieGame.Game.Serializable
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>
         public float FireRate { get; set; }
+        public float DamageMultiplier { get; set; }
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>

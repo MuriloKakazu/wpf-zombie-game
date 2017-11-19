@@ -18,7 +18,7 @@ namespace ZombieGame.UI
     /// <summary>
     /// Interaction logic for ProgressBar.xaml
     /// </summary>
-    public partial class ProgressBar : UserControl
+    public partial class ProgressBarUI : UserControl
     {
         public string ProgressText
         {
@@ -42,15 +42,15 @@ namespace ZombieGame.UI
         }
 
         public new static readonly DependencyProperty BackgroundProperty =
-            DependencyProperty.Register("Background", typeof(Brush), typeof(ProgressBar), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(0, 0, 0, 0))));
+            DependencyProperty.Register("Background", typeof(Brush), typeof(ProgressBarUI), new PropertyMetadata(new SolidColorBrush(Color.FromArgb(0, 0, 0, 0))));
         public static readonly DependencyProperty ProgressTextProperty =
-            DependencyProperty.Register("ProgressText", typeof(string), typeof(ProgressBar), new PropertyMetadata(""));
+            DependencyProperty.Register("ProgressText", typeof(string), typeof(ProgressBarUI), new PropertyMetadata(""));
         public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register("Title", typeof(string), typeof(ProgressBar), new PropertyMetadata(""));
+            DependencyProperty.Register("Title", typeof(string), typeof(ProgressBarUI), new PropertyMetadata(""));
         public static readonly DependencyProperty FillPercentageProperty =
-            DependencyProperty.Register("FillPercentage", typeof(double), typeof(ProgressBar), new PropertyMetadata(100d));
+            DependencyProperty.Register("FillPercentage", typeof(double), typeof(ProgressBarUI), new PropertyMetadata(100d));
 
-        public ProgressBar()
+        public ProgressBarUI()
         {
             InitializeComponent();
         }

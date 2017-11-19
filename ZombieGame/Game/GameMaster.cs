@@ -40,13 +40,14 @@ namespace ZombieGame.Game
         /// </summary>
         public static float Money { get; set; }
         public static float Score { get; set; }
+        public static float RunningTime { get; set; }
         public static float DifficultyBonus
         {
             get
             {
                 if (Settings.Difficulty == Difficulties.Easy) return 1;
-                else if (Settings.Difficulty == Difficulties.Medium) return 1.25f;
-                else return 1.5f;
+                else if (Settings.Difficulty == Difficulties.Medium) return 1.5f;
+                else return 2f;
             }
         }
         /// <summary>
@@ -81,10 +82,10 @@ namespace ZombieGame.Game
             SetupInternalTimer();
             Resume();
             LoadSettings();
-            //EnemySpawner.Setup();
+            EnemySpawner.Setup();
             Store.SetSellingItems();
             SetupScene(Database.Scenes[0]);
-            Money = 99999;
+            Money = 0;
             UserControls.Setup();
             Pause();
         }
@@ -138,6 +139,17 @@ namespace ZombieGame.Game
             InternalTimer = new Timer { Interval = 1 };
             InternalTimer.Elapsed += InternalTimer_Elapsed;
             InternalTimer.Start();
+            Time.HighFrequencyTimer.Elapsed += HighFrequencyTimer_Elapsed;
+        }
+
+        private static void HighFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            App.Current.Dispatcher.Invoke(delegate { IncreaseRunningTime(); IncreaseScore(); });
+        }
+
+        private static void IncreaseScore()
+        {
+            Score += 1 * Time.Delta * DifficultyBonus;
         }
 
         /// <summary>
@@ -147,7 +159,16 @@ namespace ZombieGame.Game
         /// <param name="e">Informações do evento</param>
         private static void InternalTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            App.Current.Dispatcher.Invoke(delegate { CheckForUserInput(); });        }
+            App.Current.Dispatcher.Invoke(delegate 
+            {
+                CheckForUserInput();
+            });
+        }
+
+        private static void IncreaseRunningTime()
+        {
+            RunningTime += Time.Delta;
+        }
 
         public static void HideCursor()
         {

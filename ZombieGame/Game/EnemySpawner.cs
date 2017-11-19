@@ -12,6 +12,10 @@ namespace ZombieGame.Game
         /// Gerador de números randômicos
         /// </summary>
         static Random R = new Random();
+        const int MaxEnemiesAllowed = 50;
+        const int MinEnemiesAllowed = 5;
+        static int spawnTarget = MinEnemiesAllowed;
+        public static int CurrentEnemySpawnTarget { get { return spawnTarget; } set { spawnTarget = value; if (spawnTarget > MaxEnemiesAllowed) spawnTarget = MaxEnemiesAllowed; } }
 
         public static void Setup()
         {
@@ -28,7 +32,7 @@ namespace ZombieGame.Game
         /// </summary>
         public static void SpawnRandomEnemy()
         {
-            for (int i = 0; i < 10 && Entity.Instances.Length < 50; i++)
+            for (int i = 0; i < 3 && Enemy.Instances.Length < CurrentEnemySpawnTarget; i++)
             {
                 Enemy e = Database.Enemies.PickAny().Mount();
                 e.RigidBody.SetPosition(GetRandomPositionOffCamera(e));
@@ -42,10 +46,10 @@ namespace ZombieGame.Game
         private static Physics.Vector GetRandomPositionOffCamera(Enemy e)
         {
             var scene = GameMaster.CurrentScene;
-            Physics.Vector v = new Physics.Vector(R.Next(-4000, 4000), R.Next(-4000, 4000));
-            while (new Rect(v.X - 1000, v.Y - 1000, 1500, 1500).IntersectsWith(GameMaster.Camera.RigidBody.Bounds))
+            Physics.Vector v = new Physics.Vector(R.Next((int)scene.RenderPosition.X, (int)scene.Size.X), R.Next((int)scene.RenderPosition.Y, (int)scene.Size.Y));
+            while (new Rect(v.X - 500, v.Y - 500, 500, 500).IntersectsWith(GameMaster.Camera.RigidBody.Bounds))
             {
-                v = new Physics.Vector(R.Next(-4000, 4000), R.Next(-4000, 4000));
+                v = new Physics.Vector(R.Next((int)scene.RenderPosition.X, (int)scene.Size.X), R.Next((int)scene.RenderPosition.Y, (int)scene.Size.Y));
             }
                 return v;
 

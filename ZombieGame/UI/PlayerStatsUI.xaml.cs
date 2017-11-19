@@ -19,7 +19,7 @@ namespace ZombieGame.UI
     /// <summary>
     /// Interaction logic for StatsBar.xaml
     /// </summary>
-    public partial class PlayerStats : UserControl
+    public partial class PlayerStatsUI : UserControl
     {
         public Player AssociatedPlayer
         {
@@ -28,9 +28,9 @@ namespace ZombieGame.UI
         }
 
         public static readonly DependencyProperty AssociatedPlayerProperty =
-            DependencyProperty.Register("AssociatedPlayer", typeof(Player), typeof(PlayerStats), new PropertyMetadata(null));
+            DependencyProperty.Register("AssociatedPlayer", typeof(Player), typeof(PlayerStatsUI), new PropertyMetadata(null));
 
-        public PlayerStats()
+        public PlayerStatsUI()
         {
             InitializeComponent();
 

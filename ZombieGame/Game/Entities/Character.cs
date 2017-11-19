@@ -113,9 +113,9 @@ namespace ZombieGame.Game.Entities
         {
             if (tag == Tags.Player)
             {
-                Weapon = Database.Weapons[1].Mount();
+                Weapon = Database.Weapons[6].Mount();
                 Weapon.Owner = this;
-                Weapon.SetProjectile(Database.Projectiles[4].Mount());
+                Weapon.SetProjectile(Database.Projectiles[6].Mount());
                 SetZIndex(ZIndexes.Player);
             }
             else

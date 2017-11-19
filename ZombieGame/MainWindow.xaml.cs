@@ -78,6 +78,7 @@ namespace ZombieGame
                 UI.RenderTransform = new TranslateTransform(-v.X, v.Y);
                 P1Stats.RenderTransform = new TranslateTransform(v.X, -v.Y);
                 P2Stats.RenderTransform = new TranslateTransform(v.X, -v.Y);
+                GameInfo.RenderTransform = new TranslateTransform(v.X, -v.Y);
                 UpdateUI();
             });
         }
@@ -87,6 +88,7 @@ namespace ZombieGame
             P1Stats.UpdateStats();
             if (GameMaster.Players.Length > 1)
                 P2Stats.UpdateStats();
+            GameInfo.Update();
         }
 
         private void Camera_MouseMove(object sender, MouseEventArgs e)

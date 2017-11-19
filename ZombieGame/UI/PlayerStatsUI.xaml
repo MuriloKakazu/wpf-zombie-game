@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ZombieGame.UI.PlayerStats"
+﻿<UserControl x:Class="ZombieGame.UI.PlayerStatsUI"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -13,16 +13,16 @@
                     <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>
                 </Label.Effect>
             </Label>
-            <local:ProgressBar x:Name="healthBar" Margin="0">
-                <local:ProgressBar.Effect>
+            <local:ProgressBarUI x:Name="healthBar" Margin="0">
+                <local:ProgressBarUI.Effect>
                     <DropShadowEffect Opacity="0.5" ShadowDepth="2"/>
-                </local:ProgressBar.Effect>
-            </local:ProgressBar>
-            <local:ProgressBar x:Name="ammoBar">
-                <local:ProgressBar.Effect>
+                </local:ProgressBarUI.Effect>
+            </local:ProgressBarUI>
+            <local:ProgressBarUI x:Name="ammoBar">
+                <local:ProgressBarUI.Effect>
                     <DropShadowEffect Opacity="0.5" ShadowDepth="2"/>
-                </local:ProgressBar.Effect>
-            </local:ProgressBar>
+                </local:ProgressBarUI.Effect>
+            </local:ProgressBarUI>
             <Label x:Name="Tip" Foreground="White" FontWeight="Bold" FontSize="14">
                 <Label.Effect>
                     <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>

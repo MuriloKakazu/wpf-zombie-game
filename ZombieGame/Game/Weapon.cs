@@ -26,6 +26,7 @@ namespace ZombieGame.Game
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>
         public float FireRate { get; protected set; }
+        public float DamageMultiplier { get; protected set; }
         /// <summary>
         /// Quantia de munição da arma
         /// </summary>
@@ -42,8 +43,8 @@ namespace ZombieGame.Game
         {
             get
             {
-                if (FireRate > 1000)
-                    return 60 / 1000;
+                if (FireRate > 2000)
+                    return 60 / 2000;
                 else if (FireRate < 30)
                     return 60 / 30;
                 return 60 / FireRate;
@@ -73,6 +74,7 @@ namespace ZombieGame.Game
         public Character Owner { get; set; }
         public string SoundFXKey { get; protected set; }
         public bool HasProjectile { get { return Projectile != null; } }
+        Random R = new Random();
         #endregion
 
         #region Methods
@@ -86,6 +88,7 @@ namespace ZombieGame.Game
             {
                 AcceptedProjectileTypes = source.AcceptedProjectileTypes,
                 MagSize = source.MagSize,
+                DamageMultiplier = source.DamageMultiplier,
                 Ammo = source.MagSize,
                 Name = source.Name,
                 ReloadTime = source.ReloadTime,
@@ -112,7 +115,7 @@ namespace ZombieGame.Game
         {
             if (Projectile == null)
             {
-                SoundPlayer.Instance.Play(new NoAmmo());
+                SoundPlayer.Instance.Play(new NoAmmoSFX());
                 Ammo = 0;
                 return;
             }
@@ -125,15 +128,24 @@ namespace ZombieGame.Game
 
             if (Type == WeaponTypes.Shotgun)
             {
-                Random r = new Random();
                 for (int i = -5; i < 5; i++)
                 {
                     p = Projectile.Clone();
                     p.Owner = Owner;
                     if (i <= 0)
-                        p.Launch(new Vector(direction.X - r.NextDouble() * 0.5, direction.Y - r.NextDouble() * 0.5));
+                        p.Launch(new Vector(direction.X - R.NextDouble() * 0.5, direction.Y - R.NextDouble() * 0.5));
                     else
-                        p.Launch(new Vector(direction.X + r.NextDouble() * 0.5, direction.Y + r.NextDouble() * 0.5));
+                        p.Launch(new Vector(direction.X + R.NextDouble() * 0.5, direction.Y + R.NextDouble() * 0.5));
+                }
+            }
+            else if (Type == WeaponTypes.Minigun)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    if (R.Next(0, 2) == 1)
+                        p.Launch(new Vector(direction.X - R.NextDouble() * 0.5, direction.Y - R.NextDouble() * 0.5));
+                    else
+                        p.Launch(new Vector(direction.X + R.NextDouble() * 0.5, direction.Y + R.NextDouble() * 0.5));
                 }
             }
             else
@@ -157,6 +169,7 @@ namespace ZombieGame.Game
                 Projectile.MarkAsNoLongerNeeded();
             
             Projectile = p;
+            Projectile.HitDamage *= DamageMultiplier;
         }
 
         /// <summary>

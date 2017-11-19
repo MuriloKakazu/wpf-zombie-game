@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" MaxWidth="1274" MaxHeight="688" MinHeight="345.5" MinWidth="637" Height="691" Width="1274">
     <Grid Loaded="Grid_Loaded" MaxWidth="1274" MaxHeight="696" Width="954" Height="516.75">
+        <Grid.Effect>
+            <DropShadowEffect Opacity="0.5"/>
+        </Grid.Effect>
         <Label HorizontalAlignment="Center" Margin="392,10,380,0" VerticalAlignment="Top" FontWeight="Bold" Background="#00000000" Foreground="White" FontSize="24" Content="Loja/Inventário" RenderTransformOrigin="0.517,0.524"/>
         <DockPanel LastChildFill="False" Margin="14,52,5,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="226.875" Width="927">
             <Label x:Name="lblDinheiro" DockPanel.Dock="Top" Height="49.5" Foreground="White" Content="Dinheiro:" FontWeight="Bold" FontSize="18"></Label>
@@ -27,9 +30,9 @@
                 </Image>
             </Button>
             <local:StoreItemUI x:Name="siWeapon1" VerticalAlignment="Top"/>
-            <local:StoreItemUI x:Name="siWeapon2" VerticalAlignment="Top" Margin="0,0,0,-3"/>
-            <local:StoreItemUI x:Name="siWeapon3" VerticalAlignment="Top" Margin="0,0,0,-3"/>
-            <local:StoreItemUI x:Name="siWeapon4" VerticalAlignment="Top" Margin="0,0,0,-3"/>
+            <local:StoreItemUI x:Name="siWeapon2" VerticalAlignment="Top"/>
+            <local:StoreItemUI x:Name="siWeapon3" VerticalAlignment="Top"/>
+            <local:StoreItemUI x:Name="siWeapon4" VerticalAlignment="Top"/>
         </DockPanel>
         <DockPanel LastChildFill="False" Margin="18,285,8,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="180" Width="928">
             <Label DockPanel.Dock="Top" Height="45" Foreground="White" Content="Projéteis:" FontWeight="Bold" FontSize="18"></Label>

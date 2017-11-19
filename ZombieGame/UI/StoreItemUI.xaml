@@ -8,16 +8,12 @@
              d:DesignHeight="300" d:DesignWidth="300" Height="135" Width="176">
     <Grid Width="175.125" Height="135">
         <DockPanel Height="135" LastChildFill="False" VerticalAlignment="Top" Width="175.125">
-            <DockPanel.Effect>
-                <DropShadowEffect Opacity="0.5"/>
-            </DockPanel.Effect>
             <Label x:Name="lblName" DockPanel.Dock="Top" Height="25" Content="Arma nome" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Top" FontWeight="Bold"></Label>
             <DockPanel DockPanel.Dock="Bottom" Height="30">
                 <Button x:Name="btnBuy" Content="Comprar" VerticalAlignment="Top" Background="#FF1F801F" Foreground="White" FontWeight="Bold" Click="btnBuy_Click" Height="30" FontSize="18" Width="145"/>
                 <Button x:Name="btnInfo" Background="#FF02029E" Foreground="White" Content="i" FontSize="20" FontWeight="Bold" FontStyle="Italic" Click="btnInfo_Click"></Button>
             </DockPanel>
             <Image x:Name="img" Height="80" VerticalAlignment="Top" Width="175.125"/>
-
         </DockPanel>
     </Grid>
 </UserControl>
