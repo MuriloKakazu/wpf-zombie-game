@@ -111,13 +111,13 @@ namespace ZombieGame.Game
                             Character.Stun(250);
                     }
                     else
-                        SoundPlayer.Instance.Play(new NoAmmo());
+                        SoundPlayer.Instance.Play(new NoAmmoSFX());
                 }
 
                 if (weaponReloadRequest && !Character.Weapon.IsReloading)
                 {
                     Character.Weapon.Reload();
-                    SoundPlayer.Instance.Play(new WeaponReload());
+                    SoundPlayer.Instance.Play(new WeaponReloadSFX());
                 }
             }
             else

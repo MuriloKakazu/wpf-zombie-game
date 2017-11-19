@@ -271,7 +271,7 @@ namespace ZombieGame.Game.Entities
                 if (success)
                     return returnValue;
             }
-            catch { /*Same distance to both players. Couldn't add to dictionary*/ }
+            catch { /*Same distance to both players. Can't add to dictionary*/ }
             return GameMaster.GetPlayer(0).Character;
         }
 
@@ -334,7 +334,7 @@ namespace ZombieGame.Game.Entities
         {
             if (e.Collider.Tag != Tags.Projectile && e.Collider.Tag != Tags.Wall && !e.Collider.IsCamera)
             {
-                RigidBody.AddVelocity(e.CollisionDirection * e.Collider.RigidBody.Velocity.Magnitude);
+                RigidBody.SetMomentum(e.CollisionDirection * e.Collider.RigidBody.Momentum.Magnitude);
                 RigidBody.PointAt(e.CollisionDirection.Opposite);
             }
         }
@@ -357,13 +357,11 @@ namespace ZombieGame.Game.Entities
         protected virtual void HighFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
-            //App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
         }
 
         protected virtual void LowFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             App.Current.Dispatcher.Invoke(delegate { Update(); });
-            //App.Current.Dispatcher.Invoke(delegate { Update(); });
         }
 
         /// <summary>

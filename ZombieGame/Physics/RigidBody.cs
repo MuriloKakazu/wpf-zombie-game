@@ -37,6 +37,7 @@ namespace ZombieGame.Physics
         /// Vetor força resultante aplicado ao corpo (kg*pixels/s^2 * 10)
         /// </summary>
         public Vector Force { get; private set; }
+        public Vector Momentum { get { return Velocity * Mass; } }
         /// <summary>
         /// Vetor velocidade aplicado ao corpo (pixels/s * 10)
         /// </summary>
@@ -210,6 +211,16 @@ namespace ZombieGame.Physics
         public void SetVelocity(Vector v)
         {
             Velocity = v;
+        }
+
+        public void AddMomentum(Vector m)
+        {
+            AddForce(m / Time.Delta);
+        }
+
+        public void SetMomentum(Vector m)
+        {
+            SetForce(m / Time.Delta);
         }
 
         /// <summary>

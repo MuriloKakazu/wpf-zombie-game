@@ -44,7 +44,7 @@ namespace ZombieGame.UI
         public void UpdateStats()
         {
             healthBar.FillPercentage = AssociatedPlayer.Character.Health / AssociatedPlayer.Character.MaxHealth * 100;
-            healthBar.ProgressText = string.Format("{0} / {1}", AssociatedPlayer.Character.Health, AssociatedPlayer.Character.MaxHealth);
+            healthBar.ProgressText = string.Format("{0} / {1}", Math.Round(AssociatedPlayer.Character.Health), AssociatedPlayer.Character.MaxHealth);
 
             var ammoPerc = (double)AssociatedPlayer.Character.Weapon.Ammo / (double)AssociatedPlayer.Character.Weapon.MagSize * 100;
             ammoBar.FillPercentage = ammoPerc;
