@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum Tags
+    public enum Tag
     {
         Undefined,
         Tile,

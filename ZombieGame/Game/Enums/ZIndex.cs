@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum ZIndexes : int
+    public enum ZIndex : int
     {
         Background = 0,
         BackTile,

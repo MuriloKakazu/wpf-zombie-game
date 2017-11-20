@@ -13,10 +13,6 @@ namespace ZombieGame.IO
         /// </summary>
         public static string Logs { get { return BaseDirectory + "logs/"; } }
         /// <summary>
-        /// Diretório de pontuações salvas
-        /// </summary>
-        public static string Scores { get { return BaseDirectory + "scores/"; } }
-        /// <summary>
         /// Diretório de recursos da aplicação
         /// </summary>
         public static string Resources { get { return BaseDirectory + "resources/"; } }
@@ -68,5 +64,6 @@ namespace ZombieGame.IO
         /// Diretório de sprites de animação
         /// </summary>
         public static string AnimatedSprites { get { return Sprites + "animated/"; } }
+        public static string ParallaxSprites { get { return Sprites + "parallax/"; } }
     }
 }

@@ -10,7 +10,7 @@ namespace ZombieGame.Game.Interfaces
         /// <summary>
         /// Retorna o tipo de inimigo
         /// </summary>
-        EnemyTypes Type { get; set; }
+        EnemyType Type { get; set; }
         /// <summary>
         /// Retorna a pontuação que o inimigo dará ao morrer
         /// </summary>

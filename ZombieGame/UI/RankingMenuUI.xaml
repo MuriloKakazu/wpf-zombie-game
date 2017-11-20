@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="ZombieGame.UI.RankingMenuUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZombieGame.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="691" d:DesignWidth="1274">
+    <Grid>
+        <DockPanel Margin="50">
+            <Label Content="RANKING" Background="#00000000" FontWeight="Bold" FontSize="36" Foreground="#FFC80000" DockPanel.Dock="Top" Margin="10,10,10,20">
+                <Label.Effect>
+                    <DropShadowEffect BlurRadius="100" ShadowDepth="0"/>
+                </Label.Effect>
+            </Label>
+            <local:GradientButtonUI x:Name="BackButton" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" MouseLeftButtonUp="BackButton_MouseLeftButtonUp"/>
+
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <StackPanel x:Name="Scores" CanVerticallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>
+            </ScrollViewer>
+                
+        </DockPanel>
+    </Grid>
+</UserControl>

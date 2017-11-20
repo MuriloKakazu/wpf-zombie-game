@@ -188,10 +188,8 @@ namespace ZombieGame.UI
             {
                 UserControls.WeaponInfo.SetWeapon(w);
                 UserControls.WeaponInfo.Refresh();
-                Application.Current.Windows.OfType<MainWindow>().
-                    FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
-                Application.Current.Windows.OfType<MainWindow>().
-                   FirstOrDefault().AddToUI(UserControls.WeaponInfo);
+                GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
+                GameMaster.TargetCanvas.AddChild(UserControls.WeaponInfo);
             }
         }
     }

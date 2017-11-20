@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum WeaponTypes
+    public enum WeaponType
     {
         Undefined,
         Pistol,

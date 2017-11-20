@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum TileTypes
+    public enum TileType
     {
         BackTile,
         ForeTile,

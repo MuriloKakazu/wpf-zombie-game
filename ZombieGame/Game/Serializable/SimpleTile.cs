@@ -11,7 +11,7 @@ namespace ZombieGame.Game.Serializable
         public string Name { get; set; }
         public float Mass { get; set; }
         public Vector Size { get; set; }
-        public TileTypes Type { get; set; }
+        public TileType Type { get; set; }
         public string SpriteFileName { get; set; }
         public Vector Position { get; set; }
         public float Rotation { get; set; }

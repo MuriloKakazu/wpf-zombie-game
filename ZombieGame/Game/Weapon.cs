@@ -43,10 +43,10 @@ namespace ZombieGame.Game
         {
             get
             {
-                if (FireRate > 2000)
-                    return 60 / 2000;
-                else if (FireRate < 30)
-                    return 60 / 30;
+                //if (FireRate > 2000)
+                //    return 60 / 2000;
+                //else if (FireRate < 30)
+                //    return 60 / 30;
                 return 60 / FireRate;
             }
         }
@@ -62,11 +62,11 @@ namespace ZombieGame.Game
         /// <summary>
         /// Tipo da arma
         /// </summary>
-        public WeaponTypes Type { get; protected set; }
+        public WeaponType Type { get; protected set; }
         /// <summary>
         /// Tipos de projéteis aceitos pela arma
         /// </summary>
-        public ProjectileTypes[] AcceptedProjectileTypes { get; protected set; }
+        public ProjectileType[] AcceptedProjectileTypes { get; protected set; }
         /// <summary>
         /// Projétil atual da arma
         /// </summary>
@@ -125,8 +125,10 @@ namespace ZombieGame.Game
             var db = Database.Weapons;
             Projectile p = Projectile.Clone();
             p.Owner = Owner;
+            if (Type == WeaponType.Minigun)
+                p.MaxTravelDistance = 600;
 
-            if (Type == WeaponTypes.Shotgun)
+            if (Type == WeaponType.Shotgun)
             {
                 for (int i = -5; i < 5; i++)
                 {
@@ -138,18 +140,14 @@ namespace ZombieGame.Game
                         p.Launch(new Vector(direction.X + R.NextDouble() * 0.5, direction.Y + R.NextDouble() * 0.5));
                 }
             }
-            else if (Type == WeaponTypes.Minigun)
-            {
-                for (int i = 0; i < 2; i++)
-                {
-                    if (R.Next(0, 2) == 1)
-                        p.Launch(new Vector(direction.X - R.NextDouble() * 0.5, direction.Y - R.NextDouble() * 0.5));
-                    else
-                        p.Launch(new Vector(direction.X + R.NextDouble() * 0.5, direction.Y + R.NextDouble() * 0.5));
-                }
-            }
             else
-                p.Launch(direction);
+            {
+                if (R.Next(0, 2) == 1)
+                    p.Launch(new Vector(direction.X - R.NextDouble() * 0.1, direction.Y - R.NextDouble() * 0.1));
+                else
+                    p.Launch(new Vector(direction.X + R.NextDouble() * 0.1, direction.Y + R.NextDouble() * 0.1));
+            }
+                //p.Launch(direction);
 
             Ammo--;
         }

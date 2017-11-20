@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using ZombieGame.Audio;
 using ZombieGame.Game.Interfaces;
@@ -26,12 +27,14 @@ namespace ZombieGame.Game
         /// Lista de todos os cenários disponíveis no jogo
         /// </summary>
         public static List<Scene> Scenes { get; set; }
+        public static List<Score> Scores { get; set; }
 
         public static void Setup()
         {
             Weapons = Weapons.LoadFrom(IO.GlobalPaths.DB + "weapons.db");
             Projectiles = Projectiles.LoadFrom(IO.GlobalPaths.DB + "projectiles.db");
             Enemies = Enemies.LoadFrom(IO.GlobalPaths.DB + "enemies.db");
+            Scores = Scores.LoadFrom(IO.GlobalPaths.DB + "scores.db");
             Scenes = new List<Scene>();
 
             string[] files = Directory.GetFiles(IO.GlobalPaths.Scenes);

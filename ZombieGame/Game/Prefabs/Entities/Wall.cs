@@ -10,9 +10,9 @@ namespace ZombieGame.Game.Prefabs.Entities
 {
     public sealed class Wall : Entity
     {
-        public WallTypes Type { get; private set; }
+        public WallType Type { get; private set; }
 
-        public Wall(WallTypes type) : base("Wall", Tags.Wall)
+        public Wall(WallType type) : base("Wall", Tag.Wall)
         {
             Type = type;
             Sprite = new TransparentSprite();
@@ -21,13 +21,13 @@ namespace ZombieGame.Game.Prefabs.Entities
 
         protected override void FixedUpdate()
         {
-            if (Type == WallTypes.BottomWall)
+            if (Type == WallType.BottomWall)
                 RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X, GameMaster.Camera.RigidBody.Position.Y + -GameMaster.Camera.RigidBody.Size.Y));
-            else if (Type == WallTypes.TopWall)
+            else if (Type == WallType.TopWall)
                 RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X, GameMaster.Camera.RigidBody.Position.Y + RigidBody.Size.Y));
-            else if (Type == WallTypes.LeftWall)
+            else if (Type == WallType.LeftWall)
                 RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X - RigidBody.Size.X, GameMaster.Camera.RigidBody.Position.Y));
-            else if (Type == WallTypes.RightWall)
+            else if (Type == WallType.RightWall)
                 RigidBody.SetPosition(new Vector(GameMaster.Camera.RigidBody.Position.X + GameMaster.Camera.RigidBody.Size.X, GameMaster.Camera.RigidBody.Position.Y));
 
             base.FixedUpdate();
@@ -40,28 +40,28 @@ namespace ZombieGame.Game.Prefabs.Entities
 
         protected override void OnCollisionStay(object sender, CollisionEventArgs e)
         {
-            if (e.Collider.Tag != Tags.Player)
+            if (e.Collider.Tag != Tag.Player)
                 return;
 
-            if (Type == WallTypes.BottomWall && e.Collider.Tag != Tags.Wall)
+            if (Type == WallType.BottomWall && e.Collider.Tag != Tag.Wall)
             {
                 if (e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y < RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y &&
                     e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y > RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y)
                     e.Collider.RigidBody.SetPosition(new Vector(e.Collider.RigidBody.Position.X, RigidBody.Position.Y + e.Collider.RigidBody.Size.Y));
             }
-            else if (Type == WallTypes.TopWall && e.Collider.Tag != Tags.Wall)
+            else if (Type == WallType.TopWall && e.Collider.Tag != Tag.Wall)
             {
                 if (e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y > RigidBody.Bounds.GetVector(RectPositions.CenterBottom).Y &&
                     e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y < RigidBody.Bounds.GetVector(RectPositions.CenterTop).Y)
                     e.Collider.RigidBody.SetPosition(new Vector(e.Collider.RigidBody.Position.X, RigidBody.Position.Y - RigidBody.Size.Y));
             }
-            else if (Type == WallTypes.RightWall && e.Collider.Tag != Tags.Wall)
+            else if (Type == WallType.RightWall && e.Collider.Tag != Tag.Wall)
             {
                 if (e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterRight).X > RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X &&
                     e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterRight).X < RigidBody.Bounds.GetVector(RectPositions.CenterRight).X)
                     e.Collider.RigidBody.SetPosition(new Vector(RigidBody.Position.X - e.Collider.RigidBody.Size.X, e.Collider.RigidBody.Position.Y));
             }
-            else if (Type == WallTypes.LeftWall && e.Collider.Tag != Tags.Wall)
+            else if (Type == WallType.LeftWall && e.Collider.Tag != Tag.Wall)
             {
                 if (e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X < RigidBody.Bounds.GetVector(RectPositions.CenterRight).X &&
                     e.Collider.RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X > RigidBody.Bounds.GetVector(RectPositions.CenterLeft).X)

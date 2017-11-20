@@ -13,38 +13,38 @@ namespace ZombieGame.Game
         /// <param name="type">Tipo de eixo de entrada de usuário</param>
         /// <param name="player">Número do jogador ao qual o eixo se aplica</param>
         /// <returns>Valor do eixo</returns>
-        public static float GetAxis(AxisTypes type, int player = 1)
+        public static float GetAxis(AxisType type, int player = 1)
         {
             float output = 0;
             Application.Current.Dispatcher.Invoke(delegate
             {
                 if (player == 1)
                 {
-                    if (type == AxisTypes.Horizontal)
+                    if (type == AxisType.Horizontal)
                     {
                         if (Keyboard.IsKeyDown(Key.A))
                             output += -1;
                         if (Keyboard.IsKeyDown(Key.D))
                             output += 1;
                     }
-                    else if (type == AxisTypes.Vertical)
+                    else if (type == AxisType.Vertical)
                     {
                         if (Keyboard.IsKeyDown(Key.S))
                             output += -1;
                         if (Keyboard.IsKeyDown(Key.W))
                             output += 1;
                     }
-                    else if (type == AxisTypes.Fire)
+                    else if (type == AxisType.Fire)
                     {
                         if (Keyboard.IsKeyDown(Key.Space))
                             output = 1;
                     }
-                    else if (type == AxisTypes.Sprint)
+                    else if (type == AxisType.Sprint)
                     {
                         if (Keyboard.IsKeyDown(Key.LeftShift))
                             output = 1;
                     }
-                    else if (type == AxisTypes.Reload)
+                    else if (type == AxisType.Reload)
                     {
                         if (Keyboard.IsKeyDown(Key.R))
                             output = 1;
@@ -52,31 +52,31 @@ namespace ZombieGame.Game
                 }
                 else if (player == 2)
                 {
-                    if (type == AxisTypes.Horizontal)
+                    if (type == AxisType.Horizontal)
                     {
                         if (Keyboard.IsKeyDown(Key.J))
                             output += -1;
                         if (Keyboard.IsKeyDown(Key.L))
                             output += 1;
                     }
-                    else if (type == AxisTypes.Vertical)
+                    else if (type == AxisType.Vertical)
                     {
                         if (Keyboard.IsKeyDown(Key.K))
                             output += -1;
                         if (Keyboard.IsKeyDown(Key.I))
                             output += 1;
                     }
-                    else if (type == AxisTypes.Fire)
+                    else if (type == AxisType.Fire)
                     {
                         if (Keyboard.IsKeyDown(Key.Delete))
                             output = 1;
                     }
-                    else if (type == AxisTypes.Sprint)
+                    else if (type == AxisType.Sprint)
                     {
                         if (Keyboard.IsKeyDown(Key.End))
                             output = 1;
                     }
-                    else if (type == AxisTypes.Reload)
+                    else if (type == AxisType.Reload)
                     {
                         if (Keyboard.IsKeyDown(Key.P))
                             output = 1;

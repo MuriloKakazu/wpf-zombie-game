@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum WallTypes
+    public enum WallType
     {
         LeftWall,
         RightWall,

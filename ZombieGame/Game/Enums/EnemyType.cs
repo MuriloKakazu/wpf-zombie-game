@@ -3,7 +3,7 @@
     /// <summary>
     /// Enumeração dos tipos de Zumbis.
     /// </summary>
-    public enum EnemyTypes
+    public enum EnemyType
     {
         Undefined,
         Walker,

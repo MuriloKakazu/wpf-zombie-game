@@ -7,8 +7,10 @@ namespace ZombieGame.Game
         /// <summary>
         /// Dificuldade do jogo
         /// </summary>
-        public Difficulties Difficulty { get; set; }
+        public Difficulty Difficulty { get; set; }
         public float Volume { get; set; }
+        public bool AntiAliasingEnabled { get; set; }
+        public int RenderScale { get; set; }
 
         public Settings()
         {

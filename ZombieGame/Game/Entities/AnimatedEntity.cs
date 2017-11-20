@@ -17,7 +17,7 @@ namespace ZombieGame.Game.Entities
         public float AnimationDuration { get; protected set; }
         protected float DeltaT { get; set; }
         protected float TargetInterval { get; set; }
-        protected ExecutionStates ExecutionState { get; set; }
+        protected ExecutionState ExecutionState { get; set; }
         public bool DestroyOnAnimationEnd { get; set; }
         public bool LoopAnimation { get; set; }
         protected int SpriteIndex { get; set; }
@@ -27,7 +27,7 @@ namespace ZombieGame.Game.Entities
             get { return AnimatedEntities.ToArray(); }
         }
 
-        public AnimatedEntity(string name, Tags tag) : base(name, tag)
+        public AnimatedEntity(string name, Tag tag) : base(name, tag)
         {
             Sprite = new TransparentSprite();
             Spritesheet = new Spritesheet();
@@ -44,8 +44,8 @@ namespace ZombieGame.Game.Entities
             if (!Visible)
             {
                 Visible = true;
-                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualControl);
-                ExecutionState = ExecutionStates.Running;
+                GameMaster.TargetCanvas.AddChild(VisualControl);
+                ExecutionState = ExecutionState.Running;
             }
         }
 
@@ -60,12 +60,12 @@ namespace ZombieGame.Game.Entities
 
         public void PauseAnimation()
         {
-            ExecutionState = ExecutionStates.Paused;
+            ExecutionState = ExecutionState.Paused;
         }
 
         public void ResumeAnimation()
         {
-            ExecutionState = ExecutionStates.Running;
+            ExecutionState = ExecutionState.Running;
         }
 
         protected override void FixedUpdate()
@@ -76,7 +76,7 @@ namespace ZombieGame.Game.Entities
 
         public void Animate()
         {
-            if (ExecutionState == ExecutionStates.Running)
+            if (ExecutionState == ExecutionState.Running)
             {
                 DeltaT += Time.Delta * 1000;
 

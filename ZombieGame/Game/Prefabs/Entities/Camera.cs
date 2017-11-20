@@ -15,7 +15,7 @@ namespace ZombieGame.Game.Prefabs.Entities
         public static Wall LeftWall { get; set; }
         public static Wall RightWall { get; set; }
 
-        public Camera() : base("Camera", Tags.Camera)
+        public Camera() : base("Camera", Tag.Camera)
         {
             Instance = this;
             RigidBody.SetPosition(Vector.Zero);
@@ -27,24 +27,24 @@ namespace ZombieGame.Game.Prefabs.Entities
             Sprite = new TransparentSprite();
             SetupWalls();
             Show();
-            SetZIndex(ZIndexes.Camera);
+            SetZIndex(Enums.ZIndex.Camera);
         }
 
         private void SetupWalls()
         {
-            BottomWall = new Wall(WallTypes.BottomWall);
+            BottomWall = new Wall(WallType.BottomWall);
             BottomWall.RigidBody.SetPosition(new Vector(RigidBody.Position.X, RigidBody.Position.Y - RigidBody.Size.Y));
             BottomWall.RigidBody.Resize(new Vector(RigidBody.Size.X, 100));
             BottomWall.RigidBody.Freeze();
-            TopWall = new Wall(WallTypes.TopWall);
+            TopWall = new Wall(WallType.TopWall);
             TopWall.RigidBody.SetPosition(new Vector(RigidBody.Position.X, RigidBody.Position.Y));
             TopWall.RigidBody.Resize(new Vector(RigidBody.Size.X, 100));
             TopWall.RigidBody.Freeze();
-            LeftWall = new Wall(WallTypes.LeftWall);
+            LeftWall = new Wall(WallType.LeftWall);
             LeftWall.RigidBody.SetPosition(new Vector(RigidBody.Position.X, RigidBody.Position.Y));
             LeftWall.RigidBody.Resize(new Vector(100, RigidBody.Size.Y));
             LeftWall.RigidBody.Freeze();
-            RightWall = new Wall(WallTypes.RightWall);
+            RightWall = new Wall(WallType.RightWall);
             RightWall.RigidBody.SetPosition(new Vector(RigidBody.Size.X, 0));
             RightWall.RigidBody.Resize(new Vector(100, RigidBody.Size.Y));
             RightWall.RigidBody.Freeze();

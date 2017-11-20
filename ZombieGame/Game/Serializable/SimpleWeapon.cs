@@ -28,11 +28,11 @@ namespace ZombieGame.Game.Serializable
         /// <summary>
         /// Tipo da arma
         /// </summary>
-        public WeaponTypes Type { get; set; }
+        public WeaponType Type { get; set; }
         /// <summary>
         /// Tipos de projéteis aceitos pela arma
         /// </summary>
-        public ProjectileTypes[] AcceptedProjectileTypes { get; set; }
+        public ProjectileType[] AcceptedProjectileTypes { get; set; }
         public float Mass { get; set; }
         public Vector Size { get; set; }
         public string SpriteFileName { get; set; }

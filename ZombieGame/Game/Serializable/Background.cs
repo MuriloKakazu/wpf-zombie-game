@@ -21,10 +21,10 @@ namespace ZombieGame.Game.Serializable
         public Background()
         {
             VisualComponent = new VisualControl();
-            Canvas.SetZIndex(VisualComponent, (int)ZIndexes.Background);
+            Canvas.SetZIndex(VisualComponent, (int)ZIndex.Background);
 
             var CachedBitmap = new BitmapCache();
-            CachedBitmap.RenderAtScale = 0.65;
+            CachedBitmap.RenderAtScale = 0.35 * GameMaster.Settings.RenderScale;
             CachedBitmap.EnableClearType = false;
             CachedBitmap.SnapsToDevicePixels = true;
             VisualComponent.CacheMode = CachedBitmap;
@@ -48,7 +48,7 @@ namespace ZombieGame.Game.Serializable
                 Visible = true;
                 SetPosition(Position);
                 VisualComponent.Image.Source = new BitmapImage(new Uri(IO.GlobalPaths.BackgroundSprites + SpriteFileName));
-                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualComponent);
+                GameMaster.TargetCanvas.AddChild(VisualComponent);
             }
         }
 
@@ -57,7 +57,7 @@ namespace ZombieGame.Game.Serializable
             if (Visible)
             {
                 Visible = false;
-                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().RemoveFromCamera(VisualComponent);
+                GameMaster.TargetCanvas.RemoveChild(VisualComponent);
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum AxisTypes
+    public enum AxisType
     {
         Horizontal,
         Vertical,

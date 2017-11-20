@@ -23,37 +23,36 @@ namespace ZombieGame.Game
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            App.Current.Dispatcher.Invoke(delegate
-            {
-                DeltaT += Time.Delta * 1000;
-
-                if (DeltaT >= ThresholdTimeMs)
-                {
-                    DeltaT = 0;
-                    DestroyAllInactiveEntities();
-                }
-            });
+            App.Current.Dispatcher.InvokeAsync(delegate { IncreaseDeltaT(); });
         }
 
-        public static async void DestroyAllInactiveEntities()
+        private static void IncreaseDeltaT()
         {
-            await Task.Run(delegate
+            DeltaT += Time.Delta * 1000;
+
+            if (DeltaT >= ThresholdTimeMs)
             {
-                foreach (var e in AnimatedEntity.Instances)
-                    if (!e.IsActive) e.Destroy();
+                DeltaT = 0;
+                DestroyAllInactiveEntities();
+            }
+        }
 
-                foreach (var e in Enemy.Instances)
-                    if (!e.IsActive) e.Destroy();
+        public static void DestroyAllInactiveEntities()
+        {
+            foreach (var e in AnimatedEntity.Instances)
+                if (!e.IsActive) e.Destroy();
 
-                foreach (var e in Character.Instances)
-                    if (!e.IsActive) e.Destroy();
+            foreach (var e in Enemy.Instances)
+                if (!e.IsActive) e.Destroy();
 
-                foreach (var e in Projectile.Instances)
-                    if (!e.IsActive) e.Destroy();
+            foreach (var e in Character.Instances)
+                if (!e.IsActive) e.Destroy();
 
-                foreach (var e in Entity.Instances)
-                    if (!e.IsActive) e.Destroy();
-            });
+            foreach (var e in Projectile.Instances)
+                if (!e.IsActive) e.Destroy();
+
+            foreach (var e in Entity.Instances)
+                if (!e.IsActive) e.Destroy();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum ProjectileTypes
+    public enum ProjectileType
     {
         Undefined,
         Arrow,

@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.Game.Enums
 {
-    public enum Difficulties
+    public enum Difficulty
     {
         Easy,
         Medium,

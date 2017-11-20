@@ -21,7 +21,7 @@ namespace ZombieGame.Game.Interfaces
         /// <summary>
         /// Tipo do projétil
         /// </summary>
-        ProjectileTypes Type { get; set; }
+        ProjectileType Type { get; set; }
         /// <summary>
         /// Módulo da velocidade do projétil
         /// </summary>

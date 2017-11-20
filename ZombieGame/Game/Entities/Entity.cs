@@ -40,7 +40,7 @@ namespace ZombieGame.Game.Entities
         /// <summary>
         /// Retorna a Tag da entidade
         /// </summary>
-        public virtual Tags Tag { get; protected set; }
+        public virtual Tag Tag { get; protected set; }
         /// <summary>
         /// Retorna o RigidBody da entidade
         /// </summary>
@@ -60,17 +60,17 @@ namespace ZombieGame.Game.Entities
         /// <summary>
         /// Retorna se a entidade pertence a um jogador
         /// </summary>
-        public virtual bool IsPlayer { get { return Tag == Tags.Player; } }
+        public virtual bool IsPlayer { get { return Tag == Tag.Player; } }
         /// <summary>
         /// Retorna se a entidade é um inimigo
         /// </summary>
-        public virtual bool IsEnemy { get { return Tag == Tags.Enemy; } }
+        public virtual bool IsEnemy { get { return Tag == Tag.Enemy; } }
         /// <summary>
         /// Retorna se a entidade é uma câmera
         /// </summary>
-        public virtual bool IsCamera { get { return Tag == Tags.Camera; } }
-        public virtual bool IsVisualFX { get { return Tag == Tags.VisualFX; } }
-        public virtual bool IsWall { get { return Tag == Tags.Wall; } }
+        public virtual bool IsCamera { get { return Tag == Tag.Camera; } }
+        public virtual bool IsVisualFX { get { return Tag == Tag.VisualFX; } }
+        public virtual bool IsWall { get { return Tag == Tag.Wall; } }
         /// <summary>
         /// Retorna se a entidade é visível
         /// </summary>
@@ -93,7 +93,7 @@ namespace ZombieGame.Game.Entities
             get { return Entities.ToArray(); }
         }
 
-        public static void RemoveAllOfType(Tags type)
+        public static void RemoveAllOfType(Tag type)
         {
             foreach (var v in Entities)
                 if (v.Tag == type)
@@ -107,7 +107,7 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         /// <param name="name">Nome da entidade</param>
         /// <param name="tag">Tag da entidade</param>
-        public Entity(string name = "Unknown", Tags tag = Tags.Undefined)
+        public Entity(string name = "Unknown", Tag tag = Tag.Undefined)
         {
             IsActive = true;
             Sprite = new Sprite();
@@ -118,7 +118,7 @@ namespace ZombieGame.Game.Entities
             Collisions = new List<Entity>();
             Entities.Add(this);
             CreateVisualControl();
-            SetZIndex(ZIndexes.BackTile);
+            SetZIndex(Enums.ZIndex.BackTile);
             Time.HighFrequencyTimer.Elapsed += HighFrequencyTimer_Elapsed;
             Time.LowFrequencyTimer.Elapsed += LowFrequencyTimer_Elapsed;
             CollisionEnter += OnCollisionEnter;
@@ -126,7 +126,7 @@ namespace ZombieGame.Game.Entities
             CollisionLeave += OnCollisionLeave;
 
             CachedBitmap = new BitmapCache();
-            CachedBitmap.RenderAtScale = 2;
+            CachedBitmap.RenderAtScale = GameMaster.Settings.RenderScale;
             VisualControl.CacheMode = CachedBitmap;
         }
 
@@ -135,7 +135,7 @@ namespace ZombieGame.Game.Entities
             VisualControl = new VisualControl();
         }
 
-        protected virtual void SetZIndex(ZIndexes index)
+        protected virtual void SetZIndex(ZIndex index)
         {
             ZIndex = (int)index;
             Canvas.SetZIndex(VisualControl, (int)index);
@@ -160,7 +160,7 @@ namespace ZombieGame.Game.Entities
             {
                 Visible = true;
                 VisualControl.Image.Source = Sprite.Image;
-                Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualControl);
+                GameMaster.TargetCanvas.AddChild(VisualControl);
                 UpdateVisualControl();
             }
         }
@@ -173,7 +173,7 @@ namespace ZombieGame.Game.Entities
             if (Visible)
             {
                 Visible = false;
-                Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().RemoveFromCamera(VisualControl);
+                GameMaster.TargetCanvas.RemoveChild(VisualControl);
                 UpdateVisualControl();
             }
         }
@@ -266,13 +266,16 @@ namespace ZombieGame.Game.Entities
 
                 Entity returnValue;
 
+                if (candidates.Count == 0)
+                    return null;
+
                 var success = candidates.TryGetValue(candidates.Keys.Min(), out returnValue);
 
                 if (success)
                     return returnValue;
             }
             catch { /*Same distance to both players. Can't add to dictionary*/ }
-            return GameMaster.GetPlayer(0).Character;
+            return null;
         }
 
         /// <summary>
@@ -332,7 +335,7 @@ namespace ZombieGame.Game.Entities
         /// <param name="e">Informações a respeito da colisão</param>
         protected virtual void OnCollisionStay(object sender, CollisionEventArgs e)
         {
-            if (e.Collider.Tag != Tags.Projectile && e.Collider.Tag != Tags.Wall && !e.Collider.IsCamera)
+            if (e.Collider.Tag != Tag.Projectile && e.Collider.Tag != Tag.Wall && !e.Collider.IsCamera)
             {
                 RigidBody.SetMomentum(e.CollisionDirection * e.Collider.RigidBody.Momentum.Magnitude);
                 RigidBody.PointAt(e.CollisionDirection.Opposite);

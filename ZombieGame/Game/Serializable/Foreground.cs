@@ -11,7 +11,7 @@ namespace ZombieGame.Game.Serializable
     {
         public Foreground() : base()
         {
-            Canvas.SetZIndex(VisualComponent, (int)ZIndexes.Foreground);
+            Canvas.SetZIndex(VisualComponent, (int)ZIndex.Foreground);
         }
 
         public override void Show()
@@ -21,7 +21,7 @@ namespace ZombieGame.Game.Serializable
                 Visible = true;
                 SetPosition(Position);
                 VisualComponent.Image.Source = new BitmapImage(new Uri(IO.GlobalPaths.ForegroundSprites + SpriteFileName));
-                App.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(VisualComponent);
+                GameMaster.TargetCanvas.AddChild(VisualComponent);
             }
         }
     }

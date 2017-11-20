@@ -24,7 +24,7 @@ namespace ZombieGame.Game.Prefabs.Entities
         /// </summary>
         /// <param name="pos">Posição</param>
         /// <param name="size">Tamanho</param>
-        public Explosion(Vector pos, Vector size, float duration) : base("Explosion", Tags.VisualFX)
+        public Explosion(Vector pos, Vector size, float duration) : base("Explosion", Tag.VisualFX)
         {
             Spritesheet.LoadFrom(IO.GlobalPaths.AnimatedSprites + "explosion/");
             AnimationDuration = duration;
@@ -34,7 +34,7 @@ namespace ZombieGame.Game.Prefabs.Entities
             RigidBody.Resize(size);
             RigidBody.SetRotation(Random.Next(0, 360));
             UpdateVisualControl();
-            SetZIndex(ZIndexes.VisualFX);
+            base.SetZIndex(Enums.ZIndex.VisualFX);
             SetTimer();
         }
     }
