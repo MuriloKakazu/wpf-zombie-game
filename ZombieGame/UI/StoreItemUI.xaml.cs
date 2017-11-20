@@ -69,7 +69,7 @@ namespace ZombieGame.UI
                 {
                     if (GameMaster.Money >= w.Price)
                     {
-                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(31, 128, 31));
+                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(20, 100, 0));
                         btnBuy.Content = "Comprar";
                         btnBuy.IsEnabled = true;
                     }
@@ -82,7 +82,7 @@ namespace ZombieGame.UI
                 }
                 else
                 {
-                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 215, 70));
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 0, 0));
                     btnBuy.Content = "Equipar";
                     btnBuy.IsEnabled = true;
                 }
@@ -93,7 +93,7 @@ namespace ZombieGame.UI
                 {
                     if (GameMaster.Money >= p.Price)
                     {
-                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(31, 128, 31));
+                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(20, 100, 0));
                         btnBuy.Content = "Comprar";
                         btnBuy.IsEnabled = true;
                     }
@@ -107,13 +107,13 @@ namespace ZombieGame.UI
                 else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type) ||
                          GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                 {
-                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 215, 70));
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 0, 0));
                     btnBuy.Content = "Equipar";
                     btnBuy.IsEnabled = true;
                 }
                 else
                 {
-                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(110, 110, 110));
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(80, 40, 40));
                     btnBuy.Content = "Não compatível";
                     btnBuy.IsEnabled = false;
                 }
@@ -125,7 +125,7 @@ namespace ZombieGame.UI
                 btnBuy.Content = "";
             }
         }
-        #endregion
+        
 
         private void btnBuy_Click(object sender, RoutedEventArgs e)
         {
@@ -141,9 +141,8 @@ namespace ZombieGame.UI
                     if (GameMaster.Players[1].IsPlaying)
                     {
                         UserControls.ChoosePlayer.SetItem(w);
-                        UserControls.ChoosePlayer.Refresh();
-                        GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
-                        GameMaster.TargetCanvas.AddChild(UserControls.ChoosePlayer);
+                        UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
+                        UserControls.PauseMenu.Grid.Children.Add(UserControls.ChoosePlayer);
                         SoundPlayer.Instance.Play(new NoAmmoSFX());
                     }
                     else
@@ -172,23 +171,25 @@ namespace ZombieGame.UI
                             GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                         {
                             UserControls.ChoosePlayer.SetItem(p);
-                            UserControls.ChoosePlayer.Refresh();
-                            GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
-                            GameMaster.TargetCanvas.AddChild(UserControls.ChoosePlayer);
+                            UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
+                            UserControls.PauseMenu.Grid.Children.Add(UserControls.ChoosePlayer);
                             SoundPlayer.Instance.Play(new NoAmmoSFX());
                         } else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                         {
                             GameMaster.Players[0].Character.Weapon.SetProjectile(p.Mount());
+                            GameMaster.Players[0].Character.Weapon.Ammo = 0;
                             SoundPlayer.Instance.Play(new WeaponReloadSFX());
                         } else if (GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                         {
                             GameMaster.Players[1].Character.Weapon.SetProjectile(p.Mount());
+                            GameMaster.Players[1].Character.Weapon.Ammo = 0;
                             SoundPlayer.Instance.Play(new WeaponReloadSFX());
                         }
                     }
                     else
                     {
                         GameMaster.Players[0].Character.Weapon.SetProjectile(p.Mount());
+                        GameMaster.Players[0].Character.Weapon.Ammo = 0;
                         SoundPlayer.Instance.Play(new WeaponReloadSFX());
                     }
                 }
@@ -205,17 +206,16 @@ namespace ZombieGame.UI
             if (IsSellingWeapon)
             {
                 UserControls.WeaponInfo.SetWeapon(w);
-                UserControls.WeaponInfo.Refresh();
-                GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
-                GameMaster.TargetCanvas.AddChild(UserControls.WeaponInfo);
+                UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
+                UserControls.PauseMenu.Grid.Children.Add(UserControls.WeaponInfo);
             }
             else if (IsSellingProjectile)
             {
                 UserControls.ProjectileInfo.SetProjectile(p);
-                UserControls.ProjectileInfo.Refresh();
-                GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
-                GameMaster.TargetCanvas.AddChild(UserControls.ProjectileInfo);
+                UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
+                UserControls.PauseMenu.Grid.Children.Add(UserControls.ProjectileInfo);
             }
         }
+        #endregion
     }
 }

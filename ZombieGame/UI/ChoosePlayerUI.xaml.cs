@@ -35,13 +35,7 @@ namespace ZombieGame.UI
             InitializeComponent();
             imgP1.Source = new BitmapImage(new Uri(IO.GlobalPaths.CharacterSprites + "player1.png"));
             imgP2.Source = new BitmapImage(new Uri(IO.GlobalPaths.CharacterSprites + "player2.png"));
-        }
-        public void Refresh()
-        {
-            TranslateTransform tt = new TranslateTransform();
-            tt.X = GameMaster.Camera.RigidBody.Position.X;
-            tt.Y = -GameMaster.Camera.RigidBody.Position.Y;
-            RenderTransform = tt;
+            Canvas.SetZIndex(this, 10);
         }
 
         public void SetItem(SimpleWeapon w)
@@ -68,9 +62,10 @@ namespace ZombieGame.UI
             {
                 GameMaster.Players[0].Character.Weapon.SetProjectile(p.Mount());
                 SoundPlayer.Instance.Play(new WeaponReloadSFX());
+                GameMaster.Players[0].Character.Weapon.Ammo = 0;
             }
-            GameMaster.TargetCanvas.RemoveChild(UserControls.ChoosePlayer);
-            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
+            UserControls.PauseMenu.Grid.Children.Remove(UserControls.ChoosePlayer);
+            UserControls.PauseMenu.Grid.Children.Add(UserControls.StoreControl);
         }
 
         private void btnP2_Click(object sender, RoutedEventArgs e)
@@ -83,10 +78,11 @@ namespace ZombieGame.UI
             else if (IsProjectile)
             {
                 GameMaster.Players[1].Character.Weapon.SetProjectile(p.Mount());
+                GameMaster.Players[1].Character.Weapon.Ammo = 0;
                 SoundPlayer.Instance.Play(new WeaponReloadSFX());
             }
-            GameMaster.TargetCanvas.RemoveChild(UserControls.ChoosePlayer);
-            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
+            UserControls.PauseMenu.Grid.Children.Remove(UserControls.ChoosePlayer);
+            UserControls.PauseMenu.Grid.Children.Add(UserControls.StoreControl);
         }
     }
 }

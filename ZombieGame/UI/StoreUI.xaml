@@ -10,7 +10,11 @@
         <Grid.Effect>
             <DropShadowEffect Opacity="0.5"/>
         </Grid.Effect>
-        <Label HorizontalAlignment="Center" Margin="392,10,380,0" VerticalAlignment="Top" FontWeight="Bold" Background="#00000000" Foreground="White" FontSize="24" Content="Loja/Inventário" RenderTransformOrigin="0.517,0.524"/>
+        <Label HorizontalAlignment="Center" Margin="343,10,343,0" VerticalAlignment="Top" FontWeight="Bold" Background="#00000000" Foreground="#FFC80000" FontSize="36" Content="Loja/Inventário" RenderTransformOrigin="0.517,0.524" Width="268">
+            <Label.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="100"/>
+            </Label.Effect>
+        </Label>
         <DockPanel LastChildFill="False" Margin="14,52,5,0" HorizontalAlignment="Center" VerticalAlignment="Top" Height="226.875" Width="927">
             <Label x:Name="lblDinheiro" DockPanel.Dock="Top" Height="49.5" Foreground="White" Content="Dinheiro:" FontWeight="Bold" FontSize="18"></Label>
             <Label DockPanel.Dock="Top" Height="45" Foreground="White" Content="Armas:" FontWeight="Bold" FontSize="18"></Label>
@@ -56,6 +60,7 @@
             <local:StoreItemUI x:Name="siProjectile3" VerticalAlignment="Top"/>
             <local:StoreItemUI x:Name="siProjectile4" VerticalAlignment="Top"/>
         </DockPanel>
+        <local:GradientButtonUI x:Name="BackButton" VerticalAlignment="Bottom" Margin="146,0,308,-28.25" MouseLeftButtonUp="BackButton_MouseLeftButtonUp" />
 
     </Grid>
 </UserControl>

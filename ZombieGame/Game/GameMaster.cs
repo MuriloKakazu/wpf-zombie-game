@@ -87,7 +87,9 @@ namespace ZombieGame.Game
             EnemySpawner.Setup();
             Store.SetSellingItems();
             SetupScene(Database.Scenes[0]);
-            Money = 0;
+            Money = 3000;
+            Score = 0;
+            RunningTime = 0;
             UserControls.Setup();
             Pause();
         }
@@ -224,24 +226,25 @@ namespace ZombieGame.Game
         {
             if (!IgnoreKeyPress)
             {
-                    if (Keyboard.IsKeyDown(Key.Escape))
+                if (Keyboard.IsKeyDown(Key.Escape))
+                {
+                    if (GameplayState == ExecutionState.Paused)
                     {
-                        if (GameplayState == ExecutionState.Paused)
-                        {
-                            Resume();
-                            HideCursor();
-                        }
-                        else if (GameplayState == ExecutionState.Running)
-                        {
-                            Pause();
-                            ShowCursor();
-                        }
+                        Resume();
+                        GameMaster.TargetCanvas.RemoveChild(UserControls.PauseMenu);
+                        UserControls.PauseMenu.Grid.Children.Clear();
+                        UserControls.PauseMenu = new PauseMenuUI();
+                        HideCursor();
+                    }
+                    else if (GameplayState == ExecutionState.Running)
+                    {
+                        Pause();
+                        UserControls.PauseMenu.Refresh();
+                        GameMaster.TargetCanvas.AddChild(UserControls.PauseMenu);
+                        ShowCursor();
+                    }
 
-                        if (UserControls.StoreControl.IsOpen)
-                        {
-                            GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
-                            UserControls.StoreControl.IsOpen = false;
-                        }
+
 
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
@@ -271,20 +274,14 @@ namespace ZombieGame.Game
                     {
                         EnemySpawner.SpawnRandomEnemy();
 
-                        IgnoreKeyPress = true;
-                        LastUpdate = DateTime.Now;
-                    }
-                    else if (Keyboard.IsKeyDown(Key.F3))
-                    {
-                        if (!UserControls.StoreControl.IsOpen)
-                        {
-                            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
-                            UserControls.StoreControl.IsOpen = true;
-                            UserControls.StoreControl.Refresh();
-                        }
-                        IgnoreKeyPress = true;
-                        LastUpdate = DateTime.Now;
-                    }
+                    IgnoreKeyPress = true;
+                    LastUpdate = DateTime.Now;
+                }
+                else if (Keyboard.IsKeyDown(Key.F3))
+                {
+                    IgnoreKeyPress = true;
+                    LastUpdate = DateTime.Now;
+                }
             }
             else
             {

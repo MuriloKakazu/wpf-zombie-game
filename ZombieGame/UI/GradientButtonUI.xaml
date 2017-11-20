@@ -8,7 +8,7 @@
              d:DesignHeight="300" d:DesignWidth="300" MouseEnter="UserControl_MouseEnter" MouseLeave="UserControl_MouseLeave" MouseLeftButtonUp="UserControl_MouseLeftButtonUp" MouseLeftButtonDown="UserControl_MouseLeftButtonDown">
     <Grid>
         <DockPanel Margin="10,0">
-            <Label x:Name="Text" FontSize="22" Margin="20,3,20,5" HorizontalAlignment="Left" x:FieldModifier="public">
+            <Label x:Name="Text" FontSize="22" Margin="20,3,20,5" HorizontalAlignment="Left" x:FieldModifier="public" VerticalAlignment="Center">
                 <Label.Effect>
                     <DropShadowEffect ShadowDepth="0" BlurRadius="50"/>
                 </Label.Effect>

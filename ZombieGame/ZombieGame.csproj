@@ -132,6 +132,9 @@
     <Compile Include="UI\MainMenuUI.xaml.cs">
       <DependentUpon>MainMenuUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\PauseMenuUI.xaml.cs">
+      <DependentUpon>PauseMenuUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\PlayerStatsUI.xaml.cs">
       <DependentUpon>PlayerStatsUI.xaml</DependentUpon>
     </Compile>
@@ -216,6 +219,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\MainMenuUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PauseMenuUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

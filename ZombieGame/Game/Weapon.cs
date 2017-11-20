@@ -34,7 +34,7 @@ namespace ZombieGame.Game
         /// <summary>
         /// Quantia de munição atual da arma
         /// </summary>
-        public int Ammo { get; protected set; }
+        public int Ammo { get; set; }
         /// <summary>
         /// O tempo para recarregar a arma em ms
         /// </summary>

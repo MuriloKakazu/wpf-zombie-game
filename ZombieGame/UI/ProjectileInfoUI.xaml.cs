@@ -28,6 +28,7 @@ namespace ZombieGame.UI
         public ProjectileInfoUI()
         {
             InitializeComponent();
+            Canvas.SetZIndex(this, 10);
         }
 
         public void SetProjectile(SimpleProjectile p)
@@ -43,19 +44,10 @@ namespace ZombieGame.UI
             lblDistance.Content = "Distância máxima: " + p.TravelDistance + " pixeis";
         }
 
-
-        public void Refresh()
-        {
-            TranslateTransform tt = new TranslateTransform();
-            tt.X = GameMaster.Camera.RigidBody.Position.X;
-            tt.Y = -GameMaster.Camera.RigidBody.Position.Y;
-            RenderTransform = tt;
-        }
-
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            GameMaster.TargetCanvas.RemoveChild(this);
-            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
+            UserControls.PauseMenu.Grid.Children.Remove(this);
+            UserControls.PauseMenu.Grid.Children.Add(UserControls.StoreControl);
         }
     }
 }

@@ -27,6 +27,7 @@ namespace ZombieGame.UI
         public WeaponInfoUI()
         {
             InitializeComponent();
+            Canvas.SetZIndex(this, 10);
         }
 
         public void SetWeapon(SimpleWeapon w)
@@ -50,18 +51,11 @@ namespace ZombieGame.UI
             //imgWeapon.Source = new BitmapImage(new Uri(IO.GlobalPaths.WeaponSprites + w.SpriteFileName));
         }
 
-        public void Refresh()
-        {
-            TranslateTransform tt = new TranslateTransform();
-            tt.X = GameMaster.Camera.RigidBody.Position.X;
-            tt.Y = -GameMaster.Camera.RigidBody.Position.Y;
-            RenderTransform = tt;
-        }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            GameMaster.TargetCanvas.RemoveChild(this);
-            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
+            UserControls.PauseMenu.Grid.Children.Remove(this);
+            UserControls.PauseMenu.Grid.Children.Add(UserControls.StoreControl);
         }
     }
 }
