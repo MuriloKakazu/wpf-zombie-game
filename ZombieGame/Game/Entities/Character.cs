@@ -109,17 +109,17 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         /// <param name="name">Nome do personagem</param>
         /// <param name="tag">Tag do personagem</param>
-        public Character(string name, Tags tag) : base(name, tag)
+        public Character(string name, Tag tag) : base(name, tag)
         {
-            if (tag == Tags.Player)
+            if (tag == Tag.Player)
             {
                 Weapon = Database.Weapons[6].Mount();
                 Weapon.Owner = this;
                 Weapon.SetProjectile(Database.Projectiles[6].Mount());
-                SetZIndex(ZIndexes.Player);
+                base.SetZIndex(Enums.ZIndex.Player);
             }
             else
-                SetZIndex(ZIndexes.Enemy);
+                base.SetZIndex(Enums.ZIndex.Enemy);
             Characters.Add(this);
             Show();
         }

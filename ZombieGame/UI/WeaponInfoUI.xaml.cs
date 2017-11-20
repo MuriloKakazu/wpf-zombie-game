@@ -60,10 +60,8 @@ namespace ZombieGame.UI
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Windows.OfType<MainWindow>().
-                FirstOrDefault().RemoveFromUI(this);
-            Application.Current.Windows.OfType<MainWindow>().
-                FirstOrDefault().AddToUI(UserControls.StoreControl);
+            GameMaster.TargetCanvas.RemoveChild(this);
+            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
         }
     }
 }

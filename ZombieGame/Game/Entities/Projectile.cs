@@ -27,10 +27,10 @@ namespace ZombieGame.Game.Entities
         /// </summary>
         public virtual bool IsExplosive { get; protected set; }
         protected virtual bool IsExploding { get; set; }
-        protected virtual float TravelDistance { get; set; }
+        public virtual float MaxTravelDistance { get; set; }
         public virtual float ExplosionRadius { get; protected set; }
         protected virtual float TimeAlive { get; set; }
-        protected const float MaxTimeAlive = 5000;
+        protected const float MaxTimeAlive = 3000;
         /// <summary>
         /// Dano de impacto do projétil
         /// </summary>
@@ -42,7 +42,7 @@ namespace ZombieGame.Game.Entities
         /// <summary>
         /// Tipo do projétil
         /// </summary>
-        public virtual ProjectileTypes Type { get; protected set; }
+        public virtual ProjectileType Type { get; protected set; }
         /// <summary>
         /// O valor primitivo da velocidade
         /// </summary>
@@ -120,11 +120,11 @@ namespace ZombieGame.Game.Entities
                 Name = source.Name,
                 SpeedMagnitude = source.SpeedMagnitude,
                 StunTimeMs = source.StunTimeMs,
-                Tag = Tags.Projectile,
+                Tag = Tag.Projectile,
                 Type = source.Type,
                 ExplosionSFXKey = source.ExplosionSFXKey,
                 ImpactSFXKey = source.ImpactSFXKey,
-                TravelDistance = source.TravelDistance,
+                MaxTravelDistance = source.TravelDistance,
                 ExplosionRadius = source.ExplosionRadius,
             };
             p.RigidBody.Resize(source.Size);
@@ -136,16 +136,17 @@ namespace ZombieGame.Game.Entities
         /// <summary>
         /// ctor
         /// </summary>
-        protected Projectile() : this(ProjectileTypes.Undefined) { }
+        protected Projectile() : this(ProjectileType.Undefined) { }
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="type">Tipo de projétil</param>
-        public Projectile(ProjectileTypes type) : base(type.ToString() + "Projectile", Tags.Projectile)
+        public Projectile(ProjectileType type) : base(type.ToString() + "Projectile", Tag.Projectile)
         {
             LaunchPosition = RigidBody.Position;
-            SetZIndex(ZIndexes.Projectile);
+            base.SetZIndex(Enums.ZIndex.Projectile);
+            RigidBody.UseRotation = true;
             Projectiles.Add(this);
         }
 
@@ -156,8 +157,7 @@ namespace ZombieGame.Game.Entities
         public virtual void Launch(Vector dir)
         {
             RigidBody.SetPosition(new Vector(Owner.RigidBody.CenterPoint.X - RigidBody.Size.X / 2, Owner.RigidBody.CenterPoint.Y + RigidBody.Size.Y / 2));
-             LaunchPosition = RigidBody.Position;
-            RigidBody.UseRotation = true;
+            LaunchPosition = RigidBody.Position;
             RigidBody.PointAt(dir);
             RigidBody.SetVelocity(dir.Normalized * SpeedMagnitude);
             Show();
@@ -197,10 +197,6 @@ namespace ZombieGame.Game.Entities
 
                         t.RigidBody.PointAt(pos - t.RigidBody.CenterPoint);
                         t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * (ExplosionRadius * 5));
-
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("{0} exploded on {1}", Name, t.Name);
-                        Console.ResetColor();
                     }
                 }
                 var nearbyProjectiles = GetNearbyProjectiles(ExplosionRadius / 2, 3);
@@ -248,14 +244,14 @@ namespace ZombieGame.Game.Entities
                 Tag = Tag,
                 Type = Type,
                 Visible = Visible,
-                TravelDistance = TravelDistance,
+                MaxTravelDistance = MaxTravelDistance,
                 ExplosionRadius = ExplosionRadius,
                 VisualControl = new Controls.VisualControl(),
             };
             copy.RigidBody.Resize(RigidBody.Size);
             if (copy.Visible)
             {
-                System.Windows.Application.Current.Windows.OfType<MainWindow>().FirstOrDefault().AddToCamera(copy.VisualControl);
+                GameMaster.TargetCanvas.AddChild(VisualControl);
                 UpdateVisualControl();
             }
             return copy;
@@ -277,7 +273,12 @@ namespace ZombieGame.Game.Entities
         private void CheckTimeAlive()
         {
             if (TimeAlive >= MaxTimeAlive)
-                MarkAsNoLongerNeeded();
+            {
+                if (IsExplosive && !IsExploding)
+                    Explode();
+                else
+                    MarkAsNoLongerNeeded();
+            }
         }
 
 
@@ -296,7 +297,7 @@ namespace ZombieGame.Game.Entities
         {
             get
             {
-                return RigidBody.Position.DistanceBetween(LaunchPosition) >= TravelDistance;
+                return RigidBody.Position.DistanceBetween(LaunchPosition) >= MaxTravelDistance;
             }
         }
 
@@ -367,7 +368,7 @@ namespace ZombieGame.Game.Entities
 
                     MarkAsNoLongerNeeded();
                 }
-                else if (e.Collider.Tag == Tags.Projectile)
+                else if (e.Collider.Tag == Tag.Projectile)
                 {
                     var p = Projectile.FromHashCode(e.Collider.Hash);
                     if (p != null && p.Owner != Owner)

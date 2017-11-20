@@ -1,4 +1,5 @@
 ﻿using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ZombieGame.Game.Controls
 {
@@ -10,6 +11,11 @@ namespace ZombieGame.Game.Controls
         public VisualControl()
         {
             InitializeComponent();
+
+            if (GameMaster.Settings.AntiAliasingEnabled)
+                RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.HighQuality);
+            else
+                RenderOptions.SetBitmapScalingMode(Image, BitmapScalingMode.LowQuality);
         }
     }
 }

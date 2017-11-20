@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Media.Imaging;
-using System.Xml.Serialization;
 using ZombieGame.Game.Prefabs.Sprites;
 
 namespace ZombieGame.Game

@@ -6,22 +6,10 @@
         xmlns:local="clr-namespace:ZombieGame"
         xmlns:controls="clr-namespace:ZombieGame.Game.Controls"
         mc:Ignorable="d"
-        Title="ZombieGame Client" Height="720" Width="1280" MinWidth="1280" MinHeight="720" ResizeMode="CanMinimize">
-    <Grid Background="#FF323232">
-        <Canvas x:Name="UI" Panel.ZIndex="2">
-        </Canvas>
-        <Canvas x:Name="Camera" x:FieldModifier="public" DockPanel.Dock="Top" Opacity="0.5" Background="#FFDADADA" MouseMove="Camera_MouseMove" SizeChanged="Camera_SizeChanged" Cursor="Arrow" Panel.ZIndex="1">
-            <DockPanel Width="1274" Height="691" Panel.ZIndex="10">
-                <UI:PlayerStatsUI x:Name="P1Stats" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300" Margin="0,0,0,10"/>
-                <UI:PlayerStatsUI x:Name="P2Stats" HorizontalAlignment="Right" Width="300" DockPanel.Dock="Right" Margin="0,0,10,10" VerticalAlignment="Bottom"/>
-                <UI:GameStageUI x:Name="GameInfo" Margin="0,20,0,0" />
-            </DockPanel>
-            <controls:VisualControl x:Name="Scene">
-                <controls:VisualControl.Background>
-                    <ImageBrush Stretch="Fill"/>
-                </controls:VisualControl.Background>
-            </controls:VisualControl>
-        </Canvas>
+        Title="ZombieGame Client" Height="720" Width="1280" MinWidth="1280" MinHeight="720" ResizeMode="CanMinimize" Closed="Window_Closed">
+    <Grid x:Name="Grid" Background="#FF323232">
+        <Canvas x:Name="UI" Panel.ZIndex="2" />
+        <UI:GameCanvas x:Name="GameCanvas" />
     </Grid>
 
 </Window>

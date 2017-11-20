@@ -26,13 +26,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -68,23 +69,24 @@
     <Compile Include="Audio\SoundTrackSampleProvider.cs" />
     <Compile Include="Extensions\IEnumerableExtension.cs" />
     <Compile Include="Game\Entities\AnimatedEntity.cs" />
-    <Compile Include="Game\Enums\ZIndexes.cs" />
-    <Compile Include="Game\GarbageCollector.cs" />
+    <Compile Include="Game\Enums\ZIndex.cs" />
+    <Compile Include="Game\ResourceManager.cs" />
     <Compile Include="Game\Interfaces\IDestroyable.cs" />
     <Compile Include="Game\Prefabs\Audio\NoAmmoSFX.cs" />
     <Compile Include="Game\Prefabs\Audio\WeaponReloadSFX.cs" />
     <Compile Include="Game\Prefabs\Sprites\KeyboardLayoutSprite.cs" />
+    <Compile Include="Game\Prefabs\Sprites\SplashScreenSprite.cs" />
     <Compile Include="Game\Prefabs\Sprites\TransparentSprite.cs" />
     <Compile Include="Game\Prefabs\Sprites\UnavailableSprite.cs" />
     <Compile Include="Game\Serializable\Background.cs" />
     <Compile Include="Game\Database.cs" />
     <Compile Include="Game\EnemySpawner.cs" />
-    <Compile Include="Game\Enums\Difficulties.cs" />
+    <Compile Include="Game\Enums\Difficulty.cs" />
     <Compile Include="Game\Enums\ItemType.cs" />
-    <Compile Include="Game\Enums\ExecutionStates.cs" />
-    <Compile Include="Game\Enums\ProjectileTypes.cs" />
-    <Compile Include="Game\Enums\TileTypes.cs" />
-    <Compile Include="Game\Enums\WallTypes.cs" />
+    <Compile Include="Game\Enums\ExecutionState.cs" />
+    <Compile Include="Game\Enums\ProjectileType.cs" />
+    <Compile Include="Game\Enums\TileType.cs" />
+    <Compile Include="Game\Enums\WallType.cs" />
     <Compile Include="Game\Interfaces\IItem.cs" />
     <Compile Include="Game\Interfaces\ISerializableEnemy.cs" />
     <Compile Include="Game\Interfaces\ISerializableEntity.cs" />
@@ -97,19 +99,32 @@
     <Compile Include="Game\Entities\Projectile.cs" />
     <Compile Include="Game\Serializable\Foreground.cs" />
     <Compile Include="Game\Serializable\Scene.cs" />
+    <Compile Include="Game\Serializable\Score.cs" />
     <Compile Include="Game\Serializable\SimpleEnemy.cs" />
     <Compile Include="Game\Serializable\SimpleProjectile.cs" />
     <Compile Include="Game\Serializable\SimpleTile.cs" />
     <Compile Include="Game\Serializable\SimpleWeapon.cs" />
-    <Compile Include="Game\Settings.cs" />
+    <Compile Include="Game\Serializable\Settings.cs" />
     <Compile Include="Game\Sprite.cs" />
     <Compile Include="Game\Spritesheet.cs" />
     <Compile Include="Game\Store.cs" />
     <Compile Include="Game\Entities\Tile.cs" />
     <Compile Include="IO\GlobalPaths.cs" />
     <Compile Include="IO\Serialization\Xml.cs" />
+    <Compile Include="UI\GameCanvas.xaml.cs">
+      <DependentUpon>GameCanvas.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\GameStageUI.xaml.cs">
       <DependentUpon>GameStageUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\GradientButtonUI.xaml.cs">
+      <DependentUpon>GradientButtonUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\GradientLabelUI.xaml.cs">
+      <DependentUpon>GradientLabelUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainMenuUI.xaml.cs">
+      <DependentUpon>MainMenuUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ProgressBarUI.xaml.cs">
       <DependentUpon>ProgressBarUI.xaml</DependentUpon>
@@ -117,8 +132,11 @@
     <Compile Include="UI\PlayerStatsUI.xaml.cs">
       <DependentUpon>PlayerStatsUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ProjectileInfoUI.xaml.cs">
-      <DependentUpon>ProjectileInfoUI.xaml</DependentUpon>
+    <Compile Include="UI\RankingMenuUI.xaml.cs">
+      <DependentUpon>RankingMenuUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SettingsMenuUI.xaml.cs">
+      <DependentUpon>SettingsMenuUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\StoreItemUI.xaml.cs">
       <DependentUpon>StoreItemUI.xaml</DependentUpon>
@@ -147,10 +165,10 @@
       <DependentUpon>VisualControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game\Entities\Entity.cs" />
-    <Compile Include="Game\Enums\AxisTypes.cs" />
-    <Compile Include="Game\Enums\Tags.cs" />
-    <Compile Include="Game\Enums\WeaponTypes.cs" />
-    <Compile Include="Game\Enums\EnemyTypes.cs" />
+    <Compile Include="Game\Enums\AxisType.cs" />
+    <Compile Include="Game\Enums\Tag.cs" />
+    <Compile Include="Game\Enums\WeaponType.cs" />
+    <Compile Include="Game\Enums\EnemyType.cs" />
     <Compile Include="Game\GameMaster.cs" />
     <Compile Include="Game\Input.cs" />
     <Compile Include="Game\Player.cs" />
@@ -164,15 +182,39 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UI\ProgressBar.xaml">
+    <Page Include="UI\GameCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\PlayerStatsUI.xaml">
+    <Page Include="UI\GameStageUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\GradientButtonUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\GradientLabelUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\MainMenuUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\ProgressBarUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\ProjectileInfoUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\RankingMenuUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\SettingsMenuUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

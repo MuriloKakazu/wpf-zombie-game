@@ -17,7 +17,7 @@ namespace ZombieGame.Game.Serializable
         /// <summary>
         /// Retorna o tipo de inimigo
         /// </summary>
-        public EnemyTypes Type { get; set; }
+        public EnemyType Type { get; set; }
         /// <summary>
         /// Retorna a pontuação que o inimigo dará ao morrer
         /// </summary>

@@ -41,7 +41,7 @@ namespace ZombieGame.IO.Serialization
             try
             {
                 var serializer = new XmlSerializer(typeof(T));
-                reader = new StreamReader(path);
+                    reader = new StreamReader(path);
                 return (T)serializer.Deserialize(reader);
             }
             finally

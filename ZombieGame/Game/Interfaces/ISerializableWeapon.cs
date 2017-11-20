@@ -20,11 +20,11 @@ namespace ZombieGame.Game.Interfaces
         /// <summary>
         /// Tipo da arma
         /// </summary>
-        WeaponTypes Type { get; set; }
+        WeaponType Type { get; set; }
         /// <summary>
         /// Tipos de projéteis aceitos pela arma
         /// </summary>
-        ProjectileTypes[] AcceptedProjectileTypes { get; set; }
+        ProjectileType[] AcceptedProjectileTypes { get; set; }
         string SoundFXKey { get; set; }
 
         /// <summary>

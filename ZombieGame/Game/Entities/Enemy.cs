@@ -19,7 +19,7 @@ namespace ZombieGame.Game.Entities
         /// <summary>
         /// Retorna o tipo de inimigo
         /// </summary>
-        public virtual EnemyTypes Type { get; protected set; }
+        public virtual EnemyType Type { get; protected set; }
         /// <summary>
         /// Retorna a pontuação que o inimigo dará ao morrer
         /// </summary>
@@ -61,7 +61,7 @@ namespace ZombieGame.Game.Entities
             return e;
         }
 
-        public Enemy() : this(EnemyTypes.Undefined)
+        public Enemy() : this(EnemyType.Undefined)
         {
 
         }
@@ -70,7 +70,7 @@ namespace ZombieGame.Game.Entities
         /// ctor
         /// </summary>
         /// <param name="type">O tipo de inimigo</param>
-        public Enemy(EnemyTypes type) : base(type.ToString(), Tags.Enemy)
+        public Enemy(EnemyType type) : base(type.ToString(), Tag.Enemy)
         {
             Type = type;
             RigidBody.UseRotation = true;
@@ -93,6 +93,9 @@ namespace ZombieGame.Game.Entities
         /// <param name="speedMagnitude">Magnitude da velocidade de perseguição</param>
         protected virtual void Chase(Entity target, float speedMagnitude)
         {
+            if (target == null)
+                return;
+
             if (RigidBody.Acceleration.Magnitude > 0)
                 RigidBody.Acceleration.Approximate(Vector.Zero, 10);
             RigidBody.SetForce(RigidBody.Force / 1.1f);
@@ -112,7 +115,6 @@ namespace ZombieGame.Game.Entities
             SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(DeathSFXKey));
             GameMaster.Score += DeathPoints * GameMaster.DifficultyBonus;
             GameMaster.Money += MoneyDrop * GameMaster.DifficultyBonus;
-            EnemySpawner.CurrentEnemySpawnTarget++;
             base.Kill();
         }
 
@@ -153,7 +155,7 @@ namespace ZombieGame.Game.Entities
             if (e.Collider.IsCamera)
                 return;
 
-            if (e.Collider.Tag != Tags.Projectile && e.Collider.Tag != Tags.Wall)
+            if (e.Collider.Tag != Tag.Projectile && e.Collider.Tag != Tag.Wall)
             {
                 RigidBody.AddForce(e.CollisionDirection.Normalized * RigidBody.Momentum.Magnitude);
                 if (e.Collider.IsPlayer)

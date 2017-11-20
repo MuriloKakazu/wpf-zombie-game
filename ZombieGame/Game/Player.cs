@@ -52,7 +52,7 @@ namespace ZombieGame.Game
         public Player(int playerNumber, string name)
         {
             PlayerNumber = playerNumber;
-            Character = new Character(name, Tags.Player);
+            Character = new Character(name, Tag.Player);
             Character.MaxHealth = 100;
             Character.SetHealth(100);
             Character.LoadSprite(GlobalPaths.CharacterSprites + "player" + playerNumber + ".png");
@@ -66,25 +66,25 @@ namespace ZombieGame.Game
         /// <param name="e">Informações do evento</param>
         private void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            App.Current.Dispatcher.Invoke(delegate { Update(); });
+            App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
         }
 
         /// <summary>
         /// Método que aciona funções que precisam ser disparadas constantemente
         /// </summary>
-        public void Update()
+        public void FixedUpdate()
         {
             if (!Character.IsStunned && IsPlaying)
             {
-                Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisTypes.Sprint, PlayerNumber));
-                Character.IsFiring = Convert.ToBoolean(Input.GetAxis(AxisTypes.Fire, PlayerNumber));
-                bool weaponReloadRequest = Convert.ToBoolean(Input.GetAxis(AxisTypes.Reload, PlayerNumber));
-                var x = Input.GetAxis(AxisTypes.Horizontal, PlayerNumber);
-                var y = Input.GetAxis(AxisTypes.Vertical, PlayerNumber);
+                Character.IsSprinting = Convert.ToBoolean(Input.GetAxis(AxisType.Sprint, PlayerNumber));
+                Character.IsFiring = Convert.ToBoolean(Input.GetAxis(AxisType.Fire, PlayerNumber));
+                bool weaponReloadRequest = Convert.ToBoolean(Input.GetAxis(AxisType.Reload, PlayerNumber));
+                var x = Input.GetAxis(AxisType.Horizontal, PlayerNumber);
+                var y = Input.GetAxis(AxisType.Vertical, PlayerNumber);
                 var r = new Vector(x, y);
-                var speedMult = 20f;
-                if (Character.IsSprinting)
-                    speedMult += 8;
+                var speedMult = 17f;
+                if (Character.IsSprinting && !Character.Weapon.IsReloading)
+                    speedMult += 10;
                 if (x != 0 && y != 0)
                 {
                     var mag = r.Magnitude;
@@ -107,7 +107,7 @@ namespace ZombieGame.Game
                     {
                         Character.Weapon.ShootAt(Character.RigidBody.Front);
 
-                        if (Character.Weapon.Type == WeaponTypes.Shotgun || Character.Weapon.Type == WeaponTypes.RocketLauncher)
+                        if (Character.Weapon.Type == WeaponType.Shotgun || Character.Weapon.Type == WeaponType.RocketLauncher)
                             Character.Stun(250);
                     }
                     else

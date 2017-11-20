@@ -67,7 +67,7 @@ namespace ZombieGame.UI
         public StoreUC()
         {
             InitializeComponent();
-            Canvas.SetZIndex(this, Convert.ToInt32(ZIndexes.UserInterface));
+            Canvas.SetZIndex(this, Convert.ToInt32(ZIndex.UserInterface));
         }
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {

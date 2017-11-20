@@ -149,72 +149,6 @@ namespace ZombieGame.Physics
         {
             return v1 * -1;
         }
-        // Obsolete code
-        ///// <summary>
-        ///// Retorna um booleano afirmando se o módulo de A é maior do que o módulo de B
-        ///// </summary>
-        ///// <param name="v1">Vetor A</param>
-        ///// <param name="v2">Vetor B</param>
-        ///// <returns>Bool</returns>
-        //public static bool operator >(Vector v1, Vector v2)
-        //{
-        //    return Math.Round(v1.Magnitude, 2) > Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
-        //}
-        ///// <summary>
-        ///// Retorna um booleano afirmando se o módulo de A é menor do que o módulo de B
-        ///// </summary>
-        ///// <param name="v1">Vetor A</param>
-        ///// <param name="v2">Vetor B</param>
-        ///// <returns>Bool</returns>
-        //public static bool operator <(Vector v1, Vector v2)
-        //{
-        //    return Math.Round(v1.Magnitude, 2) < Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
-        //}
-        ///// <summary>
-        ///// Retorna um booleano afirmando se o módulo de A é maior do que ou igual ao módulo de B
-        ///// </summary>
-        ///// <param name="v1">Vetor A</param>
-        ///// <param name="v2">Vetor B</param>
-        ///// <returns>Bool</returns>
-        //public static bool operator >=(Vector v1, Vector v2)
-        //{
-        //    return Math.Round(v1.Magnitude, 2) >= Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
-        //}
-        ///// <summary>
-        ///// Retorna um booleano afirmando se o módulo de A é menor do que ou igual ao módulo de B
-        ///// </summary>
-        ///// <param name="v1">Vetor A</param>
-        ///// <param name="v2">Vetor B</param>
-        ///// <returns>Bool</returns>
-        //public static bool operator <=(Vector v1, Vector v2)
-        //{
-        //    return Math.Round(v1.Magnitude, 2) <= Math.Round(v2.Magnitude, 2); // 0.995 e 1.005 são considerados como 1
-        //}
-        ///// <summary>
-        ///// Retorna um booleano afirmando se os módulos dos vetores são iguais
-        ///// </summary>
-        ///// <param name="v1">Vetor A</param>
-        ///// <param name="v2">Vetor B</param>
-        ///// <returns>Bool</returns>
-        //public static bool operator ==(Vector v1, Vector v2)
-        //{
-        //    return Math.Round(v1.X, 2) == Math.Round(v2.X, 2) ^
-        //           Math.Round(v1.Y, 2) == Math.Round(v2.Y, 2) ^
-        //           Math.Round(v1.Z, 2) == Math.Round(v2.Z, 2); // 0.995 e 1.005 são considerados como 1
-
-        //}
-        ///// <summary>
-        ///// Retorna um booleano afirmando se os módulos dos vetores são diferentes
-        ///// </summary>
-        ///// <param name="v1">Vetor A</param>
-        ///// <param name="v2">Vetor B</param>
-        ///// <returns>Bool</returns>
-        //public static bool operator !=(Vector v1, Vector v2)
-        //{
-        //    return Math.Round(v1.X, 2) != Math.Round(v2.X, 2) ||
-        //           Math.Round(v1.Y, 2) != Math.Round(v2.Y, 2) ||
-        //           Math.Round(v1.Z, 2) != Math.Round(v2.Z, 2); // 0.995 e 1.005 são considerados como 1
-        //}
         #endregion
 
         #region Methods
@@ -309,6 +243,7 @@ namespace ZombieGame.Physics
         /// <param name="offset">Deslocamento máximo de eixo</param>
         public void Approximate(Vector v, float offset)
         {
+            // Aproximação do eixo X
             if (Math.Abs(X - v.X) <= offset)
                 X = v.X;
             else if (Math.Abs(X - v.X) != 0)
@@ -319,6 +254,7 @@ namespace ZombieGame.Physics
                     X += offset;
             }
 
+            // Aproximação do eixo Y
             if (Math.Abs(Y - v.Y) <= offset)
                 Y = v.Y;
             else if (Math.Abs(Y - v.Y) != 0)
@@ -329,6 +265,7 @@ namespace ZombieGame.Physics
                     Y += offset;
             }
 
+            // Aproximação do eixo Z
             if (Math.Abs(Z - v.Z) <= offset)
                 Z = v.Z;
             else if (Math.Abs(Z - v.Z) != 0)

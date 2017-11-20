@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="ZombieGame.UI.MainMenuUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZombieGame.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="691" d:DesignWidth="1274" MouseMove="UserControl_MouseMove">
+    <Grid x:Name="Grid" Background="Wheat">
+        <DockPanel x:Name="MainMenuOptions" HorizontalAlignment="Left" Margin="50" Width="500" Panel.ZIndex="10">
+            <Label Content="MAIN MENU" FontWeight="Bold" FontSize="36" Foreground="#FFC80000" DockPanel.Dock="Top" Margin="10,10,10,20">
+                <Label.Effect>
+                    <DropShadowEffect BlurRadius="100" ShadowDepth="0" Color="Black"/>
+                </Label.Effect>
+            </Label>
+            <StackPanel HorizontalAlignment="Left" DockPanel.Dock="Top" Width="300">
+                <local:GradientButtonUI x:Name="StartGameButton" MouseLeftButtonUp="StartGameButton_MouseLeftButtonUp"/>
+                <local:GradientButtonUI x:Name="RankingButton" MouseLeftButtonUp="RankingButton_MouseLeftButtonUp"/>
+                <local:GradientButtonUI x:Name="SettingsButton" MouseLeftButtonUp="SettingsButton_MouseLeftButtonUp"/>
+                <local:GradientButtonUI x:Name="QuitButton" MouseLeftButtonUp="QuitButton_MouseLeftButtonUp"/>
+            </StackPanel>
+            <Label Content="v1.0" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" FontSize="20" Margin="30,5">
+                <Label.Effect>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="50"/>
+                </Label.Effect>
+            </Label>
+        </DockPanel>
+    </Grid>
+</UserControl>

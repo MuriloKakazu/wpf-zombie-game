@@ -5,14 +5,14 @@ namespace ZombieGame.Game.Entities
 {
     public class Tile : Entity
     {
-        public TileTypes Type { get; protected set; }
+        public TileType Type { get; protected set; }
 
-        public Tile(TileTypes type) : base("Tile", Tags.Tile)
+        public Tile(TileType type) : base("Tile", Tag.Tile)
         {
-            if (type == TileTypes.BackTile)
-                SetZIndex(ZIndexes.BackTile);
-            else if (type == TileTypes.ForeTile)
-                SetZIndex(ZIndexes.ForeTile);
+            if (type == TileType.BackTile)
+                base.SetZIndex(Enums.ZIndex.BackTile);
+            else if (type == TileType.ForeTile)
+                base.SetZIndex(Enums.ZIndex.ForeTile);
             RigidBody.UseRotation = false;
             RigidBody.Freeze();
             RigidBody.IgnoreCollisions = true;

@@ -29,7 +29,7 @@ namespace ZombieGame.Game.Serializable
         /// <summary>
         /// Tipo do projétil
         /// </summary>
-        public ProjectileTypes Type { get; set; }
+        public ProjectileType Type { get; set; }
         /// <summary>
         /// Módulo da velocidade do projétil
         /// </summary>
