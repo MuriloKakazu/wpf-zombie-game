@@ -114,6 +114,9 @@
     <Compile Include="UI\ChoosePlayerUI.xaml.cs">
       <DependentUpon>ChoosePlayerUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\EndGameUI.xaml.cs">
+      <DependentUpon>EndGameUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\GameCanvas.xaml.cs">
       <DependentUpon>GameCanvas.xaml</DependentUpon>
     </Compile>
@@ -189,6 +192,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="UI\ChoosePlayerUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\EndGameUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Timers;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Prefabs.Entities;
@@ -165,7 +167,39 @@ namespace ZombieGame.Game
         /// <param name="e">Informações do evento</param>
         private static void InternalTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            App.Current.Dispatcher.Invoke(delegate { CheckForUserInput(); });
+            App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
+        }
+
+        private static void FixedUpdate()
+        {
+            CheckForUserInput();
+            CheckGameOver();
+        }
+
+        private static void PauseForever()
+        {
+            Pause();
+            InternalTimer.Stop();
+        }
+
+        private static void CheckGameOver()
+        {
+            if (GetPlayer(0).Character == null && GetPlayer(1).Character == null ||
+                GetPlayer(0).Character != null && !GetPlayer(0).Character.IsAlive &&
+                GetPlayer(1).Character != null && !GetPlayer(1).Character.IsAlive)
+            {
+                PauseForever();
+                ShowGameOverScreen();
+                ShowCursor();
+            }
+        }
+
+        private static void ShowGameOverScreen()
+        {
+            EndGameUI endUI = new EndGameUI();
+            Canvas.SetZIndex(endUI, 11);
+            endUI.RenderTransform = GameMaster.TargetCanvas.Canvas.RenderTransform;
+            TargetCanvas.AddChild(endUI);
         }
 
         private static void IncreaseRunningTime()
@@ -228,6 +262,8 @@ namespace ZombieGame.Game
                     }
                     else if (Keyboard.IsKeyDown(Key.F1))
                     {
+                        GetPlayer(0).Character.SetHealth(0);
+
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
                     }
