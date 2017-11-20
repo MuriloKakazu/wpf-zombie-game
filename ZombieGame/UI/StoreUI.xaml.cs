@@ -67,7 +67,8 @@ namespace ZombieGame.UI
         public StoreUC()
         {
             InitializeComponent();
-            Canvas.SetZIndex(this, Convert.ToInt32(ZIndex.UserInterface));
+            Canvas.SetZIndex(this, 20);
+            BackButton.Text.Content = "Voltar";
         }
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
@@ -76,15 +77,6 @@ namespace ZombieGame.UI
             SetMaxIndex();
             Width = Physics.Vector.WindowSize.X;
             Height = Physics.Vector.WindowSize.Y;
-            Refresh();
-            Update();
-        }
-        public void Refresh()
-        {
-            TranslateTransform tt = new TranslateTransform();
-            tt.X = GameMaster.Camera.RigidBody.Position.X;
-            tt.Y = -GameMaster.Camera.RigidBody.Position.Y;
-            RenderTransform = tt;
             Update();
         }
 
@@ -131,6 +123,13 @@ namespace ZombieGame.UI
             siWeapon3.SetSellingItem(SellingWeapons[2]);
             siWeapon4.SetSellingItem(SellingWeapons[3]);
         }
+
+        private void BackButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
+            UserControls.PauseMenu.PausedMenuContent.Visibility = Visibility.Visible;
+        }
+
         private void UpdateProjectileInferfaces()
         {
             siProjectile1.SetSellingItem(SellingProjectiles[0]);

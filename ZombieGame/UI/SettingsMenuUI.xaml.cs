@@ -51,8 +51,11 @@ namespace ZombieGame.UI
                 GameMaster.TargetWindow.MainMenu.Grid.Children.Remove(this);
                 GameMaster.TargetWindow.MainMenu.ReturnToOriginalState();
             }
-            //else
-            //    GameMaster.TargetCanvas.AddChild(new PauseMenu());
+            else
+            {
+                UserControls.PauseMenu.Grid.Children.Remove(this);
+                UserControls.PauseMenu.PausedMenuContent.Visibility = Visibility.Visible;
+            }
         }
 
         private void VolumeSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

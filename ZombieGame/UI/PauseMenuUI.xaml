@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="ZombieGame.UI.PauseMenuUI"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ZombieGame.UI"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Width="1274" Height="691" Background="#33000000">
+    <Grid x:Name="Grid" Background="#00000000" Width="1274" Height="691">
+        <StackPanel x:Name="PausedMenuContent" Background="#00000000" Width="500" Height="600" Margin="0,100,0,50">
+            <Label Content="Jogo Pausado" Foreground="#FFC80000" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" FontWeight="Bold" FontSize="48">
+                <Label.Effect>
+                    <DropShadowEffect BlurRadius="50" ShadowDepth="0"/>
+                </Label.Effect>
+            </Label>
+            <local:GradientButtonUI x:Name="btnStore" Height="50" FontSize="22" Margin="0,40,0,0" MouseLeftButtonUp="btnStore_MouseLeftButtonUp"/>
+            <local:GradientButtonUI x:Name="btnSettings" Height="50" FontSize="22" Margin="0,40,0,0" MouseLeftButtonUp="btnSettings_MouseLeftButtonUp"/>
+            <local:GradientButtonUI x:Name="btnMainMenu" Height="50" FontSize="22" Margin="0,40,0,0" MouseLeftButtonUp="btnMainMenu_MouseLeftButtonUp"/>
+
+        </StackPanel>
+    </Grid>
+
+</UserControl>

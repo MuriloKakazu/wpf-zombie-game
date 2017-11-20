@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ZombieGame.Game.Serializable;
+using System.Linq;
 
 namespace ZombieGame.Game
 {
@@ -84,8 +85,9 @@ namespace ZombieGame.Game
         /// </summary>
         public static void SetSellingItems()
         {
-            SellingWeapons = Database.Weapons;
-            SellingProjectiles = Database.Projectiles;
+            
+            SellingWeapons = Database.Weapons.OrderBy(x => x.Price).ToList();
+            SellingProjectiles = Database.Projectiles.OrderBy(x => x.Price).ToList();
         }
     }
 }

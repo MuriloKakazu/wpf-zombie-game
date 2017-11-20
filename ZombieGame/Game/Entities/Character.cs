@@ -188,7 +188,7 @@ namespace ZombieGame.Game.Entities
         /// <summary>
         /// Mata o personagem
         /// </summary>
-        protected virtual void Kill()
+        protected virtual void Kill(bool silent = false)
         {
             Health = 0;
             MarkAsNoLongerNeeded();
@@ -250,7 +250,7 @@ namespace ZombieGame.Game.Entities
         public override void Destroy()
         {
             if (IsAlive)
-                Kill();
+                Kill(silent:true);
             if (HasWeapon)
                 Weapon.Destroy();
             Characters.Remove(this);

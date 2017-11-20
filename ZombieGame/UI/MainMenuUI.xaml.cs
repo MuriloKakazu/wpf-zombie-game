@@ -79,6 +79,9 @@ namespace ZombieGame.UI
             GameMaster.Setup();
             GameMaster.TargetCanvas.Prepare();
             GameMaster.TargetCanvas.Visibility = Visibility.Visible;
+            GameMaster.TargetCanvas.P1Stats.UpdateStats();
+            GameMaster.TargetCanvas.P2Stats.UpdateStats();
+            GameMaster.TargetCanvas.GameInfo.Update();
         }
 
         private void SettingsButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

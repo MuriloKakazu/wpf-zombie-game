@@ -46,6 +46,11 @@ namespace ZombieGame.UI
             Canvas.Children.Remove(element);
         }
 
+        public void ResetUI()
+        {
+            RemoveChild(UserControls.PauseMenu);
+        }
+
         private void HighFrequencyTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             App.Current.Dispatcher.Invoke(delegate
@@ -66,5 +71,6 @@ namespace ZombieGame.UI
                 P2Stats.UpdateStats();
             GameInfo.Update();
         }
+
     }
 }

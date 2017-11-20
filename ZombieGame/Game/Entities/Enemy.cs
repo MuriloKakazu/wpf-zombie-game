@@ -110,11 +110,14 @@ namespace ZombieGame.Game.Entities
             GameMaster.Score += quantity;
         }
 
-        protected override void Kill()
+        protected override void Kill(bool silent = false)
         {
-            SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(DeathSFXKey));
-            GameMaster.Score += DeathPoints * GameMaster.DifficultyBonus;
-            GameMaster.Money += MoneyDrop * GameMaster.DifficultyBonus;
+            if (!silent)
+            {
+                SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(DeathSFXKey));
+                GameMaster.Score += DeathPoints * GameMaster.DifficultyBonus;
+                GameMaster.Money += MoneyDrop * GameMaster.DifficultyBonus;
+            }
             base.Kill();
         }
 

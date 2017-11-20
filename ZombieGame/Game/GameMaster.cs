@@ -85,7 +85,9 @@ namespace ZombieGame.Game
             EnemySpawner.Setup();
             Store.SetSellingItems();
             SetupScene(Database.Scenes[0]);
-            Money = 0;
+            Money = 3000;
+            Score = 0;
+            RunningTime = 0;
             UserControls.Setup();
             Pause();
         }
@@ -190,65 +192,60 @@ namespace ZombieGame.Game
         {
             if (!IgnoreKeyPress)
             {
-                    if (Keyboard.IsKeyDown(Key.Escape))
+                if (Keyboard.IsKeyDown(Key.Escape))
+                {
+                    if (GameplayState == ExecutionState.Paused)
                     {
-                        if (GameplayState == ExecutionState.Paused)
-                        {
-                            Resume();
-                            HideCursor();
-                        }
-                        else if (GameplayState == ExecutionState.Running)
-                        {
-                            Pause();
-                            ShowCursor();
-                        }
+                        Resume();
+                        GameMaster.TargetCanvas.RemoveChild(UserControls.PauseMenu);
+                        UserControls.PauseMenu.Grid.Children.Clear();
+                        UserControls.PauseMenu = new PauseMenuUI();
+                        HideCursor();
+                    }
+                    else if (GameplayState == ExecutionState.Running)
+                    {
+                        Pause();
+                        UserControls.PauseMenu.Refresh();
+                        GameMaster.TargetCanvas.AddChild(UserControls.PauseMenu);
+                        ShowCursor();
+                    }
 
-                        if (UserControls.StoreControl.IsOpen)
-                        {
-                            GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
-                            UserControls.StoreControl.IsOpen = false;
-                        }
 
-                        IgnoreKeyPress = true;
-                        LastUpdate = DateTime.Now;
-                    }
-                    else if (Keyboard.IsKeyDown(Key.Enter))
-                    {
-                        if (GameplayState == ExecutionState.Running && !GetPlayer(1).IsPlaying)
-                        {
-                            GetPlayer(1).IsPlaying = true;
-                            GetPlayer(1).Character = new Character("Player2", Tag.Player);
-                            GetPlayer(1).Character.MaxHealth = 100;
-                            GetPlayer(1).Character.SetHealth(100);
-                            GetPlayer(1).Character.LoadSprite(GlobalPaths.CharacterSprites + "player2.png");
-                            GetPlayer(1).Character.RigidBody.SetPosition(GetPlayer(0).Character.RigidBody.Position);
-                            GetPlayer(1).Character.RigidBody.Resize(new Physics.Vector(50, 50));
-                            GetPlayer(1).Character.RigidBody.UseRotation = true;
-                        }
-                    }
-                    else if (Keyboard.IsKeyDown(Key.F1))
-                    {
-                        IgnoreKeyPress = true;
-                        LastUpdate = DateTime.Now;
-                    }
-                    else if (Keyboard.IsKeyDown(Key.F2))
-                    {
-                        EnemySpawner.SpawnRandomEnemy();
 
-                        IgnoreKeyPress = true;
-                        LastUpdate = DateTime.Now;
-                    }
-                    else if (Keyboard.IsKeyDown(Key.F3))
+                    IgnoreKeyPress = true;
+                    LastUpdate = DateTime.Now;
+                }
+                else if (Keyboard.IsKeyDown(Key.Enter))
+                {
+                    if (GameplayState == ExecutionState.Running && !GetPlayer(1).IsPlaying)
                     {
-                        if (!UserControls.StoreControl.IsOpen)
-                        {
-                            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
-                            UserControls.StoreControl.IsOpen = true;
-                            UserControls.StoreControl.Refresh();
-                        }
-                        IgnoreKeyPress = true;
-                        LastUpdate = DateTime.Now;
+                        GetPlayer(1).IsPlaying = true;
+                        GetPlayer(1).Character = new Character("Player2", Tag.Player);
+                        GetPlayer(1).Character.MaxHealth = 100;
+                        GetPlayer(1).Character.SetHealth(100);
+                        GetPlayer(1).Character.LoadSprite(GlobalPaths.CharacterSprites + "player2.png");
+                        GetPlayer(1).Character.RigidBody.SetPosition(GetPlayer(0).Character.RigidBody.Position);
+                        GetPlayer(1).Character.RigidBody.Resize(new Physics.Vector(50, 50));
+                        GetPlayer(1).Character.RigidBody.UseRotation = true;
                     }
+                }
+                else if (Keyboard.IsKeyDown(Key.F1))
+                {
+                    IgnoreKeyPress = true;
+                    LastUpdate = DateTime.Now;
+                }
+                else if (Keyboard.IsKeyDown(Key.F2))
+                {
+                    EnemySpawner.SpawnRandomEnemy();
+
+                    IgnoreKeyPress = true;
+                    LastUpdate = DateTime.Now;
+                }
+                else if (Keyboard.IsKeyDown(Key.F3))
+                {
+                    IgnoreKeyPress = true;
+                    LastUpdate = DateTime.Now;
+                }
             }
             else
             {
