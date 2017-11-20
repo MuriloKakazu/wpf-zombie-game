@@ -78,7 +78,7 @@ namespace ZombieGame.Game
         {
             Started = true;
             Time.Setup();
-            GarbageCollector.Setup();
+            ResourceManager.Setup();
             SetupGameEntities();
             SetupInternalTimer();
             Resume();
@@ -150,6 +150,12 @@ namespace ZombieGame.Game
         private static void IncreaseScore()
         {
             Score += 1 * Time.Delta * DifficultyBonus;
+        }
+
+        internal static void Destroy()
+        {
+            if (InternalTimer != null)
+                InternalTimer.Dispose();
         }
 
         /// <summary>

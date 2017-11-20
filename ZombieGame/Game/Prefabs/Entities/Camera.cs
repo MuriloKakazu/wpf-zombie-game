@@ -10,10 +10,6 @@ namespace ZombieGame.Game.Prefabs.Entities
     public sealed class Camera : Entity
     {
         public static Camera Instance { get; set; }
-        public static Wall BottomWall { get; set; }
-        public static Wall TopWall { get; set; }
-        public static Wall LeftWall { get; set; }
-        public static Wall RightWall { get; set; }
 
         public Camera() : base("Camera", Tag.Camera)
         {
@@ -23,31 +19,25 @@ namespace ZombieGame.Game.Prefabs.Entities
             RigidBody.Freeze();
             RigidBody.UseRotation = true;
             RigidBody.SetRotation(45);
-            RigidBody.IgnoreCollisions = false;
             Sprite = new TransparentSprite();
             SetupWalls();
             Show();
-            SetZIndex(Enums.ZIndex.Camera);
         }
 
         private void SetupWalls()
         {
-            BottomWall = new Wall(WallType.BottomWall);
-            BottomWall.RigidBody.SetPosition(new Vector(RigidBody.Position.X, RigidBody.Position.Y - RigidBody.Size.Y));
-            BottomWall.RigidBody.Resize(new Vector(RigidBody.Size.X, 100));
-            BottomWall.RigidBody.Freeze();
-            TopWall = new Wall(WallType.TopWall);
-            TopWall.RigidBody.SetPosition(new Vector(RigidBody.Position.X, RigidBody.Position.Y));
-            TopWall.RigidBody.Resize(new Vector(RigidBody.Size.X, 100));
-            TopWall.RigidBody.Freeze();
-            LeftWall = new Wall(WallType.LeftWall);
-            LeftWall.RigidBody.SetPosition(new Vector(RigidBody.Position.X, RigidBody.Position.Y));
-            LeftWall.RigidBody.Resize(new Vector(100, RigidBody.Size.Y));
-            LeftWall.RigidBody.Freeze();
-            RightWall = new Wall(WallType.RightWall);
-            RightWall.RigidBody.SetPosition(new Vector(RigidBody.Size.X, 0));
-            RightWall.RigidBody.Resize(new Vector(100, RigidBody.Size.Y));
-            RightWall.RigidBody.Freeze();
+            var sizeX = RigidBody.Size.X;
+            var sizeY = RigidBody.Size.Y;
+            var fixedSize = 100;
+
+            var bottomWall = new Wall(WallType.BottomWall);
+            bottomWall.RigidBody.Resize(new Vector(sizeX, fixedSize));
+            var topWall = new Wall(WallType.TopWall);
+            topWall.RigidBody.Resize(new Vector(sizeX, fixedSize));
+            var leftWall = new Wall(WallType.LeftWall);
+            leftWall.RigidBody.Resize(new Vector(fixedSize, sizeY));
+            var rightWall = new Wall(WallType.RightWall);
+            rightWall.RigidBody.Resize(new Vector(fixedSize, sizeY));
         }
 
         public static Vector GetTopLeftFocusPoint()
@@ -95,10 +85,8 @@ namespace ZombieGame.Game.Prefabs.Entities
         {
             if (e.Collider.IsPlayer)
             {
-                Console.WriteLine("Respawning {0}", e.Collider.Name);
                 e.Collider.RigidBody.SetPosition(new Vector(RigidBody.CenterPoint.X, RigidBody.CenterPoint.Y));
-                e.Collider.RigidBody.SetVelocity(Vector.Zero);
-                e.Collider.RigidBody.SetForce(Vector.Zero);
+                e.Collider.RigidBody.Stop();
             }
         }
 

@@ -31,8 +31,8 @@ namespace ZombieGame.UI
         {
             P1Stats.AssociatedPlayer = GameMaster.GetPlayer(0);
             P2Stats.AssociatedPlayer = GameMaster.GetPlayer(1);
-            P1Stats.Name.Content = "Player 1";
-            P2Stats.Name.Content = "Player 2";
+            P1Stats.PlayerName.Content = "Player 1";
+            P2Stats.PlayerName.Content = "Player 2";
             Time.HighFrequencyTimer.Elapsed += HighFrequencyTimer_Elapsed;
         }
 

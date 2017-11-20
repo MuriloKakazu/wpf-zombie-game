@@ -1,7 +1,9 @@
-﻿using ZombieGame.Game.Enums;
+﻿using System;
+using ZombieGame.Game.Enums;
 
-namespace ZombieGame.Game
+namespace ZombieGame.Game.Serializable
 {
+    [Serializable]
     public class Settings
     {
         /// <summary>
@@ -12,9 +14,6 @@ namespace ZombieGame.Game
         public bool AntiAliasingEnabled { get; set; }
         public int RenderScale { get; set; }
 
-        public Settings()
-        {
-
-        }
+        public Settings() { }
     }
 }

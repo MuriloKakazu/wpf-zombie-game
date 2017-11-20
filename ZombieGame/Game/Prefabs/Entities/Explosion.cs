@@ -34,7 +34,6 @@ namespace ZombieGame.Game.Prefabs.Entities
             RigidBody.Resize(size);
             RigidBody.SetRotation(Random.Next(0, 360));
             UpdateVisualControl();
-            base.SetZIndex(Enums.ZIndex.VisualFX);
             SetTimer();
         }
     }

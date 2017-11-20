@@ -380,10 +380,10 @@ namespace ZombieGame.Game.Entities
         protected virtual void Update()
         {
             UpdateVisualControl();
-            Test();
+            DecideVisibility();
         }
 
-        private void Test()
+        private void DecideVisibility()
         {
             if (!Collisions.Contains(GameMaster.Camera) && Visible && IsActive && !this.IsVisualFX)
                 Hide();

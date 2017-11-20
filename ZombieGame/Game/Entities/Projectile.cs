@@ -146,6 +146,7 @@ namespace ZombieGame.Game.Entities
         {
             LaunchPosition = RigidBody.Position;
             base.SetZIndex(Enums.ZIndex.Projectile);
+            RigidBody.UseRotation = true;
             Projectiles.Add(this);
         }
 
@@ -156,8 +157,7 @@ namespace ZombieGame.Game.Entities
         public virtual void Launch(Vector dir)
         {
             RigidBody.SetPosition(new Vector(Owner.RigidBody.CenterPoint.X - RigidBody.Size.X / 2, Owner.RigidBody.CenterPoint.Y + RigidBody.Size.Y / 2));
-             LaunchPosition = RigidBody.Position;
-            RigidBody.UseRotation = true;
+            LaunchPosition = RigidBody.Position;
             RigidBody.PointAt(dir);
             RigidBody.SetVelocity(dir.Normalized * SpeedMagnitude);
             Show();

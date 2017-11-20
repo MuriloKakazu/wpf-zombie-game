@@ -7,9 +7,12 @@ namespace ZombieGame.Physics
     public static class Time
     {
         #region Properties
+        /// <summary>
+        /// Timer interno de baixa frequência
+        /// </summary>
         public static Timer LowFrequencyTimer { get; private set; }
         /// <summary>
-        /// Timer interno
+        /// Timer interno de alta frequência
         /// </summary>
         public static Timer HighFrequencyTimer { get; private set; }
         /// <summary>
@@ -17,9 +20,8 @@ namespace ZombieGame.Physics
         /// </summary>
         public static float Delta { get; private set; }
         /// <summary>
-        /// Retorna o momento da última decorrência do timer de atualização
+        /// Cronômetro utilizado para medir diferença de tempo
         /// </summary>
-        private static DateTime LastUpdate { get; set; }
         private static Stopwatch Stopwatch { get; set; }
         #endregion
 
@@ -66,7 +68,6 @@ namespace ZombieGame.Physics
         {
             Stopwatch.Stop();
             Delta = Stopwatch.ElapsedMilliseconds / 1000f;
-            //Console.WriteLine(Delta);
             Stopwatch.Reset();
             Stopwatch.Start();
         }

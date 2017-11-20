@@ -66,13 +66,13 @@ namespace ZombieGame.Game
         /// <param name="e">Informações do evento</param>
         private void UpdateTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            App.Current.Dispatcher.Invoke(delegate { Update(); });
+            App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
         }
 
         /// <summary>
         /// Método que aciona funções que precisam ser disparadas constantemente
         /// </summary>
-        public void Update()
+        public void FixedUpdate()
         {
             if (!Character.IsStunned && IsPlaying)
             {

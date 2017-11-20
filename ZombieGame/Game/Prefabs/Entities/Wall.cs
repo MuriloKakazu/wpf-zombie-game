@@ -16,6 +16,7 @@ namespace ZombieGame.Game.Prefabs.Entities
         {
             Type = type;
             Sprite = new TransparentSprite();
+            RigidBody.Freeze();
             Show();
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows;
-using System.Xml.Serialization;
+﻿using System.Windows;
 using ZombieGame.Physics.Enums;
 using ZombieGame.Physics.Extensions;
 
@@ -34,16 +32,19 @@ namespace ZombieGame.Physics
         /// </summary>
         public Vector Size { get; private set; }
         /// <summary>
-        /// Vetor força resultante aplicado ao corpo (kg*pixels/s^2 * 10)
+        /// Vetor força resultante aplicado ao corpo
         /// </summary>
         public Vector Force { get; private set; }
+        /// <summary>
+        /// Vetor quantidade de movimento do corpo
+        /// </summary>
         public Vector Momentum { get { return Velocity * Mass; } }
         /// <summary>
-        /// Vetor velocidade aplicado ao corpo (pixels/s * 10)
+        /// Vetor velocidade aplicado ao corpo
         /// </summary>
         public Vector Velocity { get; private set; }
         /// <summary>
-        /// Vetor aceleração aplicado ao corpo (pixels/s^2 * 10)
+        /// Vetor aceleração aplicado ao corpo
         /// </summary>
         public Vector Acceleration { get { return Force / Mass; } }
         /// <summary>
@@ -127,6 +128,10 @@ namespace ZombieGame.Physics
             Rotation = MathExtension.RadiansToDegrees(Front.AngleBetween(Vector.Right));
         }
 
+        /// <summary>
+        /// Define a rotação do corpo
+        /// </summary>
+        /// <param name="value">Valor em graus</param>
         public void SetRotation(float value)
         {
             Rotation = value;
@@ -207,17 +212,25 @@ namespace ZombieGame.Physics
         /// <summary>
         /// Redefine o vetor velocidade aplicado ao corpo
         /// </summary>
-        /// <param name="v"></param>
+        /// <param name="v">Vetor velocidade</param>
         public void SetVelocity(Vector v)
         {
             Velocity = v;
         }
 
+        /// <summary>
+        /// Adiciona um vetor quantidade de movimento ao corpo
+        /// </summary>
+        /// <param name="m">Vetor quantia de movimento</param>
         public void AddMomentum(Vector m)
         {
             AddForce(m / Time.Delta);
         }
 
+        /// <summary>
+        /// Define a quantidade de movimento do corpo
+        /// </summary>
+        /// <param name="m">Vetor quantia de movimento</param>
         public void SetMomentum(Vector m)
         {
             SetForce(m / Time.Delta);

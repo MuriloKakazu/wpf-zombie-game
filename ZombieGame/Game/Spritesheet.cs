@@ -5,13 +5,20 @@ namespace ZombieGame.Game
 {
     public class Spritesheet
     {
+        /// <summary>
+        /// Sprites da animação
+        /// </summary>
         public Sprite[] Sprites { get; protected set; }
 
-        public Spritesheet()
-        {
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public Spritesheet() { }
 
-        }
-
+        /// <summary>
+        /// Carrega as sprites de animação a partir de um diretório
+        /// </summary>
+        /// <param name="path">Diretório</param>
         public void LoadFrom(string path)
         {
             if (Directory.Exists(path))

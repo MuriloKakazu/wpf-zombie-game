@@ -23,5 +23,10 @@ namespace ZombieGame
             MainMenu = new MainMenuUI();
             Grid.Children.Add(MainMenu);
         }
+
+        private void Window_Closed(object sender, System.EventArgs e)
+        {
+            ResourceManager.DestroyEverything();
+        }
     }
 }

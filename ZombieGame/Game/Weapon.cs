@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Xml.Serialization;
 using ZombieGame.Audio;
 using ZombieGame.Game.Entities;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Interfaces;
 using ZombieGame.Game.Prefabs.Audio;
-using ZombieGame.Game.Prefabs.Entities;
-using ZombieGame.Game.Serializable;
 using ZombieGame.Physics;
 
 namespace ZombieGame.Game
@@ -26,11 +23,17 @@ namespace ZombieGame.Game
         /// Taxa de disparo de projéteis da arma por minuto
         /// </summary>
         public float FireRate { get; protected set; }
+        /// <summary>
+        /// Multiplicador de dano da arma
+        /// </summary>
         public float DamageMultiplier { get; protected set; }
         /// <summary>
-        /// Quantia de munição da arma
+        /// Quantia de munição máxima da arma
         /// </summary>
         public int MagSize { get; protected set; }
+        /// <summary>
+        /// Quantia de munição atual da arma
+        /// </summary>
         public int Ammo { get; protected set; }
         /// <summary>
         /// O tempo para recarregar a arma em ms
@@ -39,21 +42,14 @@ namespace ZombieGame.Game
         /// <summary>
         /// Tempo de espera entre cada disparo de projéteis, em segundos
         /// </summary>
-        public float CoolDownTime
-        {
-            get
-            {
-                //if (FireRate > 2000)
-                //    return 60 / 2000;
-                //else if (FireRate < 30)
-                //    return 60 / 30;
-                return 60 / FireRate;
-            }
-        }
+        public float CoolDownTime { get { return 60 / FireRate; } }
         /// <summary>
         /// Retorna se a arma está em tempo de espera entre os disparos
         /// </summary>
         public bool IsCoolingDown { get; protected set; }
+        /// <summary>
+        /// Retorna se a arma está sendo recarregada
+        /// </summary>
         public bool IsReloading { get; protected set; }
         /// <summary>
         /// Diferença de tempo desde o último disparo, em segundos
@@ -71,9 +67,21 @@ namespace ZombieGame.Game
         /// Projétil atual da arma
         /// </summary>
         public Projectile Projectile { get; protected set; }
+        /// <summary>
+        /// Personagem dono da arma
+        /// </summary>
         public Character Owner { get; set; }
+        /// <summary>
+        /// Chave de efeito sonoro da arma
+        /// </summary>
         public string SoundFXKey { get; protected set; }
+        /// <summary>
+        /// Retorna se a arma tem projéteis carregados
+        /// </summary>
         public bool HasProjectile { get { return Projectile != null; } }
+        /// <summary>
+        /// Gerador de números randômicos
+        /// </summary>
         Random R = new Random();
         #endregion
 
@@ -147,11 +155,13 @@ namespace ZombieGame.Game
                 else
                     p.Launch(new Vector(direction.X + R.NextDouble() * 0.1, direction.Y + R.NextDouble() * 0.1));
             }
-                //p.Launch(direction);
 
             Ammo--;
         }
 
+        /// <summary>
+        /// Recarrega a arma
+        /// </summary>
         public void Reload()
         {
             IsReloading = true;
@@ -217,27 +227,6 @@ namespace ZombieGame.Game
             if (HasProjectile)
                 Projectile.MarkAsNoLongerNeeded();
         }
-
-        /// <summary>
-        /// Retorna um clone profundo da instância atual
-        /// </summary>
-        /// <returns>Weapon</returns>
-        //public Weapon Clone()
-        //{
-        //    var copy = new Weapon()
-        //    {
-        //        AcceptedProjectileTypes = AcceptedProjectileTypes,
-        //        Ammo = Ammo,
-        //        DeltaT = DeltaT,
-        //        FireRate = FireRate,
-        //        IsCoolingDown = IsCoolingDown,
-        //        Name = Name,
-        //        Projectile = Projectile.Clone(),
-        //        ReloadTime = ReloadTime,
-        //        WeaponType = WeaponType
-        //    };
-        //    return copy;
-        //}
         #endregion
     }
 }

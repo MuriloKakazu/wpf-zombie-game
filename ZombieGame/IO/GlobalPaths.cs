@@ -64,6 +64,9 @@ namespace ZombieGame.IO
         /// Diretório de sprites de animação
         /// </summary>
         public static string AnimatedSprites { get { return Sprites + "animated/"; } }
+        /// <summary>
+        /// Diretório de sprites de paralaxe
+        /// </summary>
         public static string ParallaxSprites { get { return Sprites + "parallax/"; } }
     }
 }
