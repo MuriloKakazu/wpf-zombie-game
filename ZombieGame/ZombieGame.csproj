@@ -71,9 +71,9 @@
     <Compile Include="Game\Enums\ZIndexes.cs" />
     <Compile Include="Game\GarbageCollector.cs" />
     <Compile Include="Game\Interfaces\IDestroyable.cs" />
-    <Compile Include="Game\Prefabs\Audio\NoAmmo.cs" />
-    <Compile Include="Game\Prefabs\Audio\WeaponReload.cs" />
-    <Compile Include="Game\Prefabs\Entities\NoProjectile.cs" />
+    <Compile Include="Game\Prefabs\Audio\NoAmmoSFX.cs" />
+    <Compile Include="Game\Prefabs\Audio\WeaponReloadSFX.cs" />
+    <Compile Include="Game\Prefabs\Sprites\KeyboardLayoutSprite.cs" />
     <Compile Include="Game\Prefabs\Sprites\TransparentSprite.cs" />
     <Compile Include="Game\Prefabs\Sprites\UnavailableSprite.cs" />
     <Compile Include="Game\Serializable\Background.cs" />
@@ -108,14 +108,14 @@
     <Compile Include="Game\Entities\Tile.cs" />
     <Compile Include="IO\GlobalPaths.cs" />
     <Compile Include="IO\Serialization\Xml.cs" />
-    <Compile Include="UI\ChoosePlayerUI.xaml.cs">
-      <DependentUpon>ChoosePlayerUI.xaml</DependentUpon>
+    <Compile Include="UI\GameStageUI.xaml.cs">
+      <DependentUpon>GameStageUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ProgressBar.xaml.cs">
-      <DependentUpon>ProgressBar.xaml</DependentUpon>
+    <Compile Include="UI\ProgressBarUI.xaml.cs">
+      <DependentUpon>ProgressBarUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\PlayerStats.xaml.cs">
-      <DependentUpon>PlayerStats.xaml</DependentUpon>
+    <Compile Include="UI\PlayerStatsUI.xaml.cs">
+      <DependentUpon>PlayerStatsUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ProjectileInfoUI.xaml.cs">
       <DependentUpon>ProjectileInfoUI.xaml</DependentUpon>
@@ -164,15 +164,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UI\ChoosePlayerUI.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UI\ProgressBar.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\PlayerStats.xaml">
+    <Page Include="UI\PlayerStatsUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

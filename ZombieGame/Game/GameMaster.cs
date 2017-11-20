@@ -40,13 +40,14 @@ namespace ZombieGame.Game
         /// </summary>
         public static float Money { get; set; }
         public static float Score { get; set; }
+        public static float RunningTime { get; set; }
         public static float DifficultyBonus
         {
             get
             {
                 if (Settings.Difficulty == Difficulties.Easy) return 1;
-                else if (Settings.Difficulty == Difficulties.Medium) return 1.25f;
-                else return 1.5f;
+                else if (Settings.Difficulty == Difficulties.Medium) return 1.5f;
+                else return 2f;
             }
         }
         /// <summary>
@@ -66,10 +67,6 @@ namespace ZombieGame.Game
         /// Estado do jogo
         /// </summary>
         public static ExecutionStates GameplayState { get; private set; }
-        public static Wall BottomWall { get; set; }
-        public static Wall TopWall { get; set; }
-        public static Wall LeftWall { get; set; }
-        public static Wall RightWall { get; set; }
         #endregion
 
         #region Methods
@@ -88,7 +85,7 @@ namespace ZombieGame.Game
             EnemySpawner.Setup();
             Store.SetSellingItems();
             SetupScene(Database.Scenes[0]);
-            Money = 99999;
+            Money = 0;
             UserControls.Setup();
             Pause();
         }
@@ -132,23 +129,6 @@ namespace ZombieGame.Game
             Players[0].IsPlaying = true;
             Players[1].IsPlaying = false;
             Players[1].Character.MarkAsNoLongerNeeded();
-
-            BottomWall = new Wall(WallTypes.BottomWall);
-            BottomWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y - Camera.RigidBody.Size.Y));
-            BottomWall.RigidBody.Resize(new Physics.Vector(Camera.RigidBody.Size.X, 100));
-            BottomWall.RigidBody.Freeze();
-            TopWall = new Wall(WallTypes.TopWall);
-            TopWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y));
-            TopWall.RigidBody.Resize(new Physics.Vector(Camera.RigidBody.Size.X, 100));
-            TopWall.RigidBody.Freeze();
-            LeftWall = new Wall(WallTypes.LeftWall);
-            LeftWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Position.X, Camera.RigidBody.Position.Y));
-            LeftWall.RigidBody.Resize(new Physics.Vector(100, Camera.RigidBody.Size.Y));
-            LeftWall.RigidBody.Freeze();
-            RightWall = new Wall(WallTypes.RightWall);
-            RightWall.RigidBody.SetPosition(new Physics.Vector(Camera.RigidBody.Size.X, 0));
-            RightWall.RigidBody.Resize(new Physics.Vector(100, Camera.RigidBody.Size.Y));
-            RightWall.RigidBody.Freeze();
         }
 
         /// <summary>
@@ -159,6 +139,17 @@ namespace ZombieGame.Game
             InternalTimer = new Timer { Interval = 1 };
             InternalTimer.Elapsed += InternalTimer_Elapsed;
             InternalTimer.Start();
+            Time.HighFrequencyTimer.Elapsed += HighFrequencyTimer_Elapsed;
+        }
+
+        private static void HighFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            App.Current.Dispatcher.Invoke(delegate { IncreaseRunningTime(); IncreaseScore(); });
+        }
+
+        private static void IncreaseScore()
+        {
+            Score += 1 * Time.Delta * DifficultyBonus;
         }
 
         /// <summary>
@@ -168,8 +159,15 @@ namespace ZombieGame.Game
         /// <param name="e">Informações do evento</param>
         private static void InternalTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            CheckForUserInput();
-            //ManageBackground();
+            App.Current.Dispatcher.Invoke(delegate 
+            {
+                CheckForUserInput();
+            });
+        }
+
+        private static void IncreaseRunningTime()
+        {
+            RunningTime += Time.Delta;
         }
 
         public static void HideCursor()
@@ -189,8 +187,6 @@ namespace ZombieGame.Game
         {
             if (!IgnoreKeyPress)
             {
-                App.Current.Dispatcher.Invoke(delegate
-                {
                     if (Keyboard.IsKeyDown(Key.Escape))
                     {
                         if (GameplayState == ExecutionStates.Paused)
@@ -252,7 +248,6 @@ namespace ZombieGame.Game
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
                     }
-                });
             }
             else
             {

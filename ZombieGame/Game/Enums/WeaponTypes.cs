@@ -3,11 +3,11 @@
     public enum WeaponTypes
     {
         Undefined,
-        Bow,
         Pistol,
         Rifle,
         MachineGun,
         Shotgun,
         RocketLauncher,
+        Minigun,
     }
 }

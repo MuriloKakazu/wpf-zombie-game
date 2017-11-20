@@ -134,7 +134,7 @@ namespace ZombieGame.UI
                 if (btnBuy.Content.Equals("Comprar"))
                 {
                     Store.BuyWeapon(w.ItemID);
-                    SoundPlayer.Instance.Play(new NoAmmo());
+                    SoundPlayer.Instance.Play(new NoAmmoSFX());
                 }
                 else if (btnBuy.Content.Equals("Equipar"))
                 {
@@ -151,7 +151,7 @@ namespace ZombieGame.UI
                     else
                     {
                         GameMaster.Players[0].Character.SetWeapon(w.Mount());
-                        SoundPlayer.Instance.Play(new WeaponReload());
+                        SoundPlayer.Instance.Play(new WeaponReloadSFX());
                     }
                 }
                 else
@@ -164,7 +164,7 @@ namespace ZombieGame.UI
                 if (btnBuy.Content.Equals("Comprar"))
                 {
                     Store.BuyProjectile(p.ItemID);
-                    SoundPlayer.Instance.Play(new NoAmmo());
+                    SoundPlayer.Instance.Play(new NoAmmoSFX());
                 }
                 else if (btnBuy.Content.Equals("Equipar"))
                 {
@@ -193,7 +193,7 @@ namespace ZombieGame.UI
                     else
                     {
                         GameMaster.Players[0].Character.Weapon.SetProjectile(p.Mount());
-                        SoundPlayer.Instance.Play(new WeaponReload());
+                        SoundPlayer.Instance.Play(new WeaponReloadSFX());
                     }
                 }
                 else

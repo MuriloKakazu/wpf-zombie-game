@@ -54,31 +54,31 @@ namespace ZombieGame.Game
                 {
                     if (type == AxisTypes.Horizontal)
                     {
-                        if (Keyboard.IsKeyDown(Key.Left))
+                        if (Keyboard.IsKeyDown(Key.J))
                             output += -1;
-                        if (Keyboard.IsKeyDown(Key.Right))
+                        if (Keyboard.IsKeyDown(Key.L))
                             output += 1;
                     }
                     else if (type == AxisTypes.Vertical)
                     {
-                        if (Keyboard.IsKeyDown(Key.Down))
+                        if (Keyboard.IsKeyDown(Key.K))
                             output += -1;
-                        if (Keyboard.IsKeyDown(Key.Up))
+                        if (Keyboard.IsKeyDown(Key.I))
                             output += 1;
                     }
                     else if (type == AxisTypes.Fire)
                     {
-                        if (Keyboard.IsKeyDown(Key.NumPad0))
+                        if (Keyboard.IsKeyDown(Key.Delete))
                             output = 1;
                     }
                     else if (type == AxisTypes.Sprint)
                     {
-                        if (Keyboard.IsKeyDown(Key.Enter))
+                        if (Keyboard.IsKeyDown(Key.End))
                             output = 1;
                     }
                     else if (type == AxisTypes.Reload)
                     {
-                        if (Keyboard.IsKeyDown(Key.Back))
+                        if (Keyboard.IsKeyDown(Key.P))
                             output = 1;
                     }
                 }

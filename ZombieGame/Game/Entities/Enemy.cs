@@ -104,6 +104,7 @@ namespace ZombieGame.Game.Entities
         {
             SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(HitSFXKey));
             base.Damage(damager, quantity);
+            GameMaster.Score += quantity;
         }
 
         protected override void Kill()
@@ -111,6 +112,7 @@ namespace ZombieGame.Game.Entities
             SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(DeathSFXKey));
             GameMaster.Score += DeathPoints * GameMaster.DifficultyBonus;
             GameMaster.Money += MoneyDrop * GameMaster.DifficultyBonus;
+            EnemySpawner.CurrentEnemySpawnTarget++;
             base.Kill();
         }
 
@@ -134,7 +136,10 @@ namespace ZombieGame.Game.Entities
             {
                 var colliderChar = Character.FromHashCode(e.Collider.Hash);
                 if (colliderChar != null)
-                    colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 1000);
+                {
+                    //colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 1000);
+                    colliderChar.Damage(damager: this, quantity: 1);
+                }
             }
         }
 
@@ -150,13 +155,19 @@ namespace ZombieGame.Game.Entities
 
             if (e.Collider.Tag != Tags.Projectile && e.Collider.Tag != Tags.Wall)
             {
-                var colliderChar = Character.FromHashCode(e.Collider.Hash);
-                if (colliderChar != null && colliderChar.IsPlayer)
-                    colliderChar.Damage(damager: this, quantity: 1);
+                RigidBody.AddForce(e.CollisionDirection.Normalized * RigidBody.Momentum.Magnitude);
+                if (e.Collider.IsPlayer)
+                {
+                    var colliderChar = Character.FromHashCode(e.Collider.Hash);
+                    if (colliderChar != null)
+                    {
+                        colliderChar.Damage(damager: this, quantity: 0.1f);
+                    }
+                }
             }
             if (e.Collider.IsEnemy)
             {
-                RigidBody.AddForce(e.CollisionDirection.Normalized * 5);
+                //RigidBody.AddForce(e.CollisionDirection.Normalized * 5);
             }
         }
 
