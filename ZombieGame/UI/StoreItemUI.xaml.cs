@@ -142,11 +142,9 @@ namespace ZombieGame.UI
                     {
                         UserControls.ChoosePlayer.SetItem(w);
                         UserControls.ChoosePlayer.Refresh();
-                        Application.Current.Windows.OfType<MainWindow>().
-                            FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
-                        Application.Current.Windows.OfType<MainWindow>().
-                            FirstOrDefault().AddToUI(UserControls.ChoosePlayer);
-                        SoundPlayer.Instance.Play(new NoAmmo());
+                        GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
+                        GameMaster.TargetCanvas.AddChild(UserControls.ChoosePlayer);
+                        SoundPlayer.Instance.Play(new NoAmmoSFX());
                     }
                     else
                     {
@@ -175,19 +173,17 @@ namespace ZombieGame.UI
                         {
                             UserControls.ChoosePlayer.SetItem(p);
                             UserControls.ChoosePlayer.Refresh();
-                            Application.Current.Windows.OfType<MainWindow>().
-                                FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
-                            Application.Current.Windows.OfType<MainWindow>().
-                                FirstOrDefault().AddToUI(UserControls.ChoosePlayer);
-                            SoundPlayer.Instance.Play(new NoAmmo());
+                            GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
+                            GameMaster.TargetCanvas.AddChild(UserControls.ChoosePlayer);
+                            SoundPlayer.Instance.Play(new NoAmmoSFX());
                         } else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                         {
                             GameMaster.Players[0].Character.Weapon.SetProjectile(p.Mount());
-                            SoundPlayer.Instance.Play(new WeaponReload());
+                            SoundPlayer.Instance.Play(new WeaponReloadSFX());
                         } else if (GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                         {
                             GameMaster.Players[1].Character.Weapon.SetProjectile(p.Mount());
-                            SoundPlayer.Instance.Play(new WeaponReload());
+                            SoundPlayer.Instance.Play(new WeaponReloadSFX());
                         }
                     }
                     else
@@ -217,10 +213,8 @@ namespace ZombieGame.UI
             {
                 UserControls.ProjectileInfo.SetProjectile(p);
                 UserControls.ProjectileInfo.Refresh();
-                Application.Current.Windows.OfType<MainWindow>().
-                    FirstOrDefault().RemoveFromUI(UserControls.StoreControl);
-                Application.Current.Windows.OfType<MainWindow>().
-                   FirstOrDefault().AddToUI(UserControls.ProjectileInfo);
+                GameMaster.TargetCanvas.RemoveChild(UserControls.StoreControl);
+                GameMaster.TargetCanvas.AddChild(UserControls.ProjectileInfo);
             }
         }
     }

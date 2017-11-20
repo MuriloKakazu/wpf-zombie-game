@@ -62,17 +62,15 @@ namespace ZombieGame.UI
             if (IsWeapon)
             {
                 GameMaster.Players[0].Character.SetWeapon(w.Mount());
-                SoundPlayer.Instance.Play(new WeaponReload());
+                SoundPlayer.Instance.Play(new WeaponReloadSFX());
             }
             else if (IsProjectile)
             {
                 GameMaster.Players[0].Character.Weapon.SetProjectile(p.Mount());
-                SoundPlayer.Instance.Play(new WeaponReload());
+                SoundPlayer.Instance.Play(new WeaponReloadSFX());
             }
-            Application.Current.Windows.OfType<MainWindow>().
-                    FirstOrDefault().RemoveFromUI(UserControls.ChoosePlayer);
-            Application.Current.Windows.OfType<MainWindow>().
-                FirstOrDefault().AddToUI(UserControls.StoreControl);
+            GameMaster.TargetCanvas.RemoveChild(UserControls.ChoosePlayer);
+            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
         }
 
         private void btnP2_Click(object sender, RoutedEventArgs e)
@@ -80,17 +78,15 @@ namespace ZombieGame.UI
             if (IsWeapon)
             {
                 GameMaster.Players[1].Character.SetWeapon(w.Mount());
-                SoundPlayer.Instance.Play(new WeaponReload());
+                SoundPlayer.Instance.Play(new WeaponReloadSFX());
             }
             else if (IsProjectile)
             {
                 GameMaster.Players[1].Character.Weapon.SetProjectile(p.Mount());
-                SoundPlayer.Instance.Play(new WeaponReload());
+                SoundPlayer.Instance.Play(new WeaponReloadSFX());
             }
-            Application.Current.Windows.OfType<MainWindow>().
-                    FirstOrDefault().RemoveFromUI(UserControls.ChoosePlayer);
-            Application.Current.Windows.OfType<MainWindow>().
-                FirstOrDefault().AddToUI(UserControls.StoreControl);
+            GameMaster.TargetCanvas.RemoveChild(UserControls.ChoosePlayer);
+            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
         }
     }
 }

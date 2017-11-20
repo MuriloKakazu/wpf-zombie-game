@@ -38,7 +38,7 @@ namespace ZombieGame.UI
             lblSpeed.Content = "Velocidade: " + p.SpeedMagnitude + " pixeis/s";
             lblStunner.Content = "Atordoador: " + ((p.IsStunner) ? "Sim (" + p.StunTimeMs / 1000 + "s)" : "Não");
             lblType.Content = "Tipo: " + p.Type.ToString();
-            lblKnockback.Content = "Empurro: "+ p.KnockbackMagnitude + " pixeis";
+            lblKnockback.Content = "Empurro: " + p.KnockbackMagnitude + " pixeis";
             lblExplosive.Content = "Explosivo: " + ((p.IsExplosive) ? "Sim" : "Não");
             lblDistance.Content = "Distância máxima: " + p.TravelDistance + " pixeis";
         }
@@ -54,10 +54,8 @@ namespace ZombieGame.UI
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            Application.Current.Windows.OfType<MainWindow>().
-                FirstOrDefault().RemoveFromUI(this);
-            Application.Current.Windows.OfType<MainWindow>().
-                FirstOrDefault().AddToUI(UserControls.StoreControl);
+            GameMaster.TargetCanvas.RemoveChild(this);
+            GameMaster.TargetCanvas.AddChild(UserControls.StoreControl);
         }
     }
 }

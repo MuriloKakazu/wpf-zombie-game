@@ -111,6 +111,9 @@
     <Compile Include="Game\Entities\Tile.cs" />
     <Compile Include="IO\GlobalPaths.cs" />
     <Compile Include="IO\Serialization\Xml.cs" />
+    <Compile Include="UI\ChoosePlayerUI.xaml.cs">
+      <DependentUpon>ChoosePlayerUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\GameCanvas.xaml.cs">
       <DependentUpon>GameCanvas.xaml</DependentUpon>
     </Compile>
@@ -126,11 +129,14 @@
     <Compile Include="UI\MainMenuUI.xaml.cs">
       <DependentUpon>MainMenuUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\PlayerStatsUI.xaml.cs">
+      <DependentUpon>PlayerStatsUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\ProgressBarUI.xaml.cs">
       <DependentUpon>ProgressBarUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\PlayerStatsUI.xaml.cs">
-      <DependentUpon>PlayerStatsUI.xaml</DependentUpon>
+    <Compile Include="UI\ProjectileInfoUI.xaml.cs">
+      <DependentUpon>ProjectileInfoUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\RankingMenuUI.xaml.cs">
       <DependentUpon>RankingMenuUI.xaml</DependentUpon>
@@ -182,6 +188,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI\ChoosePlayerUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\GameCanvas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -199,6 +209,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UI\MainMenuUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\PlayerStatsUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
