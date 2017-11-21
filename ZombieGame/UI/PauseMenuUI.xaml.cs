@@ -26,41 +26,78 @@ namespace ZombieGame.UI
         {
             InitializeComponent();
             Canvas.SetZIndex(this, 11);
-            btnStore.Text.Content = "LOJA/INVENTÁRIO";
-            btnSettings.Text.Content = "CONFIGURAÇÕES";
-            btnMainMenu.Text.Content = "MENU PRINCIPAL";
+        }
+
+        private void Grid_Loaded(object sender, RoutedEventArgs e)
+        {
+            Refresh();
         }
 
         public void Refresh()
         {
-            TranslateTransform tt = new TranslateTransform();
-            tt.X = GameMaster.Camera.RigidBody.Position.X;
-            tt.Y = -GameMaster.Camera.RigidBody.Position.Y;
-            RenderTransform = tt;
+            if (GameMaster.Score > 0)
+            {
+                TranslateTransform tt = new TranslateTransform();
+                if (GameMaster.GetPlayer(0).Character != null && GameMaster.GetPlayer(1).Character != null ||
+                    GameMaster.GetPlayer(0).Character == null && GameMaster.GetPlayer(1).Character != null ||
+                    GameMaster.GetPlayer(0).Character != null && GameMaster.GetPlayer(1).Character == null)
+                {
+                    tt.X = GameMaster.Camera.RigidBody.Position.X;
+                    tt.Y = -GameMaster.Camera.RigidBody.Position.Y;
+                }
+                else
+                {
+                    tt.X = 0;
+                    tt.Y = 0;
+                    GameMaster.TargetCanvas.RenderTransform = tt;
+                }
+                RenderTransform = tt;
+            }
+            else
+                RenderTransform = new TranslateTransform(0, 0);
         }
 
         private void btnStore_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             PausedMenuContent.Visibility = Visibility.Collapsed;
-            Grid.Children.Add(UserControls.StoreControl);
+            Grid.Children.Add(ControlCache.StoreControl);
         }
 
         private void btnSettings_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             PausedMenuContent.Visibility = Visibility.Collapsed;
-            var m = new SettingsMenuUI();
+            var m = new SettingsMenuUI(fromMainMenu: false);
             m.DockPanel.HorizontalAlignment = HorizontalAlignment.Center;
-            m.AccessedFromMainMenu = false;
             Grid.Children.Add(m);
         }
 
         private void btnMainMenu_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {            
+        {
+            btnMainMenu.Content = "CLIQUE 2X PARA CONFIRMAR";
+        }
+
+        private void btnMainMenu_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
             GameMaster.TargetCanvas.Visibility = Visibility.Collapsed;
             ResourceManager.DestroyEverything();
             GameMaster.TargetWindow.MainMenu.Visibility = Visibility.Visible;
             GameMaster.Started = false;
             GameMaster.TargetCanvas.ResetUI();
+        }
+
+        private void btnMainMenu_MouseLeave(object sender, MouseEventArgs e)
+        {
+            btnMainMenu.Content = "SAIR";
+        }
+
+        private void btnResume_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            PausedMenuContent.Visibility = Visibility.Collapsed;
+            GameMaster.Resume();
+            GameMaster.TargetCanvas.RemoveChild(ControlCache.PauseMenu);
+            ControlCache.PauseMenu.Grid.Children.Clear();
+            ControlCache.PauseMenu = new PauseMenuUI();
+            GameMaster.HideCursor();
         }
     }
 }

@@ -142,14 +142,17 @@ namespace ZombieGame.Game
                 {
                     p = Projectile.Clone();
                     p.Owner = Owner;
+                    p.SpeedMagnitude += 1 * i;
                     if (i <= 0)
-                        p.Launch(new Vector(direction.X - R.NextDouble() * 0.5, direction.Y - R.NextDouble() * 0.5));
+                        p.Launch(new Vector(direction.X - R.NextDouble() * 0.2, direction.Y - R.NextDouble() * 0.2));
                     else
-                        p.Launch(new Vector(direction.X + R.NextDouble() * 0.5, direction.Y + R.NextDouble() * 0.5));
+                        p.Launch(new Vector(direction.X + R.NextDouble() * 0.2, direction.Y + R.NextDouble() * 0.2));
                 }
             }
             else
             {
+                p.SpeedMagnitude += R.Next(-5, 5) * 1;
+
                 if (R.Next(0, 2) == 1)
                     p.Launch(new Vector(direction.X - R.NextDouble() * 0.1, direction.Y - R.NextDouble() * 0.1));
                 else

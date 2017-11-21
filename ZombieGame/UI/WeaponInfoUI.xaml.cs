@@ -48,14 +48,13 @@ namespace ZombieGame.UI
             }
 
             lblAcceptedPrectiles.Content = "Projéteis aceitos: " + accepted;
-            //imgWeapon.Source = new BitmapImage(new Uri(IO.GlobalPaths.WeaponSprites + w.SpriteFileName));
+            ItemIcon.Source = new BitmapImage(new Uri(IO.GlobalPaths.WeaponSprites + w.SpriteFileName));
         }
 
-
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void btnClose_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            UserControls.PauseMenu.Grid.Children.Remove(this);
-            UserControls.PauseMenu.Grid.Children.Add(UserControls.StoreControl);
+            ControlCache.PauseMenu.Grid.Children.Remove(this);
+            ControlCache.PauseMenu.Grid.Children.Add(ControlCache.StoreControl);
         }
     }
 }

@@ -6,11 +6,11 @@
              xmlns:local="clr-namespace:ZombieGame.UI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" MaxWidth="1274" MaxHeight="691" MinHeight="345.5" MinWidth="637" Height="691" Width="1274">
-    <Grid Loaded="Grid_Loaded" MaxWidth="1274" MaxHeight="696" Width="954" Height="516.75">
+    <Grid Loaded="Grid_Loaded" MaxWidth="1274" MaxHeight="696">
         <Grid.Effect>
             <DropShadowEffect Opacity="0.5"/>
         </Grid.Effect>
-        <Label HorizontalAlignment="Center" Margin="343,10,343,0" VerticalAlignment="Top" FontWeight="Bold" Background="#00000000" Foreground="#FFC80000" FontSize="36" Content="Loja/Inventário" RenderTransformOrigin="0.517,0.524" Width="268">
+        <Label HorizontalAlignment="Center" Margin="343,50,343,0" VerticalAlignment="Top" FontWeight="Bold" Background="#00000000" Foreground="#FFC80000" FontSize="36" Content="Loja/Inventário" RenderTransformOrigin="0.517,0.524" Width="268">
             <Label.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="100"/>
             </Label.Effect>
@@ -60,7 +60,11 @@
             <local:StoreItemUI x:Name="siProjectile3" VerticalAlignment="Top"/>
             <local:StoreItemUI x:Name="siProjectile4" VerticalAlignment="Top"/>
         </DockPanel>
-        <local:GradientButtonUI x:Name="BackButton" VerticalAlignment="Bottom" Margin="146,0,308,-28.25" MouseLeftButtonUp="BackButton_MouseLeftButtonUp" />
+        <local:GradientButtonUI x:Name="BackButton" VerticalAlignment="Bottom" Margin="200,20,200,100" MouseLeftButtonUp="BackButton_MouseLeftButtonUp" FontSize="22" Padding="20,10" Content="VOLTAR" UnfocusedForeground="White" >
+            <local:GradientButtonUI.Effect>
+                <DropShadowEffect Opacity="0.5"/>
+            </local:GradientButtonUI.Effect>
+        </local:GradientButtonUI>
 
     </Grid>
 </UserControl>

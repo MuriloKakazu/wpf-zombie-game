@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="691" d:DesignWidth="1274">
     <Grid>
+        <Canvas x:Name="FixedUI">
+            
+        </Canvas>
         <Canvas x:Name="Canvas" x:FieldModifier="public" DockPanel.Dock="Top" Background="#00000000" Cursor="Arrow" Panel.ZIndex="1" Margin="0" Width="1274" Height="691">
             <DockPanel Width="1274" Height="691" Panel.ZIndex="10">
                 <local:PlayerStatsUI x:Name="P1Stats" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300" Margin="0,0,0,10"/>

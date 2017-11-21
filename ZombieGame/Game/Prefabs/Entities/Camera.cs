@@ -90,6 +90,12 @@ namespace ZombieGame.Game.Prefabs.Entities
             }
         }
 
+        public void ForceUpdate()
+        {
+            RigidBody.SetPosition(GetTopLeftFocusPoint());
+            base.FixedUpdate();
+        }
+
         protected override void FixedUpdate()
         {
             RigidBody.SetPosition(GetTopLeftFocusPoint());

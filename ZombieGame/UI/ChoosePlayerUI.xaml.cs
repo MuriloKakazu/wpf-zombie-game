@@ -64,8 +64,8 @@ namespace ZombieGame.UI
                 SoundPlayer.Instance.Play(new WeaponReloadSFX());
                 GameMaster.Players[0].Character.Weapon.Ammo = 0;
             }
-            UserControls.PauseMenu.Grid.Children.Remove(UserControls.ChoosePlayer);
-            UserControls.PauseMenu.Grid.Children.Add(UserControls.StoreControl);
+            ControlCache.PauseMenu.Grid.Children.Remove(ControlCache.ChoosePlayer);
+            ControlCache.PauseMenu.Grid.Children.Add(ControlCache.StoreControl);
         }
 
         private void btnP2_Click(object sender, RoutedEventArgs e)
@@ -81,8 +81,8 @@ namespace ZombieGame.UI
                 GameMaster.Players[1].Character.Weapon.Ammo = 0;
                 SoundPlayer.Instance.Play(new WeaponReloadSFX());
             }
-            UserControls.PauseMenu.Grid.Children.Remove(UserControls.ChoosePlayer);
-            UserControls.PauseMenu.Grid.Children.Add(UserControls.StoreControl);
+            ControlCache.PauseMenu.Grid.Children.Remove(ControlCache.ChoosePlayer);
+            ControlCache.PauseMenu.Grid.Children.Add(ControlCache.StoreControl);
         }
     }
 }

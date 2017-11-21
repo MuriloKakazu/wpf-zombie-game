@@ -285,12 +285,18 @@ namespace ZombieGame.Game.Entities
         /// <returns>Entity(Array)</returns>
         public virtual Entity[] GetNearbyEntities(float radius, int maxValue)
         {
+            int maxIterations = 15;
+            int it = 0;
             try
             {
                 List<Entity> entities = new List<Entity>();
                 foreach (var e in Entities.ToArray())
+                {
+                    if (++it > maxIterations)
+                        return entities.ToArray();
                     if ((e.RigidBody.CenterPoint - RigidBody.CenterPoint).Magnitude <= radius && e.Hash != Hash && entities.Count < maxValue)
                         entities.Add(e);
+                }
                 return entities.ToArray();
             }
             catch { }

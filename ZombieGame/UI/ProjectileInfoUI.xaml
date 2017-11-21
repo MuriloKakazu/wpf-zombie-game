@@ -6,21 +6,57 @@
              xmlns:local="clr-namespace:ZombieGame.UI"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Width="1274" Height="691">
-    <Grid Width="400" Height="300" Background="#33000000">
+    <Grid Width="500" Height="500" Background="#33000000">
         <StackPanel Background="#0C000000" Margin="5">
-            <Button x:Name="btnClose" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="20" Background="Red" FontWeight="Bold" Click="btnClose_Click"/>
-            <Label x:Name="lblName" Content="Nome do Projétil" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" FontSize="24" FontWeight="Bold"/>
+            <Label x:Name="lblName" Content="Nome do Projétil" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFC80000" FontSize="24" FontWeight="Bold" Margin="0,25,0,20" Background="{x:Null}">
+                <Label.Effect>
+                    <DropShadowEffect Opacity="0.5"/>
+                </Label.Effect>
+            </Label>
             <DockPanel>
+                <Image x:Name="ItemIcon" Width="200" Height="100" DockPanel.Dock="Top" Margin="0,0,0,25">
+                    <Image.Effect>
+                        <DropShadowEffect BlurRadius="50" ShadowDepth="0"/>
+                    </Image.Effect>
+                </Image>
                 <StackPanel DockPanel.Dock="Top" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Label x:Name="lblDamage" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblType" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblSpeed" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblDistance" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblKnockback" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblExplosive" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblStunner" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                    <Label x:Name="lblDamage" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblType" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblSpeed" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblDistance" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblKnockback" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblExplosive" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblStunner" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
                 </StackPanel>
-                <Image x:Name="imgWeapon" DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top" Height="130" Width="132"/>
+                <local:GradientButtonUI Padding="20,10" Content="VOLTAR" FontSize="12" UnfocusedForeground="White" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="150" DockPanel.Dock="Bottom" Margin="0,20,0,0" MouseLeftButtonUp="GradientButtonUI_MouseLeftButtonUp" />
             </DockPanel>
         </StackPanel>
     </Grid>

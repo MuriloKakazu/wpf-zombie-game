@@ -67,23 +67,22 @@ namespace ZombieGame.UI
             {
                 if (!w.Sold)
                 {
+                    btnBuy.Content = "$" + w.Price;
                     if (GameMaster.Money >= w.Price)
                     {
                         btnBuy.Background = new SolidColorBrush(Color.FromRgb(20, 100, 0));
-                        btnBuy.Content = "Comprar";
                         btnBuy.IsEnabled = true;
                     }
                     else
                     {
-                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 0, 0));
-                        btnBuy.Content = "Preço: " + w.Price;
+                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(150, 0, 0));
                         btnBuy.IsEnabled = false;
                     }
-                }
+              }
                 else
                 {
-                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 0, 0));
-                    btnBuy.Content = "Equipar";
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 150, 0));
+                    btnBuy.Content = "Comprado";
                     btnBuy.IsEnabled = true;
                 }
             }
@@ -91,29 +90,28 @@ namespace ZombieGame.UI
             {
                 if (!p.Sold)
                 {
+                    btnBuy.Content = "$" + p.Price;
                     if (GameMaster.Money >= p.Price)
                     {
                         btnBuy.Background = new SolidColorBrush(Color.FromRgb(20, 100, 0));
-                        btnBuy.Content = "Comprar";
                         btnBuy.IsEnabled = true;
                     }
                     else
                     {
-                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 0, 0));
-                        btnBuy.Content = "Preço: " + p.Price;
+                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(150, 0, 0));
                         btnBuy.IsEnabled = false;
                     }
                 }
                 else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type) ||
                          GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                 {
-                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 0, 0));
-                    btnBuy.Content = "Equipar";
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(200, 150, 0));
+                    btnBuy.Content = "Comprado";
                     btnBuy.IsEnabled = true;
                 }
                 else
                 {
-                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(80, 40, 40));
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(100, 100, 100));
                     btnBuy.Content = "Não compatível";
                     btnBuy.IsEnabled = false;
                 }
@@ -125,9 +123,7 @@ namespace ZombieGame.UI
                 btnBuy.Content = "";
             }
         }
-        
-
-        private void btnBuy_Click(object sender, RoutedEventArgs e)
+        private void btnBuy_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (IsSellingWeapon)
             {
@@ -140,9 +136,9 @@ namespace ZombieGame.UI
                 {
                     if (GameMaster.Players[1].IsPlaying)
                     {
-                        UserControls.ChoosePlayer.SetItem(w);
-                        UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
-                        UserControls.PauseMenu.Grid.Children.Add(UserControls.ChoosePlayer);
+                        ControlCache.ChoosePlayer.SetItem(w);
+                        ControlCache.PauseMenu.Grid.Children.Remove(ControlCache.StoreControl);
+                        ControlCache.PauseMenu.Grid.Children.Add(ControlCache.ChoosePlayer);
                         SoundPlayer.Instance.Play(new NoAmmoSFX());
                     }
                     else
@@ -170,16 +166,18 @@ namespace ZombieGame.UI
                         if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type) &&
                             GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                         {
-                            UserControls.ChoosePlayer.SetItem(p);
-                            UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
-                            UserControls.PauseMenu.Grid.Children.Add(UserControls.ChoosePlayer);
+                            ControlCache.ChoosePlayer.SetItem(p);
+                            ControlCache.PauseMenu.Grid.Children.Remove(ControlCache.StoreControl);
+                            ControlCache.PauseMenu.Grid.Children.Add(ControlCache.ChoosePlayer);
                             SoundPlayer.Instance.Play(new NoAmmoSFX());
-                        } else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
+                        }
+                        else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                         {
                             GameMaster.Players[0].Character.Weapon.SetProjectile(p.Mount());
                             GameMaster.Players[0].Character.Weapon.Ammo = 0;
                             SoundPlayer.Instance.Play(new WeaponReloadSFX());
-                        } else if (GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
+                        }
+                        else if (GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
                         {
                             GameMaster.Players[1].Character.Weapon.SetProjectile(p.Mount());
                             GameMaster.Players[1].Character.Weapon.Ammo = 0;
@@ -199,23 +197,94 @@ namespace ZombieGame.UI
                 }
             }
             SetBtnStatus();
-            UserControls.StoreControl.Update();
+            ControlCache.StoreControl.Update();
         }
-        private void btnInfo_Click(object sender, RoutedEventArgs e)
+
+        private void btnInfo_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (IsSellingWeapon)
             {
-                UserControls.WeaponInfo.SetWeapon(w);
-                UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
-                UserControls.PauseMenu.Grid.Children.Add(UserControls.WeaponInfo);
+                ControlCache.WeaponInfo.SetWeapon(w);
+                ControlCache.PauseMenu.Grid.Children.Remove(ControlCache.StoreControl);
+                ControlCache.PauseMenu.Grid.Children.Add(ControlCache.WeaponInfo);
             }
             else if (IsSellingProjectile)
             {
-                UserControls.ProjectileInfo.SetProjectile(p);
-                UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
-                UserControls.PauseMenu.Grid.Children.Add(UserControls.ProjectileInfo);
+                ControlCache.ProjectileInfo.SetProjectile(p);
+                ControlCache.PauseMenu.Grid.Children.Remove(ControlCache.StoreControl);
+                ControlCache.PauseMenu.Grid.Children.Add(ControlCache.ProjectileInfo);
             }
         }
         #endregion
+
+        private void btnBuy_MouseEnter(object sender, MouseEventArgs e)
+        {
+            if (IsSellingWeapon)
+            {
+                if (!w.Sold)
+                {
+                    if (GameMaster.Money >= w.Price)
+                    {
+                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(0, 80, 0));
+                        btnBuy.Content = "Comprar";
+                        btnBuy.IsEnabled = true;
+                    }
+                    else
+                    {
+                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(130, 0, 0));
+                        btnBuy.Content = "$" + w.Price;
+                        btnBuy.IsEnabled = false;
+                    }
+                }
+                else
+                {
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(170, 120, 0));
+                    btnBuy.Content = "Equipar";
+                    btnBuy.IsEnabled = true;
+                }
+            }
+            else if (IsSellingProjectile)
+            {
+                if (!p.Sold)
+                {
+                    if (GameMaster.Money >= p.Price)
+                    {
+                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(0, 50, 0));
+                        btnBuy.Content = "Comprar";
+                        btnBuy.IsEnabled = true;
+                    }
+                    else
+                    {
+                        btnBuy.Background = new SolidColorBrush(Color.FromRgb(130, 0, 0));
+                        btnBuy.Content = "$" + p.Price;
+                        btnBuy.IsEnabled = false;
+                    }
+                }
+                else if (GameMaster.Players[0].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type) ||
+                         GameMaster.Players[1].Character.Weapon.AcceptedProjectileTypes.Contains(p.Type))
+                {
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(170, 120, 0));
+                    btnBuy.Content = "Equipar";
+                    btnBuy.IsEnabled = true;
+                }
+                else
+                {
+                    btnBuy.Background = new SolidColorBrush(Color.FromRgb(70, 70, 70));
+                    btnBuy.Content = "Não compatível";
+                    btnBuy.IsEnabled = false;
+                }
+            }
+            else
+            {
+                btnBuy.IsEnabled = false;
+                btnBuy.Background = new SolidColorBrush(Color.FromRgb(80, 80, 80));
+                btnBuy.Content = "";
+            }
+        }
+
+        private void btnBuy_MouseLeave(object sender, MouseEventArgs e)
+        {
+            SetBtnStatus();
+        }
     }
 }

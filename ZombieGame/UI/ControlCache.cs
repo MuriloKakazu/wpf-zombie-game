@@ -1,6 +1,6 @@
 ﻿namespace ZombieGame.UI
 {
-    public static class UserControls
+    public static class ControlCache
     {
         public static WeaponInfoUI WeaponInfo;
         public static StoreUC StoreControl;

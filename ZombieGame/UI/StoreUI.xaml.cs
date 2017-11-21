@@ -68,7 +68,6 @@ namespace ZombieGame.UI
         {
             InitializeComponent();
             Canvas.SetZIndex(this, 20);
-            BackButton.Text.Content = "Voltar";
         }
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
@@ -126,8 +125,8 @@ namespace ZombieGame.UI
 
         private void BackButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            UserControls.PauseMenu.Grid.Children.Remove(UserControls.StoreControl);
-            UserControls.PauseMenu.PausedMenuContent.Visibility = Visibility.Visible;
+            ControlCache.PauseMenu.Grid.Children.Remove(ControlCache.StoreControl);
+            ControlCache.PauseMenu.PausedMenuContent.Visibility = Visibility.Visible;
         }
 
         private void UpdateProjectileInferfaces()

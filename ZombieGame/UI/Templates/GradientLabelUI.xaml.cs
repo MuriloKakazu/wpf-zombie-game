@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,14 +22,43 @@ namespace ZombieGame.UI
     /// </summary>
     public partial class GradientLabelUI : Label
     {
+        [Browsable(false)]
+        public new Brush Foreground { get { return base.Foreground; } set { base.Foreground = value; } }
+
+        [Description(""), Category("Brush")]
+        public Brush FocusedForeground
+        {
+            get { return (Brush)GetValue(FocusedForegroundProperty); }
+            set { SetValue(FocusedForegroundProperty, value); }
+        }
+
+        [Description(""), Category("Brush")]
+        public Brush UnfocusedForeground
+        {
+            get { return (Brush)GetValue(UnfocusedForegroundProperty); }
+            set { SetValue(UnfocusedForegroundProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for UnfocusedBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty UnfocusedForegroundProperty =
+            DependencyProperty.Register("UnfocusedForeground", typeof(Brush), typeof(GradientLabelUI), new PropertyMetadata(new SolidColorBrush(Colors.Black)));
+        // Using a DependencyProperty as the backing store for FocusedBrush.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty FocusedForegroundProperty =
+            DependencyProperty.Register("FocusedForeground", typeof(Brush), typeof(GradientLabelUI), new PropertyMetadata(new SolidColorBrush(Colors.White)));
+
         public GradientLabelUI()
         {
             InitializeComponent();
         }
 
+        private void Label_Loaded(object sender, RoutedEventArgs e)
+        {
+            Foreground = UnfocusedForeground;
+        }
+
         private void Label_MouseEnter(object sender, MouseEventArgs e)
         {
-            Foreground = new SolidColorBrush(Colors.White);
+            Foreground = FocusedForeground;
             var x = new LinearGradientBrush()
             {
                 StartPoint = new Point(0, 0.5),
@@ -49,7 +79,7 @@ namespace ZombieGame.UI
 
         private void Label_MouseLeave(object sender, MouseEventArgs e)
         {
-            Foreground = new SolidColorBrush(Colors.Black);
+            Foreground = UnfocusedForeground;
             Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
             AnimateMouseLeave();
         }

@@ -42,12 +42,13 @@ namespace ZombieGame.UI
             lblKnockback.Content = "Empurro: " + p.KnockbackMagnitude + " pixeis";
             lblExplosive.Content = "Explosivo: " + ((p.IsExplosive) ? "Sim" : "Não");
             lblDistance.Content = "Distância máxima: " + p.TravelDistance + " pixeis";
+            ItemIcon.Source = new BitmapImage(new Uri(IO.GlobalPaths.ProjectileSprites + p.SpriteFileName));
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void GradientButtonUI_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            UserControls.PauseMenu.Grid.Children.Remove(this);
-            UserControls.PauseMenu.Grid.Children.Add(UserControls.StoreControl);
+            ControlCache.PauseMenu.Grid.Children.Remove(this);
+            ControlCache.PauseMenu.Grid.Children.Add(ControlCache.StoreControl);
         }
     }
 }

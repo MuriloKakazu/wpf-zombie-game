@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using ZombieGame.Audio;
 using ZombieGame.Game.Enums;
 using ZombieGame.Game.Interfaces;
+using ZombieGame.Game.Prefabs.Entities;
 using ZombieGame.Physics;
 using ZombieGame.Physics.Events;
 
@@ -27,6 +28,11 @@ namespace ZombieGame.Game.Entities
         public virtual float MoneyDrop { get; protected set; }
         public virtual string DeathSFXKey { get; set; }
         public virtual string HitSFXKey { get; set; }
+        public virtual bool ExplodesOnDeath { get; set; }
+        public virtual float ExplosionRadius { get; set; }
+        public virtual string ExplosionSFXKey { get; protected set; }
+        public bool IsExploding { get; protected set; }
+        public virtual float HitDamage { get; protected set; }
         #endregion
 
         #region Methods
@@ -51,7 +57,11 @@ namespace ZombieGame.Game.Entities
                 MoneyDrop = source.MoneyDrop,
                 Type = source.Type,
                 DeathSFXKey = source.DeathSFXKey,
-                HitSFXKey = source.HitSFXKey
+                HitSFXKey = source.HitSFXKey,
+                ExplodesOnDeath = source.ExplodesOnDeath,
+                ExplosionRadius = source.ExplosionRadius,
+                ExplosionSFXKey = source.ExplosionSFXKey,
+                HitDamage = source.HitDamage * GameMaster.DifficultyBonus,
             };
             e.RigidBody.SetMass(source.Mass);
             e.RigidBody.SpeedMultiplier = source.SpeedMultiplier + 0.25f * GameMaster.DifficultyBonus;
@@ -61,6 +71,9 @@ namespace ZombieGame.Game.Entities
             return e;
         }
 
+        /// <summary>
+        /// ctor
+        /// </summary>
         public Enemy() : this(EnemyType.Undefined)
         {
 
@@ -117,8 +130,55 @@ namespace ZombieGame.Game.Entities
                 SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(DeathSFXKey));
                 GameMaster.Score += DeathPoints * GameMaster.DifficultyBonus;
                 GameMaster.Money += MoneyDrop * GameMaster.DifficultyBonus;
+                if (ExplodesOnDeath && !IsExploding)
+                    Explode();
             }
             base.Kill();
+        }
+
+        /// <summary>
+        /// Explode o projétil
+        /// </summary>
+        /// <param name="pos">Posição da explosão</param>
+        public virtual void Explode(bool preventCascadeEffect = false)
+        {
+            if (!preventCascadeEffect)
+                SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(ExplosionSFXKey));
+
+            var pos = RigidBody.CenterPoint;
+            IsExploding = true;
+
+            Explosion.Create(pos, ExplosionRadius * 2);
+
+            if (!preventCascadeEffect)
+            {
+                var targets = Character.GetNearbyCharacters(pos, ExplosionRadius / 2, 5);
+                if (targets != null)
+                {
+                    foreach (var t in targets)
+                    {
+                        t.Damage(damager: this, quantity: HitDamage);
+
+                        t.RigidBody.PointAt(pos - t.RigidBody.CenterPoint);
+                        //t.RigidBody.AddForce(t.RigidBody.CenterPoint.PointedAt(RigidBody.CenterPoint).Normalized * (ExplosionRadius * 5));
+                        if (t.IsEnemy)
+                        {
+                            var e = (Enemy)t;
+                            if (e.ExplodesOnDeath && !e.IsExploding) e.Explode(preventCascadeEffect: true);
+                            else e.Damage(damager: this, quantity: HitDamage * 5);
+                        }
+                    }
+                }
+                //var nearbyProjectiles = Projectile.GetNearbyProjectiles(ExplosionRadius / 2, 3);
+                //if (nearbyProjectiles != null)
+                //{
+                //    foreach (var p in nearbyProjectiles)
+                //        if (p.IsExplosive && !p.IsExploding)
+                //            p.Explode(preventCascadeEffect: true);
+                //}
+            }
+
+            MarkAsNoLongerNeeded();
         }
 
         /// <summary>
@@ -143,7 +203,10 @@ namespace ZombieGame.Game.Entities
                 if (colliderChar != null)
                 {
                     //colliderChar.RigidBody.AddForce(e.CollisionDirection.Opposite.Normalized * 1000);
-                    colliderChar.Damage(damager: this, quantity: 1);
+                    if (ExplodesOnDeath && !IsExploding)
+                        Kill();
+                    else if (!IsExploding)
+                        colliderChar.Damage(damager: this, quantity: HitDamage);
                 }
             }
         }
@@ -166,7 +229,7 @@ namespace ZombieGame.Game.Entities
                     var colliderChar = Character.FromHashCode(e.Collider.Hash);
                     if (colliderChar != null)
                     {
-                        colliderChar.Damage(damager: this, quantity: 0.1f);
+                        colliderChar.Damage(damager: this, quantity: HitDamage / 10);
                     }
                 }
             }

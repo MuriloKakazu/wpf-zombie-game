@@ -28,9 +28,6 @@ namespace ZombieGame.UI
         {
             InitializeComponent();
 
-            SaveButton.Text.Content = "APPLY";
-            BackButton.Text.Content = "BACK";
-
             if (GameMaster.Settings.AntiAliasingEnabled)
                 AntiAliasComboBox.SelectedIndex = 0;
             else
@@ -43,6 +40,23 @@ namespace ZombieGame.UI
                 
         }
 
+        public SettingsMenuUI(bool fromMainMenu) : this()
+        {
+            AccessedFromMainMenu = fromMainMenu;
+
+            if (!AccessedFromMainMenu)
+            {
+                var brush = new SolidColorBrush(Colors.White);
+                BackButton.UnfocusedForeground = brush;
+                SaveButton.UnfocusedForeground = brush;
+                AntiAliasLabel.Foreground = brush;
+                RenderscaleLabel.Foreground = brush;
+                VolumeLabel.Foreground = brush;
+                VolumeValue.Foreground = brush;
+                VolumeValue.Background = new SolidColorBrush(Colors.Transparent);
+            }
+        }
+
         private void BackButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             this.Visibility = Visibility.Collapsed;
@@ -53,8 +67,8 @@ namespace ZombieGame.UI
             }
             else
             {
-                UserControls.PauseMenu.Grid.Children.Remove(this);
-                UserControls.PauseMenu.PausedMenuContent.Visibility = Visibility.Visible;
+                ControlCache.PauseMenu.Grid.Children.Remove(this);
+                ControlCache.PauseMenu.PausedMenuContent.Visibility = Visibility.Visible;
             }
         }
 
@@ -78,12 +92,12 @@ namespace ZombieGame.UI
             GameMaster.Settings.SaveTo("settings.config");
             GameMaster.LoadSettings();
 
-            SaveButton.Text.Content = "DONE!";
+            SaveButton.Content = "CONFIGURAÇÕES SALVAS!";
         }
 
         private void SaveButton_MouseLeave(object sender, MouseEventArgs e)
         {
-            SaveButton.Text.Content = "APPLY";
+            SaveButton.Content = "SALVAR";
         }
     }
 }

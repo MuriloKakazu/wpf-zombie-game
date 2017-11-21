@@ -5,29 +5,34 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZombieGame.UI"
              mc:Ignorable="d" 
-             d:DesignHeight="691" d:DesignWidth="1274">
+             d:DesignHeight="691" d:DesignWidth="1274" Loaded="UserControl_Loaded">
     <Grid>
         <StackPanel Margin="0">
-            <DockPanel LastChildFill="False" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,-2">
+            <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0" Width="700" Height="691" LastChildFill="False">
                 <Label Content="GAME OVER" Foreground="#FFC70000" FontSize="72" HorizontalAlignment="Center" VerticalAlignment="Top" DockPanel.Dock="Top" Margin="0,50,0,0">
                     <Label.Effect>
                         <DropShadowEffect ShadowDepth="0" BlurRadius="50"/>
                     </Label.Effect>
                 </Label>
-                <Label x:Name="Score" Content="PONTUAÇÃO: 0000" DockPanel.Dock="Top" FontSize="48" Margin="200,50,200,30" Foreground="#FFFFCA00"></Label>
-                <DockPanel DockPanel.Dock="Top">
-                    <Label Content="NOME:" FontSize="48" Foreground="White" Margin="50,0,0,0">
+                <Label x:Name="Score" Content="PONTUAÇÃO: 0000" DockPanel.Dock="Top" FontSize="36" Margin="50,50,50,30" Foreground="#FFFFCA00" HorizontalAlignment="Center">
+                    <Label.Effect>
+                        <DropShadowEffect Opacity="0.5"/>
+                    </Label.Effect>
+                </Label>
+                <DockPanel DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="0" LastChildFill="False">
+                    <Label Content="NOME:" FontSize="28" Foreground="White" Margin="0,0,20,0" Padding="5,5,0,5">
                         <Label.Effect>
                             <DropShadowEffect BlurRadius="50" ShadowDepth="0"/>
                         </Label.Effect>
                     </Label>
-                    <TextBox x:Name="Name" DockPanel.Dock="Right" Height="50" FontSize="22" Margin="20,0,50,0">
+                    <TextBox x:Name="Name" Height="35" FontSize="22" Margin="0" Width="300" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Cursor="Pen" ForceCursor="True" TextChanged="Name_TextChanged">
                         <TextBox.Effect>
                             <DropShadowEffect Opacity="0.5"/>
                         </TextBox.Effect>
                     </TextBox>
                 </DockPanel>
-                <local:GradientButtonUI x:Name="SaveButton" Margin="50" DockPanel.Dock="Top" Height="54" MouseLeftButtonUp="SaveButton_MouseLeftButtonUp" MouseLeave="SaveButton_MouseLeave" />
+                <local:GradientButtonUI x:Name="BackButton" DockPanel.Dock="Bottom" Height="54" MouseLeftButtonUp="BackButton_MouseLeftButtonUp" Content="VOLTAR AO MENU PRINCIPAL" FontSize="22" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="20,10" UnfocusedForeground="White" Margin="0,0,0,75" HorizontalAlignment="Center" />
+                <local:GradientButtonUI x:Name="SaveButton" DockPanel.Dock="Bottom" Height="54" MouseLeftButtonUp="SaveButton_MouseLeftButtonUp" Content="SALVAR MINHA PONTUAÇÃO" FontSize="22" HorizontalContentAlignment="Left" VerticalContentAlignment="Center" Padding="20,10" UnfocusedForeground="White" MouseLeave="SaveButton_MouseLeave" HorizontalAlignment="Center"/>
             </DockPanel>
         </StackPanel>
     </Grid>

@@ -19,6 +19,7 @@ namespace ZombieGame.Game
     public static class GameMaster
     {
         #region Properties
+        public static bool GameOver { get; private set; }
         public static bool Started { get; set; }
         public static GameCanvas TargetCanvas { get; set; }
         public static MainWindow TargetWindow { get; set; }
@@ -78,7 +79,9 @@ namespace ZombieGame.Game
         /// </summary>
         public static void Setup()
         {
+            GameOver = false;
             Started = true;
+            ControlCache.Setup();
             Time.Setup();
             ResourceManager.Setup();
             SetupGameEntities();
@@ -90,8 +93,20 @@ namespace ZombieGame.Game
             Money = 3000;
             Score = 0;
             RunningTime = 0;
-            UserControls.Setup();
             Pause();
+            GameMaster.TargetCanvas.AddChild(ControlCache.PauseMenu);
+            ControlCache.PauseMenu.Refresh();
+            ShowCursor();
+            ShowStartScreen();
+        }
+
+        private static void ShowStartScreen()
+        {
+            TargetCanvas.Reset();
+            TargetCanvas.HideUI();
+            ControlCache.PauseMenu.PausedMenuContent.Visibility = Visibility.Collapsed;
+            ControlCache.PauseMenu.Grid.Children.Add(new DifficultySelectionUI());
+            ControlCache.PauseMenu.Refresh();
         }
 
         public static void LoadSettings()
@@ -160,6 +175,13 @@ namespace ZombieGame.Game
         {
             if (InternalTimer != null)
                 InternalTimer.Dispose();
+            Players = null;
+            if (Camera != null)
+                Camera.Destroy();
+            CurrentScene = null;
+            Money = 0;
+            RunningTime = 0;
+            Score = 0;
         }
 
         /// <summary>
@@ -186,10 +208,14 @@ namespace ZombieGame.Game
 
         private static void CheckGameOver()
         {
+            if (GameOver)
+                return;
+
             if (GetPlayer(0).Character == null && GetPlayer(1).Character == null ||
-                GetPlayer(0).Character != null && !GetPlayer(0).Character.IsAlive &&
-                GetPlayer(1).Character != null && !GetPlayer(1).Character.IsAlive)
+            GetPlayer(0).Character != null && !GetPlayer(0).Character.IsAlive &&
+            GetPlayer(1).Character != null && !GetPlayer(1).Character.IsAlive)
             {
+                GameOver = true;
                 PauseForever();
                 ShowGameOverScreen();
                 ShowCursor();
@@ -198,10 +224,15 @@ namespace ZombieGame.Game
 
         private static void ShowGameOverScreen()
         {
+            TargetCanvas.Reset();
             EndGameUI endUI = new EndGameUI();
-            Canvas.SetZIndex(endUI, 11);
-            endUI.RenderTransform = GameMaster.TargetCanvas.Canvas.RenderTransform;
-            TargetCanvas.AddChild(endUI);
+            Canvas.SetZIndex(endUI, 12);
+            GameMaster.TargetCanvas.HideUI();
+            GameMaster.TargetCanvas.AddChild(ControlCache.PauseMenu);
+            ControlCache.PauseMenu.PausedMenuContent.Visibility = Visibility.Collapsed;
+            ControlCache.PauseMenu.Grid.Children.Add(endUI);
+            Camera.ForceUpdate();
+            ControlCache.PauseMenu.Refresh();
         }
 
         private static void IncreaseRunningTime()
@@ -224,6 +255,9 @@ namespace ZombieGame.Game
         /// </summary>
         private static void CheckForUserInput()
         {
+            if (Score < 1 || GameOver)
+                return;
+
             if (!IgnoreKeyPress)
             {
                 if (Keyboard.IsKeyDown(Key.Escape))
@@ -231,21 +265,18 @@ namespace ZombieGame.Game
                     if (GameplayState == ExecutionState.Paused)
                     {
                         Resume();
-                        GameMaster.TargetCanvas.RemoveChild(UserControls.PauseMenu);
-                        UserControls.PauseMenu.Grid.Children.Clear();
-                        UserControls.PauseMenu = new PauseMenuUI();
+                        GameMaster.TargetCanvas.RemoveChild(ControlCache.PauseMenu);
+                        ControlCache.PauseMenu.Grid.Children.Clear();
+                        ControlCache.PauseMenu = new PauseMenuUI();
                         HideCursor();
                     }
                     else if (GameplayState == ExecutionState.Running)
                     {
                         Pause();
-                        UserControls.PauseMenu.Refresh();
-                        GameMaster.TargetCanvas.AddChild(UserControls.PauseMenu);
+                        ControlCache.PauseMenu.Refresh();
+                        GameMaster.TargetCanvas.AddChild(ControlCache.PauseMenu);
                         ShowCursor();
                     }
-
-
-
                         IgnoreKeyPress = true;
                         LastUpdate = DateTime.Now;
                     }

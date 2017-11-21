@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZombieGame.UI"
+             xmlns:local1="clr-namespace:ZombieGame.UI.Templates"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="300">
     <Grid>
@@ -13,16 +14,16 @@
                     <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>
                 </Label.Effect>
             </Label>
-            <local:ProgressBarUI x:Name="healthBar" Margin="0">
-                <local:ProgressBarUI.Effect>
+            <local1:GradientProgressBarUI x:Name="healthBar" Margin="0" FillColor1="#BFC81414" FillColor2="#7FC81414" FillColor3="#3FC81414">
+                <local1:GradientProgressBarUI.Effect>
                     <DropShadowEffect Opacity="0.5" ShadowDepth="2"/>
-                </local:ProgressBarUI.Effect>
-            </local:ProgressBarUI>
-            <local:ProgressBarUI x:Name="ammoBar">
-                <local:ProgressBarUI.Effect>
+                </local1:GradientProgressBarUI.Effect>
+            </local1:GradientProgressBarUI>
+            <local1:GradientProgressBarUI x:Name="ammoBar" FillColor3="#3F3232C8" FillColor2="#7F3232C8" FillColor1="#BF3232C8">
+                <local1:GradientProgressBarUI.Effect>
                     <DropShadowEffect Opacity="0.5" ShadowDepth="2"/>
-                </local:ProgressBarUI.Effect>
-            </local:ProgressBarUI>
+                </local1:GradientProgressBarUI.Effect>
+            </local1:GradientProgressBarUI>
             <Label x:Name="Tip" Foreground="White" FontWeight="Bold" FontSize="14">
                 <Label.Effect>
                     <DropShadowEffect ShadowDepth="2" Opacity="0.5"/>

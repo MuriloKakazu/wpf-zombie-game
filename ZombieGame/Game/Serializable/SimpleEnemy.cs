@@ -38,6 +38,10 @@ namespace ZombieGame.Game.Serializable
         /// Multiplicador do módulo da velocidade
         /// </summary>
         public float SpeedMultiplier { get; set; }
+        public bool ExplodesOnDeath { get; set; }
+        public float ExplosionRadius { get; set; }
+        public string ExplosionSFXKey { get; set; }
+        public float HitDamage { get; set; }
         /// <summary>
         /// Tamanho do projétil
         /// </summary>

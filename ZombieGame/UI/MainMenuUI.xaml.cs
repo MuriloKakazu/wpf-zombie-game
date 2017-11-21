@@ -43,11 +43,6 @@ namespace ZombieGame.UI
             Grid.Children.Add(ParalaxLayer2);
             Grid.Children.Add(ParalaxLayer3);
             Grid.Children.Add(ParalaxLayer4);
-
-            StartGameButton.Text.Content = "START GAME";
-            RankingButton.Text.Content = "RANKING";
-            SettingsButton.Text.Content = "SETTINGS";
-            QuitButton.Text.Content = "QUIT";
         }
 
         public void ReturnToOriginalState()
@@ -94,13 +89,23 @@ namespace ZombieGame.UI
 
         private void QuitButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            App.Current.Shutdown();
+            QuitButton.Content = "CLIQUE 2X PARA CONFIRMAR";
         }
 
         private void RankingButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             MainMenuOptions.Visibility = Visibility.Collapsed;
             GameMaster.TargetWindow.Grid.Children.Add(new RankingMenuUI());
+        }
+
+        private void QuitButton_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            App.Current.Shutdown();
+        }
+
+        private void QuitButton_MouseLeave(object sender, MouseEventArgs e)
+        {
+            QuitButton.Content = "SAIR";
         }
     }
 }

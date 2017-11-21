@@ -25,24 +25,31 @@ namespace ZombieGame.UI
         public RankingMenuUI()
         {
             InitializeComponent();
-            BackButton.Text.Content = "BACK";
 
             var sortedScores = Database.Scores.OrderBy(x => x.Highscore).Reverse();
 
             for (int i = 0; i < sortedScores.Count(); i++)
             {
-                var pos = i + 1;
-                var name = sortedScores.ElementAt(i).Name;
-                var highscore = sortedScores.ElementAt(i).Highscore;
-                var date = sortedScores.ElementAt(i).Date.ToString(@"dd\/MM\/yyyy");
+                string pos = (i + 1).ToString();
+                if (i + 1 > 200) pos = "200+";
+                while (pos.Length < 4) pos += " ";
+                string name = "NOME: " + sortedScores.ElementAt(i).Name;
+                if (name.Length > 40) name = name.Substring(0, 37) + "...";
+                else while (name.Length < 40) name += " ";
+                string highscore = Math.Round(sortedScores.ElementAt(i).Highscore).ToString();
+                if (highscore.Length > 12) highscore = "PTS: >999999999999";
+                else { highscore = "PTS: " + highscore; while (highscore.Length < 18) highscore += " "; }
+                string date = "DATA: " + sortedScores.ElementAt(i).Date.ToString(@"dd\/MM\/yyyy");
                 GradientLabelUI label = new GradientLabelUI()
                 {
-                    Content = string.Format("POSITION: {0,-" + (20 - (pos.ToString().Length)) + "} NAME: {1,-" + 
-                    (50 - (name.ToString().Length)) + "} SCORE: {2,-" + 
-                    (20 - (highscore.ToString().Length)) + "} {3," + 
-                    (40 - (date.ToString().Length)) + "}", pos, name, highscore, "DATE: " + date),
+                    Content = string.Format("{0} {1} {2} {3}", pos, name, highscore, date),
                     FontSize = 22,
+                    FontFamily = new FontFamily("Lucida Console"),
+                    Padding = new Thickness(20, 5, 20, 5),
+                    Height = 50,
+                    VerticalContentAlignment = VerticalAlignment.Center,
                 };
+                //label.UnfocusedForeground = new SolidColorBrush(Colors.White);
                 Scores.Children.Add(label);
             }
         }

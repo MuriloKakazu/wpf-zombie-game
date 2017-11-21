@@ -8,19 +8,19 @@
              d:DesignHeight="691" d:DesignWidth="1274" MouseMove="UserControl_MouseMove">
     <Grid Background="Wheat">
         <Canvas x:Name="Grid">
-            <DockPanel x:Name="MainMenuOptions" HorizontalAlignment="Left" Margin="50" Width="500" Panel.ZIndex="10">
-                <Label Content="MAIN MENU" FontWeight="Bold" FontSize="36" Foreground="#FFC80000" DockPanel.Dock="Top" Margin="10,10,10,20">
+            <DockPanel x:Name="MainMenuOptions" HorizontalAlignment="Left" Margin="50" Width="500" Panel.ZIndex="10" Height="600">
+                <Label Content="MAIN MENU" FontWeight="Bold" FontSize="36" Foreground="#FFC80000" DockPanel.Dock="Top" Margin="10,10,10,30">
                     <Label.Effect>
                         <DropShadowEffect BlurRadius="100" ShadowDepth="0" Color="Black"/>
                     </Label.Effect>
                 </Label>
-                <StackPanel HorizontalAlignment="Left" DockPanel.Dock="Top" Width="300">
-                    <local:GradientButtonUI x:Name="StartGameButton" MouseLeftButtonUp="StartGameButton_MouseLeftButtonUp"/>
-                    <local:GradientButtonUI x:Name="RankingButton" MouseLeftButtonUp="RankingButton_MouseLeftButtonUp"/>
-                    <local:GradientButtonUI x:Name="SettingsButton" MouseLeftButtonUp="SettingsButton_MouseLeftButtonUp"/>
-                    <local:GradientButtonUI x:Name="QuitButton" MouseLeftButtonUp="QuitButton_MouseLeftButtonUp"/>
+                <StackPanel HorizontalAlignment="Left" DockPanel.Dock="Top" Width="500">
+                    <local:GradientButtonUI x:Name="StartGameButton" MouseLeftButtonUp="StartGameButton_MouseLeftButtonUp" Content="NOVO JOGO" FontSize="22" Padding="20,10"/>
+                    <local:GradientButtonUI x:Name="RankingButton" MouseLeftButtonUp="RankingButton_MouseLeftButtonUp" Content="RANKING" FontSize="22" Padding="20,10"/>
+                    <local:GradientButtonUI x:Name="SettingsButton" MouseLeftButtonUp="SettingsButton_MouseLeftButtonUp" Content="CONFIGURAÇÕES" FontSize="22" Padding="20,10"/>
+                    <local:GradientButtonUI x:Name="QuitButton" MouseLeftButtonUp="QuitButton_MouseLeftButtonUp" Content="SAIR" FontSize="22" Padding="20,10" MouseDoubleClick="QuitButton_MouseDoubleClick" MouseLeave="QuitButton_MouseLeave"/>
                 </StackPanel>
-                <Label Content="v1.0" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" FontSize="20" Margin="30,5">
+                <Label Content="v1.0" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" FontSize="20" Margin="20,5">
                     <Label.Effect>
                         <DropShadowEffect ShadowDepth="0" BlurRadius="50"/>
                     </Label.Effect>

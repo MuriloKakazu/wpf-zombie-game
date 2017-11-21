@@ -5,8 +5,5 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZombieGame.UI"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="300" MouseEnter="Label_MouseEnter" MouseLeave="Label_MouseLeave">
-    <Label.Effect>
-        <DropShadowEffect ShadowDepth="0" BlurRadius="50"/>
-    </Label.Effect>
+             d:DesignHeight="100" d:DesignWidth="300" MouseEnter="Label_MouseEnter" MouseLeave="Label_MouseLeave" Loaded="Label_Loaded">
 </Label>

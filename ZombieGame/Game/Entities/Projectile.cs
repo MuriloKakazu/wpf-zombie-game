@@ -308,16 +308,22 @@ namespace ZombieGame.Game.Entities
         /// <returns>Entity(Array)</returns>
         public virtual Projectile[] GetNearbyProjectiles(float radius, float threshold)
         {
+            int maxIterations = 15;
+            int it = 0;
             try
             {
                 List<Projectile> projectiles = new List<Projectile>();
                 foreach (var e in Projectiles.ToArray())
+                {
+                    if (++it > maxIterations)
+                        return projectiles.ToArray();
                     if ((e.RigidBody.CenterPoint - RigidBody.CenterPoint).Magnitude <= radius && e.Hash != Hash && projectiles.Count < threshold)
                     {
                         projectiles.Add(e);
                         if (projectiles.Count >= threshold)
                             return projectiles.ToArray();
                     }
+                }
                 return projectiles.ToArray();
             }
             catch { }

@@ -35,10 +35,10 @@ namespace ZombieGame.UI
             InitializeComponent();
 
             AssociatedPlayer = new Player();
-            healthBar.Background = new SolidColorBrush(Color.FromArgb(200, 255, 50, 50));
-            ammoBar.Background = new SolidColorBrush(Color.FromArgb(200, 70, 70, 255));
-            healthBar.Title = "HP:";
-            ammoBar.Title = "AMMO:";
+            //healthBar.Background = new SolidColorBrush(Color.FromArgb(200, 255, 50, 50));
+            //ammoBar.Background = new SolidColorBrush(Color.FromArgb(200, 70, 70, 255));
+            healthBar.Title = "VIDA:";
+            ammoBar.Title = "MUNIÇÃO:";
         }
 
         public void UpdateStats()
@@ -55,12 +55,19 @@ namespace ZombieGame.UI
             if (AssociatedPlayer.Character.Weapon.Projectile == null)
             {
                 Tip.Content = "Equipe um projétil para poder atirar!";
-                Tip.Foreground = new SolidColorBrush(Color.FromRgb(255, 129, 129));
+                Tip.Foreground = new SolidColorBrush(Color.FromRgb(200, 0, 0));
             }
             else if (ammoPerc <= 25)
                 Tip.Content = "Pouca munição!";
             else if (AssociatedPlayer.PlayerNumber == 2 && !AssociatedPlayer.IsPlaying)
-                Tip.Content = "Clique ENTER para jogar!";
+                Tip.Content = "Aperte ENTER para jogar!";
+            else if (AssociatedPlayer.IsPlaying && !AssociatedPlayer.Character.IsAlive)
+            {
+                Tip.Foreground = new SolidColorBrush(Color.FromRgb(200, 0, 0));
+                healthBar.FillPercentage = 0;
+                ammoBar.FillPercentage = 0;
+                Tip.Content = "MORTO!";
+            }
             else
                 Tip.Content = "";
         }

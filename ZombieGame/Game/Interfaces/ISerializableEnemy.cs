@@ -25,6 +25,10 @@ namespace ZombieGame.Game.Interfaces
         float SpeedMultiplier { get; set; }
         string DeathSFXKey { get; set; }
         string HitSFXKey { get; set; }
+        bool ExplodesOnDeath { get; set; }
+        float ExplosionRadius { get; set; }
+        string ExplosionSFXKey { get; set; }
+        float HitDamage { get; set; }
 
         /// <summary>
         /// Monta uma instância do objeto Enemy

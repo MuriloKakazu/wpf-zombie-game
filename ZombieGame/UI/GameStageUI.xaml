@@ -11,7 +11,7 @@
             <DropShadowEffect Opacity="0.5"/>
         </Grid.Effect>
         <StackPanel>
-            <Label x:Name="Score" Content="SCORE: 0" FontWeight="Bold" FontSize="22" HorizontalAlignment="Center" Foreground="White"></Label>
+            <Label x:Name="Score" Content="PONTUAÇÃO: 0" FontWeight="Bold" FontSize="22" HorizontalAlignment="Center" Foreground="White"></Label>
             <Label x:Name="RunningTime" Foreground="White" FontWeight="Bold" FontSize="16" Content="00:00" HorizontalAlignment="Center"></Label>
         </StackPanel>
     </Grid>

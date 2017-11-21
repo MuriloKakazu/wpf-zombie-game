@@ -13,7 +13,7 @@
                     <DropShadowEffect BlurRadius="100" ShadowDepth="0"/>
                 </Label.Effect>
             </Label>
-            <local:GradientButtonUI x:Name="BackButton" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" MouseLeftButtonUp="BackButton_MouseLeftButtonUp"/>
+            <local:GradientButtonUI x:Name="BackButton" DockPanel.Dock="Bottom" VerticalAlignment="Bottom" MouseLeftButtonUp="BackButton_MouseLeftButtonUp" Padding="20,10" FontSize="22" Content="VOLTAR"/>
 
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <StackPanel x:Name="Scores" CanVerticallyScroll="True" ScrollViewer.VerticalScrollBarVisibility="Hidden"/>

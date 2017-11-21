@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ZombieGame"
         xmlns:controls="clr-namespace:ZombieGame.Game.Controls"
         mc:Ignorable="d"
-        Title="ZombieGame Client" Height="720" Width="1280" MinWidth="1280" MinHeight="720" ResizeMode="CanMinimize" Closed="Window_Closed">
+        Title="ZombieGame Client" Height="720" Width="1280" MinWidth="1280" MinHeight="720" ResizeMode="CanMinimize" Closed="Window_Closed" Icon="ZombieGame.ico">
     <Grid x:Name="Grid" Background="#FF323232">
         <Canvas x:Name="UI" Panel.ZIndex="2" />
         <UI:GameCanvas x:Name="GameCanvas" />

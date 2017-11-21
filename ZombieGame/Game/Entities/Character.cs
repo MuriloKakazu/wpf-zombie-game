@@ -76,16 +76,22 @@ namespace ZombieGame.Game.Entities
         /// <returns>Character(Array)</returns>
         public static Character[] GetNearbyCharacters(Vector pos, float radius, int threshold)
         {
+            int maxIterations = 15;
+            int it = 0;
             try
             {
                 List<Character> characters = new List<Character>();
                 foreach (var c in Characters.ToArray())
+                {
+                    if (++it > maxIterations)
+                        return characters.ToArray();
                     if ((c.RigidBody.CenterPoint - pos).Magnitude <= radius && characters.Count < threshold)
                     {
                         characters.Add(c);
                         if (characters.Count >= threshold)
                             return characters.ToArray();
                     }
+                }
                 return characters.ToArray();
             }
             catch { return null; }
@@ -228,16 +234,22 @@ namespace ZombieGame.Game.Entities
         /// <returns>Character(Array)</returns>
         public virtual Character[] GetNearbyCharacters(float radius, int threshold)
         {
+            int maxIterations = 15;
+            int it = 0;
             try
             {
                 List<Character> characters = new List<Character>();
                 foreach (var c in Characters.ToArray())
+                {
+                    if (++it > maxIterations)
+                        return characters.ToArray();
                     if ((c.RigidBody.CenterPoint + RigidBody.CenterPoint).Magnitude <= radius && characters.Count < threshold)
                     {
                         characters.Add(c);
                         if (characters.Count >= threshold)
                             return characters.ToArray();
                     }
+                }
                 return characters.ToArray();
             }
             catch { }

@@ -28,7 +28,7 @@ namespace ZombieGame.UI
 
         public void Update()
         {
-            Score.Content = "SCORE: " + Math.Round(GameMaster.Score);
+            Score.Content = "PONTUAÇÃO: " + Math.Round(GameMaster.Score);
             RunningTime.Content = TimeSpan.FromSeconds(GameMaster.RunningTime).ToString(@"hh\:mm\:ss");
         }
     }

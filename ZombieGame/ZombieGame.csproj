@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1857FF66-B45F-4B9A-8F4C-356FDD4B0578}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>ZombieGame</RootNamespace>
     <AssemblyName>ZombieGame</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -15,7 +15,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>x64</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -37,6 +37,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>ZombieGame.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NAudio, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -114,6 +117,9 @@
     <Compile Include="UI\ChoosePlayerUI.xaml.cs">
       <DependentUpon>ChoosePlayerUI.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UI\DifficultySelectionUI.xaml.cs">
+      <DependentUpon>DifficultySelectionUI.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI\EndGameUI.xaml.cs">
       <DependentUpon>EndGameUI.xaml</DependentUpon>
     </Compile>
@@ -123,10 +129,10 @@
     <Compile Include="UI\GameStageUI.xaml.cs">
       <DependentUpon>GameStageUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\GradientButtonUI.xaml.cs">
+    <Compile Include="UI\Templates\GradientButtonUI.xaml.cs">
       <DependentUpon>GradientButtonUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\GradientLabelUI.xaml.cs">
+    <Compile Include="UI\Templates\GradientLabelUI.xaml.cs">
       <DependentUpon>GradientLabelUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\MainMenuUI.xaml.cs">
@@ -135,10 +141,13 @@
     <Compile Include="UI\PauseMenuUI.xaml.cs">
       <DependentUpon>PauseMenuUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\PlayerStatsUI.xaml.cs">
+    <Compile Include="UI\Templates\GradientProgressBarUI.xaml.cs">
+      <DependentUpon>GradientProgressBarUI.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI\Templates\PlayerStatsUI.xaml.cs">
       <DependentUpon>PlayerStatsUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\ProgressBarUI.xaml.cs">
+    <Compile Include="UI\Templates\ProgressBarUI.xaml.cs">
       <DependentUpon>ProgressBarUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\ProjectileInfoUI.xaml.cs">
@@ -150,13 +159,13 @@
     <Compile Include="UI\SettingsMenuUI.xaml.cs">
       <DependentUpon>SettingsMenuUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\StoreItemUI.xaml.cs">
+    <Compile Include="UI\Templates\StoreItemUI.xaml.cs">
       <DependentUpon>StoreItemUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\StoreUI.xaml.cs">
       <DependentUpon>StoreUI.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UI\UserControls.cs" />
+    <Compile Include="UI\ControlCache.cs" />
     <Compile Include="UI\WeaponInfoUI.xaml.cs">
       <DependentUpon>WeaponInfoUI.xaml</DependentUpon>
     </Compile>
@@ -198,6 +207,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UI\DifficultySelectionUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\EndGameUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -210,11 +223,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\GradientButtonUI.xaml">
+    <Page Include="UI\Templates\GradientButtonUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\GradientLabelUI.xaml">
+    <Page Include="UI\Templates\GradientLabelUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -226,11 +239,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\PlayerStatsUI.xaml">
+    <Page Include="UI\Templates\GradientProgressBarUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\ProgressBarUI.xaml">
+    <Page Include="UI\Templates\PlayerStatsUI.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI\Templates\ProgressBarUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -246,7 +263,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UI\StoreItemUI.xaml">
+    <Page Include="UI\Templates\StoreItemUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -294,6 +311,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="arrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ZombieGame.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

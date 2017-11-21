@@ -5,23 +5,52 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ZombieGame.UI"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Width="1274" Height="691">
-    <Grid Width="400" Height="300" Background="#33000000">
+             d:DesignHeight="300" d:DesignWidth="300" Width="1274" Height="691" Padding="0,5">
+    <Grid Width="500" Height="500" Background="#33000000">
         <StackPanel Background="#0C000000" Margin="5">
             <StackPanel.Effect>
                 <DropShadowEffect Opacity="0.5"/>
             </StackPanel.Effect>
-            <Button x:Name="btnClose" Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="20" Background="Red" FontWeight="Bold" Click="btnClose_Click"/>
-            <Label x:Name="lblName" Content="Nome da Arma" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="White" FontSize="24" FontWeight="Bold"/>
+            <Label x:Name="lblName" Content="Nome da Arma" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="#FFC80000" FontSize="24" FontWeight="Bold" Margin="0,25,0,20">
+                <Label.Effect>
+                    <DropShadowEffect Opacity="0.5"/>
+                </Label.Effect>
+            </Label>
+            <Image x:Name="ItemIcon" Width="200" Height="96" Margin="0,0,0,25">
+                <Image.Effect>
+                    <DropShadowEffect BlurRadius="50" ShadowDepth="0"/>
+                </Image.Effect>
+            </Image>
             <DockPanel>
                 <StackPanel DockPanel.Dock="Top" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <Label x:Name="lblFireRate" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblMagSize" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblReloadTime" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblPrice" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
-                    <Label x:Name="lblAcceptedPrectiles" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top"/>
+                    <Label x:Name="lblFireRate" Content="Cadência" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top" FontSize="14">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblMagSize" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top" FontSize="14">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblReloadTime" Content="Label" HorizontalAlignment="Left"  VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top" FontSize="14">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblPrice" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top" FontSize="14">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
+                    <Label x:Name="lblAcceptedPrectiles" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" Foreground="White" FontWeight="Bold" DockPanel.Dock="Top" FontSize="14">
+                        <Label.Effect>
+                            <DropShadowEffect Opacity="0.5"/>
+                        </Label.Effect>
+                    </Label>
                 </StackPanel>
             </DockPanel>
+            <local:GradientButtonUI x:Name="btnClose" MouseLeftButtonUp="btnClose_MouseLeftButtonUp" Content="VOLTAR" UnfocusedForeground="White" Padding="20,10" DockPanel.Dock="Bottom" VerticalContentAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.IsSharedSizeScope="True" Margin="0,50,0,0" Width="150" HorizontalContentAlignment="Center" />
         </StackPanel>
     </Grid>
 </UserControl>
