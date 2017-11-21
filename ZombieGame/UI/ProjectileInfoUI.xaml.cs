@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ZombieGame.Game;
 using ZombieGame.Game.Serializable;
 
 namespace ZombieGame.UI
@@ -22,15 +11,24 @@ namespace ZombieGame.UI
     /// </summary>
     public partial class ProjectileInfoUI : UserControl
     {
+        /// <summary>
+        /// O projétil exibido.
+        /// </summary>
         public SimpleProjectile p { get; protected set; }
 
-
+        /// <summary>
+        /// ctor
+        /// </summary>
         public ProjectileInfoUI()
         {
             InitializeComponent();
             Canvas.SetZIndex(this, 10);
         }
 
+        /// <summary>
+        /// O método para definir o projétil
+        /// </summary>
+        /// <param name="p">O projétil</param>
         public void SetProjectile(SimpleProjectile p)
         {
             this.p = p;
@@ -45,6 +43,11 @@ namespace ZombieGame.UI
             ItemIcon.Source = new BitmapImage(new Uri(IO.GlobalPaths.ProjectileSprites + p.SpriteFileName));
         }
 
+        /// <summary>
+        /// O botão voltar.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GradientButtonUI_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ControlCache.PauseMenu.Grid.Children.Remove(this);

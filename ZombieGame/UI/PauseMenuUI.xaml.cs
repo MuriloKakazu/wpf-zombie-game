@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZombieGame.Game;
-using ZombieGame.Game.Enums;
 
 namespace ZombieGame.UI
 {
@@ -22,17 +11,27 @@ namespace ZombieGame.UI
     /// </summary>
     public partial class PauseMenuUI : UserControl
     {
+        #region Methods
+        /// <summary>
+        /// ctor
+        /// </summary>
         public PauseMenuUI()
         {
             InitializeComponent();
             Canvas.SetZIndex(this, 11);
         }
-
+        /// <summary>
+        /// Evento de load do grid
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Grid_Loaded(object sender, RoutedEventArgs e)
         {
             Refresh();
         }
-
+        /// <summary>
+        /// Método de atualizar a tela, colocando-a no centro da celula
+        /// </summary>
         public void Refresh()
         {
             if (GameMaster.Score > 0)
@@ -56,13 +55,21 @@ namespace ZombieGame.UI
             else
                 RenderTransform = new TranslateTransform(0, 0);
         }
-
+        /// <summary>
+        /// Evento de clique do botão loja
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnStore_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             PausedMenuContent.Visibility = Visibility.Collapsed;
             Grid.Children.Add(ControlCache.StoreControl);
         }
-
+        /// <summary>
+        /// Evento de clique do botão configurações
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnSettings_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             PausedMenuContent.Visibility = Visibility.Collapsed;
@@ -70,12 +77,20 @@ namespace ZombieGame.UI
             m.DockPanel.HorizontalAlignment = HorizontalAlignment.Center;
             Grid.Children.Add(m);
         }
-
+        /// <summary>
+        /// Evento de clique do botão menu principal
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMainMenu_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             btnMainMenu.Content = "CLIQUE 2X PARA CONFIRMAR";
         }
-
+        /// <summary>
+        /// Evento de double clique do botão menu principal
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMainMenu_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             GameMaster.TargetCanvas.Visibility = Visibility.Collapsed;
@@ -84,12 +99,20 @@ namespace ZombieGame.UI
             GameMaster.Started = false;
             GameMaster.TargetCanvas.ResetUI();
         }
-
+        /// <summary>
+        /// Evento de quando o mouse sai do botão menu principal
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnMainMenu_MouseLeave(object sender, MouseEventArgs e)
         {
             btnMainMenu.Content = "SAIR";
         }
-
+        /// <summary>
+        /// Evento do botão resume
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnResume_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             PausedMenuContent.Visibility = Visibility.Collapsed;
@@ -99,5 +122,6 @@ namespace ZombieGame.UI
             ControlCache.PauseMenu = new PauseMenuUI();
             GameMaster.HideCursor();
         }
+        #endregion
     }
 }
