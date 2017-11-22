@@ -85,9 +85,16 @@ namespace ZombieGame.Game
         /// </summary>
         public static void SetSellingItems()
         {
-            
             SellingWeapons = Database.Weapons.OrderBy(x => x.Price).ToList();
             SellingProjectiles = Database.Projectiles.OrderBy(x => x.Price).ToList();
+        }
+
+        /// <summary>
+        /// Método responsável por zerar os itens comprados na loja.
+        /// </summary>
+        public static void ResetStore()
+        {
+
         }
     }
 }

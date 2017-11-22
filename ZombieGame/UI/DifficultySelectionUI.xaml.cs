@@ -25,6 +25,7 @@ namespace ZombieGame.UI
         public DifficultySelectionUI()
         {
             InitializeComponent();
+            ControlCache.PauseMenu.HideDarkDarkBackground();
         }
 
         private void EasyButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -54,6 +55,10 @@ namespace ZombieGame.UI
             GameMaster.Resume();
             GameMaster.TargetCanvas.ShowUI();
             //GameMaster.TargetCanvas.Visibility = Visibility.Visible;
+            ControlCache.PauseMenu.ShowDarkBackground();
+            GameMaster.TargetCanvas.RemoveChild(ControlCache.PauseMenu);
+            ControlCache.PauseMenu.Grid.Children.Clear();
+            ControlCache.PauseMenu = new PauseMenuUI();
         }
     }
 }

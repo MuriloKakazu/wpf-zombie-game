@@ -19,9 +19,21 @@ namespace ZombieGame.Game
     public static class GameMaster
     {
         #region Properties
+        /// <summary>
+        /// Retorna se o jogo acabou
+        /// </summary>
         public static bool GameOver { get; private set; }
+        /// <summary>
+        /// Retorna se o jogo iniciou
+        /// </summary>
         public static bool Started { get; set; }
+        /// <summary>
+        /// Canvas alvo onde serão desenhadas as entidades
+        /// </summary>
         public static GameCanvas TargetCanvas { get; set; }
+        /// <summary>
+        /// Janela alvo da aplicação
+        /// </summary>
         public static MainWindow TargetWindow { get; set; }
         /// <summary>
         /// Timer interno do jogo (não relacionado aos cálculos de Física)
@@ -43,8 +55,17 @@ namespace ZombieGame.Game
         /// Retorna a quantidade de dinheiro dos personagens
         /// </summary>
         public static float Money { get; set; }
+        /// <summary>
+        /// Pontuãção dos jogadores
+        /// </summary>
         public static float Score { get; set; }
+        /// <summary>
+        /// Tempo em que a partida está ativa
+        /// </summary>
         public static float RunningTime { get; set; }
+        /// <summary>
+        /// Bônus de dificuldade de jogo
+        /// </summary>
         public static float DifficultyBonus
         {
             get
@@ -66,6 +87,9 @@ namespace ZombieGame.Game
         /// Retorna o cenário atual do jogo
         /// </summary>
         public static Scene CurrentScene { get; private set; }
+        /// <summary>
+        /// Configurações do jogo
+        /// </summary>
         public static Settings Settings { get; private set; }
         /// <summary>
         /// Estado do jogo
@@ -79,6 +103,7 @@ namespace ZombieGame.Game
         /// </summary>
         public static void Setup()
         {
+            Database.Setup();
             GameOver = false;
             Started = true;
             ControlCache.Setup();
@@ -90,30 +115,44 @@ namespace ZombieGame.Game
             EnemySpawner.Setup();
             Store.SetSellingItems();
             SetupScene(Database.Scenes[0]);
-            Money = 3000;
+            Money = 0;
             Score = 0;
             RunningTime = 0;
             Pause();
+            TargetCanvas.Reset();
+            Camera.ForceUpdate();
+            ControlCache.PauseMenu.Refresh();
             GameMaster.TargetCanvas.AddChild(ControlCache.PauseMenu);
             ControlCache.PauseMenu.Refresh();
             ShowCursor();
             ShowStartScreen();
         }
 
+        /// <summary>
+        /// Mostra a tela inicial de escolha de dificuldade do jogo
+        /// </summary>
         private static void ShowStartScreen()
         {
             TargetCanvas.Reset();
             TargetCanvas.HideUI();
             ControlCache.PauseMenu.PausedMenuContent.Visibility = Visibility.Collapsed;
             ControlCache.PauseMenu.Grid.Children.Add(new DifficultySelectionUI());
-            ControlCache.PauseMenu.Refresh();
+            //ControlCache.PauseMenu.Refresh();
         }
 
+
+        /// <summary>
+        /// Carrega as configurações do jogo
+        /// </summary>
         public static void LoadSettings()
         {
             Settings = Settings.LoadFrom("settings.config");
         }
 
+        /// <summary>
+        /// Prepara o cenário atual no canvas
+        /// </summary>
+        /// <param name="s"></param>
         private static void SetupScene(Scene s)
         {
             Entity.RemoveAllOfType(Tag.Tile);
@@ -122,10 +161,10 @@ namespace ZombieGame.Game
             CurrentScene = s;
             CurrentScene.Show();
 
-            if (GameMaster.GetPlayer(0).IsPlaying)
-                GetPlayer(0).Character.RigidBody.SetPosition(s.Player1Spawn);
-            if (GameMaster.GetPlayer(1).IsPlaying)
-                GetPlayer(1).Character.RigidBody.SetPosition(s.Player2Spawn);
+            //if (GameMaster.GetPlayer(0).IsPlaying)
+            //    GetPlayer(0).Character.RigidBody.SetPosition(s.Player1Spawn);
+            //if (GameMaster.GetPlayer(1).IsPlaying)
+            //    GetPlayer(1).Character.RigidBody.SetPosition(s.Player2Spawn);
         }
 
         /// <summary>
@@ -138,8 +177,8 @@ namespace ZombieGame.Game
             var Player2 = new Player(2, "Player2");
             Player1.Character.RigidBody.UseRotation = true;
             Player2.Character.RigidBody.UseRotation = true;
-            Player1.Character.RigidBody.SetPosition(new Physics.Vector(100, 0));
-            Player2.Character.RigidBody.SetPosition(new Physics.Vector(500, 0));
+            Player1.Character.RigidBody.SetPosition(new Physics.Vector(637, -345.5));
+            Player2.Character.RigidBody.SetPosition(new Physics.Vector(637, -345.5));
             Player1.Character.RigidBody.Resize(new Physics.Vector(50, 50));
             Player2.Character.RigidBody.Resize(new Physics.Vector(50, 50));
             Players = new Player[2];
@@ -161,16 +200,27 @@ namespace ZombieGame.Game
             Time.HighFrequencyTimer.Elapsed += HighFrequencyTimer_Elapsed;
         }
 
+        /// <summary>
+        /// Timer de alta frequência
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void HighFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             App.Current.Dispatcher.Invoke(delegate { IncreaseRunningTime(); IncreaseScore(); });
         }
 
+        /// <summary>
+        /// Aumenta a pontuaçã odos jogadores conforme o tempo
+        /// </summary>
         private static void IncreaseScore()
         {
             Score += 1 * Time.Delta * DifficultyBonus;
         }
 
+        /// <summary>
+        /// Destrói e finaliza a partida atual
+        /// </summary>
         internal static void Destroy()
         {
             if (InternalTimer != null)
@@ -178,7 +228,8 @@ namespace ZombieGame.Game
             Players = null;
             if (Camera != null)
                 Camera.Destroy();
-            CurrentScene = null;
+            GameMaster.TargetCanvas.RemoveChild(GameMaster.CurrentScene.Background.VisualComponent);
+            GameMaster.TargetCanvas.RemoveChild(GameMaster.CurrentScene.Foreground.VisualComponent);
             Money = 0;
             RunningTime = 0;
             Score = 0;
@@ -194,24 +245,51 @@ namespace ZombieGame.Game
             App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
         }
 
+        /// <summary>
+        /// Método a ser chamado pelo timer de alta frequência
+        /// </summary>
         private static void FixedUpdate()
         {
-            CheckForUserInput();
-            CheckGameOver();
+            if (GameOver || !Started)
+                return;
+
+            try
+            {
+                CheckForUserInput();
+                CheckGameOver();
+
+                if (GameplayState == ExecutionState.Paused)
+                {
+                    TargetCanvas.Reset();
+                    Camera.ForceUpdate();
+                    ControlCache.PauseMenu.Refresh();
+                    TargetCanvas.UpdateUI();
+                }
+            }
+            catch { }
         }
 
+        /// <summary>
+        /// Para a partida completamente
+        /// </summary>
         private static void PauseForever()
         {
             Pause();
             InternalTimer.Stop();
         }
 
+        /// <summary>
+        /// Verifica se os jogadores estão vivos e decide o que fazer nessa situação
+        /// </summary>
         private static void CheckGameOver()
         {
             if (GameOver)
                 return;
 
-            if (GetPlayer(0).Character == null && GetPlayer(1).Character == null ||
+            if (Players == null)
+                return;
+
+            if(GetPlayer(0).Character == null && GetPlayer(1).Character == null ||
             GetPlayer(0).Character != null && !GetPlayer(0).Character.IsAlive &&
             GetPlayer(1).Character != null && !GetPlayer(1).Character.IsAlive)
             {
@@ -222,6 +300,9 @@ namespace ZombieGame.Game
             }
         }
 
+        /// <summary>
+        /// Mostra a tela de fim de jogo
+        /// </summary>
         private static void ShowGameOverScreen()
         {
             TargetCanvas.Reset();
@@ -233,18 +314,29 @@ namespace ZombieGame.Game
             ControlCache.PauseMenu.Grid.Children.Add(endUI);
             Camera.ForceUpdate();
             ControlCache.PauseMenu.Refresh();
+            CurrentScene.Background.Destroy();
+            CurrentScene.Foreground.Destroy();
         }
 
+        /// <summary>
+        /// Aumenta o tempo em que a partida está ativa
+        /// </summary>
         private static void IncreaseRunningTime()
         {
             RunningTime += Time.Delta;
         }
 
+        /// <summary>
+        /// Esconde o cursor
+        /// </summary>
         public static void HideCursor()
         {
             Mouse.OverrideCursor = Cursors.None;
         }
 
+        /// <summary>
+        /// Mostra o cursor
+        /// </summary>
         public static void ShowCursor()
         {
             Mouse.OverrideCursor = Cursors.Arrow;
@@ -277,39 +369,40 @@ namespace ZombieGame.Game
                         GameMaster.TargetCanvas.AddChild(ControlCache.PauseMenu);
                         ShowCursor();
                     }
-                        IgnoreKeyPress = true;
-                        LastUpdate = DateTime.Now;
-                    }
-                    else if (Keyboard.IsKeyDown(Key.Enter))
+                    IgnoreKeyPress = true;
+                    LastUpdate = DateTime.Now;
+                }
+                else if (Keyboard.IsKeyDown(Key.Enter))
+                {
+                    if (GameplayState == ExecutionState.Running && !GetPlayer(1).IsPlaying)
                     {
-                        if (GameplayState == ExecutionState.Running && !GetPlayer(1).IsPlaying)
-                        {
-                            GetPlayer(1).IsPlaying = true;
-                            GetPlayer(1).Character = new Character("Player2", Tag.Player);
-                            GetPlayer(1).Character.MaxHealth = 100;
-                            GetPlayer(1).Character.SetHealth(100);
-                            GetPlayer(1).Character.LoadSprite(GlobalPaths.CharacterSprites + "player2.png");
-                            GetPlayer(1).Character.RigidBody.SetPosition(GetPlayer(0).Character.RigidBody.Position);
-                            GetPlayer(1).Character.RigidBody.Resize(new Physics.Vector(50, 50));
-                            GetPlayer(1).Character.RigidBody.UseRotation = true;
-                        }
+                        GetPlayer(1).IsPlaying = true;
+                        GetPlayer(1).Character = new Character("Player2", Tag.Player);
+                        GetPlayer(1).Character.MaxHealth = 100;
+                        GetPlayer(1).Character.SetHealth(100);
+                        GetPlayer(1).Character.LoadSprite(GlobalPaths.CharacterSprites + "player2.png");
+                        GetPlayer(1).Character.RigidBody.SetPosition(GetPlayer(0).Character.RigidBody.Position);
+                        GetPlayer(1).Character.RigidBody.Resize(new Physics.Vector(50, 50));
+                        GetPlayer(1).Character.RigidBody.UseRotation = true;
                     }
-                    else if (Keyboard.IsKeyDown(Key.F1))
-                    {
-                        GetPlayer(0).Character.SetHealth(0);
+                }
+                else if (Keyboard.IsKeyDown(Key.F1))
+                {
+                    GetPlayer(0).Character.SetHealth(0);
 
-                        IgnoreKeyPress = true;
-                        LastUpdate = DateTime.Now;
-                    }
-                    else if (Keyboard.IsKeyDown(Key.F2))
-                    {
-                        EnemySpawner.SpawnRandomEnemy();
+                    IgnoreKeyPress = true;
+                    LastUpdate = DateTime.Now;
+                }
+                else if (Keyboard.IsKeyDown(Key.F2))
+                {
+                    EnemySpawner.SpawnRandomEnemy();
 
                     IgnoreKeyPress = true;
                     LastUpdate = DateTime.Now;
                 }
                 else if (Keyboard.IsKeyDown(Key.F3))
                 {
+                    Money += 10000;
                     IgnoreKeyPress = true;
                     LastUpdate = DateTime.Now;
                 }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Xml.Serialization;
 using ZombieGame.Game.Controls;
 using ZombieGame.Game.Enums;
 using ZombieGame.Physics;
@@ -12,7 +13,8 @@ namespace ZombieGame.Game.Serializable
     [Serializable]
     public class Background
     {
-        protected VisualControl VisualComponent { get; set; }
+        [XmlIgnore]
+        public VisualControl VisualComponent { get; set; }
         protected bool Visible { get; set; }
         public string SpriteFileName { get; set; }
         public Vector Position { get; set; }

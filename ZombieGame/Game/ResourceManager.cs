@@ -64,6 +64,11 @@ namespace ZombieGame.Game
             if (Time.LowFrequencyTimer != null)
                 Time.LowFrequencyTimer.Dispose();
             GameMaster.Destroy();
+            if (GameMaster.CurrentScene != null)
+            {
+                GameMaster.TargetCanvas.RemoveChild(GameMaster.CurrentScene.Background.VisualComponent);
+                GameMaster.TargetCanvas.RemoveChild(GameMaster.CurrentScene.Foreground.VisualComponent);
+            }
 
             foreach (var e in AnimatedEntity.Instances)
                 e.Destroy();

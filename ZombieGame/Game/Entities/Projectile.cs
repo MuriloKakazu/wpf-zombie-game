@@ -266,7 +266,7 @@ namespace ZombieGame.Game.Entities
 
         protected override void FixedUpdate()
         {
-            this.TimeAlive += Time.Delta * 100;
+            this.TimeAlive += Time.Delta * 1000;
             base.FixedUpdate();
         }
 

@@ -27,8 +27,14 @@ namespace ZombieGame.Game
         /// Lista de todos os cenários disponíveis no jogo
         /// </summary>
         public static List<Scene> Scenes { get; set; }
+        /// <summary>
+        /// Lista das pontuações
+        /// </summary>
         public static List<Score> Scores { get; set; }
 
+        /// <summary>
+        /// Instancia todas as litas do Database
+        /// </summary>
         public static void Setup()
         {
             Weapons = Weapons.LoadFrom(IO.GlobalPaths.DB + "weapons.db");

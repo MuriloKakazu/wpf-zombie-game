@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" Width="1274" Height="691" Background="#7F000000">
     <Grid x:Name="Grid" Background="#00000000" Width="1274" Height="691" Loaded="Grid_Loaded">
-        <Rectangle StrokeThickness="0" Height="691">
+        <Rectangle x:Name="GradRect" StrokeThickness="0" Height="691">
             <Rectangle.Fill>
                 <RadialGradientBrush>
                     <GradientStop Color="#00000000"/>
@@ -26,6 +26,7 @@
             </Label>
             <local:GradientButtonUI x:Name="btnStore" Height="50" FontSize="22" Margin="40,10,40,0" MouseLeftButtonUp="btnStore_MouseLeftButtonUp" Padding="20,10" Content="LOJA/INVENTÁRIO" UnfocusedForeground="White" FocusedForeground="White"/>
             <local:GradientButtonUI x:Name="btnSettings" Height="50" FontSize="22" Margin="40,10,40,0" MouseLeftButtonUp="btnSettings_MouseLeftButtonUp" Padding="20,10" Content="CONFIGURAÇÕES" UnfocusedForeground="White"/>
+            <local:GradientButtonUI x:Name="btnControls" Padding="20,10" FontSize="22" Height="50" UnfocusedForeground="White" Content="CONTROLES" Margin="40,10,40,0" MouseLeftButtonUp="btnControls_MouseLeftButtonUp" />
             <local:GradientButtonUI x:Name="btnResume" Height="50" FontSize="22" Margin="40,10,40,0" MouseLeftButtonUp="btnResume_MouseLeftButtonUp" Padding="20,10" Content="VOLTAR AO JOGO" UnfocusedForeground="White"/>
             <local:GradientButtonUI x:Name="btnMainMenu" Height="50" FontSize="22" Margin="40,10,40,0" MouseLeftButtonUp="btnMainMenu_MouseLeftButtonUp" Padding="20,10" Content="SAIR" UnfocusedForeground="White" MouseDoubleClick="btnMainMenu_MouseDoubleClick" MouseLeave="btnMainMenu_MouseLeave"/>
 

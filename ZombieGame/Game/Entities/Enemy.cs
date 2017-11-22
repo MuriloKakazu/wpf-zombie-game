@@ -25,13 +25,37 @@ namespace ZombieGame.Game.Entities
         /// Retorna a pontuação que o inimigo dará ao morrer
         /// </summary>
         public virtual float DeathPoints { get; protected set; }
+        /// <summary>
+        /// Quantia de dinheiro que o inimigo dará ao morrer
+        /// </summary>
         public virtual float MoneyDrop { get; protected set; }
+        /// <summary>
+        /// Chave de efeito sonoro de morte do inimigo
+        /// </summary>
         public virtual string DeathSFXKey { get; set; }
+        /// <summary>
+        /// Chave de efeito sonoro de dano do inimigo
+        /// </summary>
         public virtual string HitSFXKey { get; set; }
+        /// <summary>
+        /// Retorna se o inimigo explode ao morrer
+        /// </summary>
         public virtual bool ExplodesOnDeath { get; set; }
+        /// <summary>
+        /// Raio de explosão do inimigo
+        /// </summary>
         public virtual float ExplosionRadius { get; set; }
+        /// <summary>
+        /// Chave do efeito sonoro de explosão
+        /// </summary>
         public virtual string ExplosionSFXKey { get; protected set; }
+        /// <summary>
+        /// Retorna se o inimigo está explodindo
+        /// </summary>
         public bool IsExploding { get; protected set; }
+        /// <summary>
+        /// Dano do inimigo ao colidir com o jogador
+        /// </summary>
         public virtual float HitDamage { get; protected set; }
         #endregion
 
@@ -45,6 +69,11 @@ namespace ZombieGame.Game.Entities
             get { return Enemies.ToArray(); }
         }
 
+        /// <summary>
+        /// Retorna uma instância de inimigo a partir de uma interface
+        /// </summary>
+        /// <param name="source"></param>
+        /// <returns></returns>
         public static Enemy Mount(ISerializableEnemy source)
         {
             Enemy e = new Enemy()
@@ -90,6 +119,9 @@ namespace ZombieGame.Game.Entities
             Enemies.Add(this);
         }
 
+        /// <summary>
+        /// Método a ser chamado pelo timer de baixa frequência
+        /// </summary>
         protected override void Update()
         {
             if (!IsStunned)
@@ -116,6 +148,11 @@ namespace ZombieGame.Game.Entities
             RigidBody.PointAt(RigidBody.CenterPoint.PointedAt(target.RigidBody.CenterPoint).Opposite);
         }
 
+        /// <summary>
+        /// Aplica um ano ao inimigo
+        /// </summary>
+        /// <param name="damager"></param>
+        /// <param name="quantity"></param>
         public override void Damage(Entity damager, float quantity)
         {
             SoundPlayer.Instance.Play(SoundTrack.GetAnyWithKey(HitSFXKey));
@@ -123,6 +160,10 @@ namespace ZombieGame.Game.Entities
             GameMaster.Score += quantity;
         }
 
+        /// <summary>
+        /// Mata o inimigo
+        /// </summary>
+        /// <param name="silent"></param>
         protected override void Kill(bool silent = false)
         {
             if (!silent)

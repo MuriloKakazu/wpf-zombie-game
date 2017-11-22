@@ -18,6 +18,7 @@
                     <local:GradientButtonUI x:Name="StartGameButton" MouseLeftButtonUp="StartGameButton_MouseLeftButtonUp" Content="NOVO JOGO" FontSize="22" Padding="20,10"/>
                     <local:GradientButtonUI x:Name="RankingButton" MouseLeftButtonUp="RankingButton_MouseLeftButtonUp" Content="RANKING" FontSize="22" Padding="20,10"/>
                     <local:GradientButtonUI x:Name="SettingsButton" MouseLeftButtonUp="SettingsButton_MouseLeftButtonUp" Content="CONFIGURAÇÕES" FontSize="22" Padding="20,10"/>
+                    <local:GradientButtonUI x:Name="AboutButton" Padding="20,10" Content="SOBRE" FontSize="22" MouseLeftButtonUp="AboutButton_MouseLeftButtonUp" />
                     <local:GradientButtonUI x:Name="QuitButton" MouseLeftButtonUp="QuitButton_MouseLeftButtonUp" Content="SAIR" FontSize="22" Padding="20,10" MouseDoubleClick="QuitButton_MouseDoubleClick" MouseLeave="QuitButton_MouseLeave"/>
                 </StackPanel>
                 <Label Content="v1.0" VerticalAlignment="Bottom" DockPanel.Dock="Bottom" FontSize="20" Margin="20,5">

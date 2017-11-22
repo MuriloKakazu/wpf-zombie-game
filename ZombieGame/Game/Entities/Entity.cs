@@ -51,7 +51,11 @@ namespace ZombieGame.Game.Entities
         protected virtual List<Entity> Collisions { get; set; }
         /// <summary>
         /// Retorna o componente visual da entidade
+        /// </summary>
         public virtual VisualControl VisualControl { get; protected set; }
+        /// <summary>
+        /// Retorna a imagem da sprite da entidade em cache
+        /// </summary>
         private BitmapCache CachedBitmap { get; set; }
         /// <summary>
         /// Retorna a sprite da entidade
@@ -69,7 +73,13 @@ namespace ZombieGame.Game.Entities
         /// Retorna se a entidade é uma câmera
         /// </summary>
         public virtual bool IsCamera { get { return Tag == Tag.Camera; } }
+        /// <summary>
+        /// Retorna se a entidade é um efeito visual
+        /// </summary>
         public virtual bool IsVisualFX { get { return Tag == Tag.VisualFX; } }
+        /// <summary>
+        /// Retorna se a entidade é uma parede
+        /// </summary>
         public virtual bool IsWall { get { return Tag == Tag.Wall; } }
         /// <summary>
         /// Retorna se a entidade é visível
@@ -79,7 +89,13 @@ namespace ZombieGame.Game.Entities
         /// Retorna se a entidade tem um componente visual instanciado
         /// </summary>
         public virtual bool HasVisualControl { get { return VisualControl != null; } }
+        /// <summary>
+        /// Retorna o ZIndex da entidade
+        /// </summary>
         protected virtual int ZIndex { get; private set; }
+        /// <summary>
+        /// Retorna se a entidade está ativa
+        /// </summary>
         public bool IsActive { get; private set; }
         #endregion
 
@@ -93,6 +109,10 @@ namespace ZombieGame.Game.Entities
             get { return Entities.ToArray(); }
         }
 
+        /// <summary>
+        /// Destrói todas as entidades de um certo tipo
+        /// </summary>
+        /// <param name="type"></param>
         public static void RemoveAllOfType(Tag type)
         {
             foreach (var v in Entities)
@@ -100,6 +120,9 @@ namespace ZombieGame.Game.Entities
                     v.MarkAsNoLongerNeeded();
         }
 
+        /// <summary>
+        /// ctor
+        /// </summary>
         protected Entity() { }
 
         /// <summary>
@@ -130,11 +153,18 @@ namespace ZombieGame.Game.Entities
             VisualControl.CacheMode = CachedBitmap;
         }
 
+        /// <summary>
+        /// Cria o componente visual da entidade
+        /// </summary>
         public virtual void CreateVisualControl()
         {
             VisualControl = new VisualControl();
         }
 
+        /// <summary>
+        /// Redefine o ZIndex da entidade
+        /// </summary>
+        /// <param name="index"></param>
         protected virtual void SetZIndex(ZIndex index)
         {
             ZIndex = (int)index;
@@ -178,6 +208,9 @@ namespace ZombieGame.Game.Entities
             }
         }
 
+        /// <summary>
+        /// Marca a entidade para ser coletada pelo garbage Collector
+        /// </summary>
         public virtual void MarkAsNoLongerNeeded()
         {
             IsActive = false;
@@ -194,6 +227,9 @@ namespace ZombieGame.Game.Entities
                 VisualControl.RenderTransform = new TranslateTransform(RigidBody.Position.X, -RigidBody.Position.Y);
         }
 
+        /// <summary>
+        /// Atualzia o componente visual da entidade
+        /// </summary>
         protected virtual void UpdateVisualControl()
         {
             if (Visible)
@@ -259,7 +295,8 @@ namespace ZombieGame.Game.Entities
                     if (player.IsPlaying && player.Character.IsActive)
                     {
                         var distance = player.Character.RigidBody.CenterPoint.DistanceBetween(RigidBody.CenterPoint);
-                        if (!candidates.TryGetValue(distance, out Entity e))
+                        Entity e = null;
+                        if (!candidates.TryGetValue(distance, out e))
                             candidates.Add(distance, player.Character);
                     }
                 }
@@ -315,6 +352,9 @@ namespace ZombieGame.Game.Entities
             Collisions.Clear();
         }
 
+        /// <summary>
+        /// Desinscreve os eventos da entidade
+        /// </summary>
         protected virtual void UnsubscribeFromEvents()
         {
             Time.HighFrequencyTimer.Elapsed -= HighFrequencyTimer_Elapsed;
@@ -368,6 +408,11 @@ namespace ZombieGame.Game.Entities
             App.Current.Dispatcher.Invoke(delegate { FixedUpdate(); });
         }
 
+        /// <summary>
+        /// Timer de baixa frequência
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected virtual void LowFrequencyTimer_Elapsed(object sender, ElapsedEventArgs e)
         {
             App.Current.Dispatcher.Invoke(delegate { Update(); });
@@ -383,12 +428,18 @@ namespace ZombieGame.Game.Entities
             CheckCollision();
         }
 
+        /// <summary>
+        /// Método que aciona funções que precisam ser disparadas pelo timer de baixa frequência
+        /// </summary>
         protected virtual void Update()
         {
             UpdateVisualControl();
             DecideVisibility();
         }
 
+        /// <summary>
+        /// Decide se a entidade estará visível na tela
+        /// </summary>
         private void DecideVisibility()
         {
             if (!Collisions.Contains(GameMaster.Camera) && Visible && IsActive && !this.IsVisualFX)

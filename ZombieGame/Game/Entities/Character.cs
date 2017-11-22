@@ -39,6 +39,9 @@ namespace ZombieGame.Game.Entities
         /// Retorna a saúde do personagem
         /// </summary>
         public virtual float Health { get; protected set; }
+        /// <summary>
+        /// Saúde máxima do personagem
+        /// </summary>
         public virtual float MaxHealth { get; set; }
         /// <summary>
         /// Retorna a experiência adquirida pelo personagem
@@ -56,6 +59,9 @@ namespace ZombieGame.Game.Entities
         /// Tempo que o atordoamento deve durar em ms
         /// </summary>
         protected virtual float TargetStunTime { get; set; }
+        /// <summary>
+        /// Retorna se o personagem tem uma arma
+        /// </summary>
         protected virtual bool HasWeapon { get { return Weapon != null; } }
         #endregion
 
@@ -119,9 +125,9 @@ namespace ZombieGame.Game.Entities
         {
             if (tag == Tag.Player)
             {
-                Weapon = Database.Weapons[6].Mount();
+                Weapon = Database.Weapons[0].Mount();
                 Weapon.Owner = this;
-                Weapon.SetProjectile(Database.Projectiles[6].Mount());
+                Weapon.SetProjectile(Database.Projectiles[1].Mount());
                 base.SetZIndex(Enums.ZIndex.Player);
             }
             else
@@ -142,6 +148,11 @@ namespace ZombieGame.Game.Entities
                 Kill(killer: damager);
         }
 
+        /// <summary>
+        /// Redefine a arma do personagem
+        /// </summary>
+        /// <param name="wep"></param>
+        /// <param name="proj"></param>
         public virtual void SetWeapon(Weapon wep, Projectile proj = null)
         {
             wep.Owner = this;

@@ -33,6 +33,18 @@ namespace ZombieGame.UI
             Refresh();
         }
 
+        public void ShowDarkBackground()
+        {
+            Background = new SolidColorBrush(Color.FromArgb(127, 0, 0, 0));
+            GradRect.Fill = new SolidColorBrush(Color.FromArgb(127, 0, 0, 0));
+        }
+
+        public void HideDarkDarkBackground()
+        {
+            Background = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+            GradRect.Fill = new SolidColorBrush(Color.FromArgb(0, 0, 0, 0));
+        }
+
         public void Refresh()
         {
             if (GameMaster.Score > 0)
@@ -98,6 +110,13 @@ namespace ZombieGame.UI
             ControlCache.PauseMenu.Grid.Children.Clear();
             ControlCache.PauseMenu = new PauseMenuUI();
             GameMaster.HideCursor();
+        }
+
+        private void btnControls_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            PausedMenuContent.Visibility = Visibility.Collapsed;
+            var m = new ControlsUI();
+            Grid.Children.Add(m);
         }
     }
 }

@@ -107,5 +107,11 @@ namespace ZombieGame.UI
         {
             QuitButton.Content = "SAIR";
         }
+
+        private void AboutButton_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            MainMenuOptions.Visibility = Visibility.Collapsed;
+            GameMaster.TargetWindow.Grid.Children.Add(new AboutUI());
+        }
     }
 }
