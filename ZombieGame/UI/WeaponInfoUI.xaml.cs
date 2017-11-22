@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using ZombieGame.Game;
 using ZombieGame.Game.Serializable;
 
 namespace ZombieGame.UI
@@ -22,14 +11,24 @@ namespace ZombieGame.UI
     /// </summary>
     public partial class WeaponInfoUI : UserControl
     {
+        /// <summary>
+        /// Arma sendo exibida
+        /// </summary>
         public SimpleWeapon w { get; protected set; }
 
+        /// <summary>
+        /// ctor
+        /// </summary>
         public WeaponInfoUI()
         {
             InitializeComponent();
             Canvas.SetZIndex(this, 10);
         }
 
+        /// <summary>
+        /// Método para definir a arma
+        /// </summary>
+        /// <param name="w"></param>
         public void SetWeapon(SimpleWeapon w)
         {
             this.w = w;
@@ -51,6 +50,11 @@ namespace ZombieGame.UI
             ItemIcon.Source = new BitmapImage(new Uri(IO.GlobalPaths.WeaponSprites + w.SpriteFileName));
         }
 
+        /// <summary>
+        /// Evento do botão voltar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnClose_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ControlCache.PauseMenu.Grid.Children.Remove(this);
